@@ -1,10 +1,48 @@
 window.onload = header_nav_draw;
 
+
+ function RegistFbGraphData(){
+   FB.api(
+      "/me?fields=picture,first_name,last_name,timezone,gender,languages,link,religion",
+      function (response) {
+        if (response && !response.error) {
+          /* handle the result */
+
+          var currentUser = Parse.User.current();
+
+          console.log(response);
+          currentUser.set("FirstName", response.first_name);
+          currentUser.set("LastName", response.last_name);
+          currentUser.set("timezone", response.timezone);
+          currentUser.set("languages", response.languages);
+          currentUser.set("link", response.link);
+          currentUser.set("religion", response.religion);
+          currentUser.set("Profile_picture", response.picture.data.url);
+          currentUser.save(null, {
+            success: function(){
+              alert("saved");
+              window.location.href = "./user/edit_profile";
+            },
+            error: function(){
+              alert("fail to save");
+              window.location.href = "./home";
+            }
+          });
+        }
+      }
+  );
+ }
+
+
+
+
+
 function click_fb_login(){
 	Parse.FacebookUtils.logIn(null, {
 	  success: function(user) {
 	    if (!user.existed()) {
 	      console.log("---------go to profile edit page---------");
+	      RegistFbGraphData();
 	    } else {
 	      console.log("--------User loged in mixidea--------");
 	      construct_dom_for_logeduser();
@@ -34,7 +72,23 @@ function construct_dom_for_login(){
 
 
 function construct_dom_for_logeduser(){
-	console.log("-----loged user --------")
+	console.log("-----loged user --------");
+
+	var currentUser = Parse.User.current();
+	var first_name = currentUser.get("FirstName");
+	var last_name = currentUser.get("LastName");
+	var link = currentUser.get("link");
+	var profile_picture_src = currentUser.get("Profile_picture");
+
+
+	$("#login").html("");
+	$("#profile_pict").html("<img src=" + profile_picture_src + ">");
+	$("#login").html("");
+
+
+
+
+
 }
 
 function header_nav_draw(){
