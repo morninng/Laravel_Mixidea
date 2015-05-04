@@ -1,19 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Mixidea</title>
 
-	<link href="{{ asset('/css/app.css') }}" rel="stylesheet">
-
-	<!-- Fonts -->
+	<link href="{{ asset('/css/app.css') }}" rel="stylesheet"> 
 	<link href='//fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css'>
-
 
 </head>
 <body>
+
+	@yield('config_init')
+	@yield('cxense_init')
+
+
+
 	<nav class="navbar navbar-default">
 		<div class="container-fluid">
 			<div class="navbar-header">
@@ -43,15 +45,13 @@
 	</nav>
 
 
-@yield('config_init')
-
-
 	<!-- Scripts -->
 	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.1/js/bootstrap.min.js"></script>
-	<script src="//www.parsecdn.com/js/parse-1.4.2.min.js"></script>
-	<script src="{{ asset('/js/parse_init.js') }}"></script>
-	<script src="{{ asset('/js/header_nav_draw.js') }}"></script>
+
+
+	@yield('page_script')
+
 
 
 </body>

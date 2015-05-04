@@ -1,1 +1,1 @@
-Parse.initialize("EWPPdrDVaAIqhRazWp8K0ZlmafAAPt93JiOAonvX", "US6Lheio8PGcBdIpwGFhFSQVpi5GKunGf6hGq5Ze");
+Parse.initialize(parse_app_id, parse_js_key);
