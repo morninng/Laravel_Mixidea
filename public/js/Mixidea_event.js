@@ -1,0 +1,60 @@
+
+function create_event(){
+
+  var str_title = document.event_creation.title.value;
+  var str_date = document.event_creation.date.value;
+  var str_time = document.event_creation.time.value;
+
+  var event_hour = str_time.split(":")[0];
+  var event_minute = str_time.split(":")[1];
+  var event_datetime = new Date(str_date);
+  event_datetime.setHours(event_hour);
+  event_datetime.setMinutes(event_minute);
+  console.log("input time is " + event_datetime);
+
+  var str_genre = document.event_creation.genre.value;
+  var str_type = document.event_creation.type.value;
+  var str_style = document.event_creation.style.value;
+  var str_description = document.event_creation.description.value;
+  var str_motion = document.event_creation.motion.value;
+
+  var Game = Parse.Object.extend("Game");
+  var mixidea_game = new Game();
+  mixidea_game.set("type", str_type);
+  mixidea_game.set("style", str_style);
+  mixidea_game.set("motion", str_motion);
+  mixidea_game.set("date_time", event_datetime);
+
+  mixidea_game.save().then(function(game_obj){
+    var Round = Parse.Object.extend("Round");
+    var mixidea_round = new Round();  
+  	mixidea_round.add("game",game_obj);
+  	return mixidea_round.save();
+
+  }).then(function(round_obj){
+    var Event = Parse.Object.extend("Event");
+    var mixidea_event = new Event();
+    mixidea_event.set("date_time", event_datetime);
+    mixidea_event.set("genre", str_genre);
+    mixidea_event.set("title", str_title);
+    mixidea_event.set("type", str_type);
+    mixidea_event.set("style", str_style);
+  	mixidea_event.add("round",round_obj);
+
+  	var game_obj = round_obj.get("game");
+  	var game_object = {game_ID: game_obj, type:str_style}
+  	var game_array_obj = [game_object];
+  	var round_object = {round_ID: round_obj, game_array: game_array_obj};
+  	var round_array_obj = [round_object];
+  	var event_obj = {round_array: round_array_obj};
+  	mixidea_event.set("event_hierarchy", event_obj);
+  	return mixidea_event.save();
+
+  }).then(function(obj) {
+  	console.log("event,round,game was saved");
+  }, function(error) {
+  	console.log("error happen" + error);
+  });
+
+
+}
