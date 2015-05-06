@@ -63,7 +63,7 @@ class MixideaEventController extends Controller {
 		  $event_type = $event_obj->get("type");
 		  $event_style = $event_obj->get("style");
 		  $event_genre = "";
-
+/*
 		  $event_hierarchy = $event_obj->get('event_hierarchy');
 		  echo "event hierarchy";
 		  print_r(json_encode($event_hierarchy) );
@@ -92,7 +92,7 @@ class MixideaEventController extends Controller {
 		  $game_ID = $game_first_array['game_ID'];
 		  echo "<br>game ID<br>";
 		  print_r(json_encode($game_ID));
-
+*/
 
 		  foreach ($event_genre_array as $event_genre_str){
 			  $event_genres = $event_genre . $event_genre_str . ",";
