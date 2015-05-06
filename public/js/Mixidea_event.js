@@ -35,16 +35,18 @@ function create_event(){
     var Event = Parse.Object.extend("Event");
     var mixidea_event = new Event();
     mixidea_event.set("date_time", event_datetime);
-    mixidea_event.set("genre", str_genre);
+    mixidea_event.add("genre", str_genre);
     mixidea_event.set("title", str_title);
     mixidea_event.set("type", str_type);
     mixidea_event.set("style", str_style);
   	mixidea_event.add("round",round_obj);
 
-  	var game_obj = round_obj.get("game");
-  	var game_object = {game_ID: game_obj, type:str_style}
+  	var game_obj = round_obj.get("game")[0];
+    var game_obj_id = game_obj.id;
+  	var game_object = {game_ID: game_obj_id, type:str_style}
   	var game_array_obj = [game_object];
-  	var round_object = {round_ID: round_obj, game_array: game_array_obj};
+    var round_obj_id = round_obj.id;
+  	var round_object = {round_ID: round_obj_id, game_array: game_array_obj};
   	var round_array_obj = [round_object];
   	var event_obj = {round_array: round_array_obj};
   	mixidea_event.set("event_hierarchy", event_obj);

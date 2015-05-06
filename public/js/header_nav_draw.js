@@ -85,10 +85,6 @@ function construct_dom_for_logeduser(){
 	$("#profile_pict").html("<img src=" + profile_picture_src + ">");
 	$("#login").html("");
 
-
-
-
-
 }
 
 function header_nav_draw(){
