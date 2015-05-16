@@ -1,5 +1,4 @@
 
-
 function create_event(){
 
   var str_title = document.event_creation.title.value;

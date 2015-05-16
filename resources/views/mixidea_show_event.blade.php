@@ -28,8 +28,7 @@
       cookie     : true,  // enable cookies to allow Parse to access the session
       xfbml      : true,  // initialize Facebook social plugins on the page
       version    : facebook_app_version // point to the latest Facebook Graph API version
-    });
- 
+    }); 
     // Run code after the Facebook SDK is loaded.
   };
  
@@ -134,15 +133,94 @@
     <h2>event description: <span id="event_description"></span></h2>
     <h2>motion: <span id="game_motion"></span></h2>
     <center><span id="hangout_area"></span></center>
+
+
+
     @if($game_type === "NorthAmerica")
-      <table class ="table table-bordered">
+
+      <table class="table table-bordered">
        <thead><tr><th>Government</th><th>Opposition</th></tr></thead> 
        <tbody>
-        <tr><td><div id="PM_Container">PM</div></td><td><div id="LO_Container">LO</div></td></tr>
-        <tr><td><div id="MG_Container">MG</div></td><td><div id="MO_Container">MO</div></td></tr>
-        <tr><td><div id="PMR_Container">PMR</div></td><td><div id="LOR_Container">LOR</div></td></tr>
+        <tr><td><div id="PM_Container">
+                  <div class="role"> <p><font-weight: bol>Prime Minister</font-weight></p></div>
+                  <div class="participant" style="float:left;">
+                    <span class="user_info"></span>
+                  </div>
+                  <div class="event_button" style="float:right;margin-right:5px; margin-left:5px;">
+                    <span class="participate_button"></span>
+                  </div>
+                  <div class="comment" style="clear:both">
+                    <span id="event_PM"></span>
+                  </div>
+            </div></td>
+            <td><div id="LO_Container">
+                  <div class="role"> <p><font-weight: bol>Leader Opposition</font-weight></p></div>
+                  <div class="participant" style="float:left;">
+                    <span class="user_info"></span>
+                  </div>
+                  <div class="event_button" style="float:right;margin-right:5px; margin-left:5px;">
+                    <span class="participate_button"></span>554
+                  </div>
+                  <div class="comment" style="clear:both">
+                    <span id="event_LO"></span>
+                  </div>
+            </div></td></tr>
+        <tr><td><div id="MG_Container">
+                  <div class="role"> <p><font-weight: bol>Member Government</font-weight></p></div>
+                  <div class="participant" style="float:left;">
+                    <span class="user_info"></span>
+                  </div>
+                  <div class="event_button" style="float:right;margin-right:5px; margin-left:5px;">
+                    <span class="participate_button"></span>
+                  </div>
+                  <div class="comment" style="clear:both">
+                    <span id="event_MG"></span>
+                  </div>
+              </div></td>
+            <td><div id="MO_Container"></div>
+                  <div class="role"> <p><font-weight: bol>Member Opposition</font-weight></p></div>
+                  <div class="participant" style="float:left;">
+                    <span class="user_info"></span>
+                  </div>
+                  <div class="event_button" style="float:right;margin-right:5px; margin-left:5px;">
+                    <span class="participate_button"></span>
+                  </div>
+                  <div class="comment" style="clear:both">
+                    <span id="event_MO"></span>
+                  </div>
+            </td></tr>
+        <tr><td><div id="PMR_Container">
+                  <div class="role"> <p><font-weight: bol>Prime Minister Reply</font-weight></p></div>
+                  <div class="participant" style="float:left;">
+                    <span class="user_info"></span>
+                  </div>
+                  <div class="event_button" style="float:right;margin-right:5px; margin-left:5px;">
+                    <span class="participate_button"></span>
+                  </div>
+                  <div class="comment" style="clear:both">
+                    <span id="event_PMR"></span>
+                  </div>
+            </div></td>
+            <td><div id="LOR_Container">
+
+                  <div class="role"> <p><font-weight: bol>Leader Opposition Reply</font-weight></p></div>
+                  <div class="participant" style="float:left;">
+                    <span class="user_info"></span>
+                  </div>
+                  <div class="event_button" style="float:right;margin-right:5px; margin-left:5px;">
+                    <span class="participate_button"></span>
+                  </div>
+                  <div class="comment" style="clear:both">
+                    <span id="event_LOR"></span>
+                  </div>
+
+            </div></td></tr>
        </tbody>
       </table>
+ <!--     <script src="{{ asset('/js/NA_user_mgn.js') }}"></script> -->
+
+/*memo: どこかに、Window.OnLoadで呼び出す処理を書かねば*/
+
     @elseif($game_type === "BP")
 
     @elseif($game_type === "Asian")
@@ -173,19 +251,94 @@
    ?>
 <div role="tabpanel" class="tab-pane" id="{{$Round_name_array[$i]}}Round_{{$Game_name_array[$j]}}">
   <div id="game_container_{{$game_id}}">
-    <h2>event title: <span id="event_title"></span></h2>
-    <h2>event title: <span id="event_description"></span></h2>
-    <h2>motion: <span id="game_motion"></span></h2>
+    <p> <h2>event title: <span id="event_title"></span></h2></p>
+    <p> <h2>event title: <span id="event_description"></span></h2></p>
+    <p> <h2>motion: <span id="game_motion"></span></h2></p>
     <center><span id="hangout_area"></span></center>
+
+
     @if($game_type === "NorthAmerica")
-      <table>
+      <table class="table table-bordered">
        <thead><tr><th>Government</th><th>Opposition</th><</tr></thead> 
        <tbody>
-        <tr><td><div id="PM_Container"></div></td><td><div id="LO_Container"></div></td></tr>
-        <tr><td><div id="MG_Container"></div></td><td><div id="MO_Container"></div></td></tr>
-        <tr><td><div id="PMR_Container"></div></td><td><div id="LOR_Container"></div></td></tr>
+        <tr><td><div id="PM_Container">
+                  <div class="role"> <p><font-weight: bol>Prime Minister</font-weight></p></div>
+                  <div class="participant" style="float:left;">
+                    <span class="user_info"></span>
+                  </div>
+                  <div class="event_button" style="float:right;margin-right:5px; margin-left:5px;">
+                    <span class="participate_button"></span>
+                  </div>
+                  <div class="comment" style="clear:both">
+                    <span id="event_PM"></span>
+                  </div>
+            </div></td>
+            <td><div id="LO_Container">
+                  <div class="role"> <p><font-weight: bol>Leader Opposition</font-weight></p></div>
+                  <div class="participant" style="float:left;">
+                    <span class="user_info"></span>
+                  </div>
+                  <div class="event_button" style="float:right;margin-right:5px; margin-left:5px;">
+                    <span class="participate_button"></span>
+                  </div>
+                  <div class="comment" style="clear:both">
+                    <span id="event_LO"></span>
+                  </div>
+            </div></td></tr>
+        <tr><td><div id="MG_Container">
+                  <div class="role"> <p><font-weight: bol>Member Government</font-weight></p></div>
+                  <div class="participant" style="float:left;">
+                    <span class="user_info"></span>
+                  </div>
+                  <div class="event_button" style="float:right;margin-right:5px; margin-left:5px;">
+                    <span class="participate_button"></span>
+                  </div>
+                  <div class="comment" style="clear:both">
+                    <span id="event_MG"></span>
+                  </div>
+              </div></td>
+            <td><div id="MO_Container"></div></td></tr>
+                  <div class="role"> <p><font-weight: bol>Member Opposition</font-weight></p></div>
+                  <div class="participant" style="float:left;">
+                    <span class="user_info"></span>
+                  </div>
+                  <div class="event_button" style="float:right;margin-right:5px; margin-left:5px;">
+                    <span class="participate_button"></span>
+                  </div>
+                  <div class="comment" style="clear:both">
+                    <span id="event_MO"></span>
+                  </div>
+            </td></tr>
+        <tr><td><div id="PMR_Container">
+                  <div class="role"> <p><font-weight: bol>Prime Minister Reply</font-weight></p></div>
+                  <div class="participant" style="float:left;">
+                    <span class="user_info"></span>
+                  </div>
+                  <div class="event_button" style="float:right;margin-right:5px; margin-left:5px;">
+                    <span class="participate_button"></span>
+                  </div>
+                  <div class="comment" style="clear:both">
+                    <span id="event_PMR"></span>
+                  </div>
+            </div></td>
+            <td><div id="LOR_Container">
+
+                  <div class="role"> <p><font-weight: bol>Leader Opposition Reply</font-weight></p></div>
+                  <div class="participant" style="float:left;">
+                    <span class="user_info"></span>
+                  </div>
+                  <div class="event_button" style="float:right;margin-right:5px; margin-left:5px;">
+                    <span class="participate_button"></span>
+                  </div>
+                  <div class="comment" style="clear:both">
+                    <span id="event_LOR"></span>
+                  </div>
+
+            </div></td></tr>
        </tbody>
       </table>
+    
+      <script src="{{ asset('/js/NA_user_mgn.js') }}"></script>
     @elseif($game_type === "BP")
 
     @elseif($game_type === "Asian")
@@ -211,6 +364,10 @@
   </div>
 </div>
 
+<script>
+// window.oload(showEventData({{ @initial_game_type }}  {{ @initial_game_id }}))
+</script>
+
 @stop
 
 
@@ -222,5 +379,8 @@
   <script src ="{{ asset('/js/retrieve_user_data.js') }}"></script>
   <script src ="{{ asset('/js/Mixidea_event.js') }}"></script>
   
+
+  <script src ="{{ asset('/js/testscript.js') }}"></script>
+
 @stop
 
