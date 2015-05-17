@@ -392,7 +392,7 @@
   $initial_game_type = $game_first_array['type'];
 ?>
 <script>
- window.onload(new ShowEvent( "{{ $initial_game_id }}", "{{ $initial_game_type }}" ));
+ new ShowEvent( "{{ $initial_game_id }}", "{{ $initial_game_type }}" );
 </script>
 
 @stop
