@@ -145,7 +145,29 @@ ShowEvent.prototype.fill_container = function(){
 };
 
 ShowEvent.prototype.fill_container_currentuser_applied = function(role_name){
-  console.log("you applied");
+
+  var user_first_name = "";
+  var user_last_name = "";
+  var user_picture_src = "";
+
+  if(self.current_user){
+    user_first_name = self.current_user.get("FirstName");
+    user_last_name = self.current_user.get("LastName");
+    user_picture_src = self.current_user.get("ProfilePicture");
+  }
+
+  var CurrentUserApplied_Template = 
+                             "<div class='role'> <p><font-weight: bol>" + role_name + "</font-weight></p></div>" +
+                             "<div class='participant' style='float:left;'>" + user_first_name+ "&nbsp;" + user_last_name + "</div>" +
+                              "<div class='event_button' style='float:right;margin-right:5px; margin-left:5px;'>" +
+                                "<button class='cancel_button' data-role=" + role_name +
+                                ">Cancel</button>" +
+                              "</div>" +
+                              "<div class='comment' align='center' style='clear:both'>You have joined</div>";
+
+    var participant_container = $("#game_container_" + this.game_id).find("." + self.container_object[role_name]);
+    participant_container.html(CurrentUserApplied_Template);
+
 };
 
 ShowEvent.prototype.fill_container_someone_applied = function(role_name){
