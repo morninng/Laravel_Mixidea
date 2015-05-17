@@ -71,6 +71,14 @@ function construct_dom_for_login(){
 }
 
 
+function logout(){
+
+	Parse.User.logOut();
+	$("#profile_pict").html("");
+	$("#logout").html("");
+	construct_dom_for_login();
+}
+
 function construct_dom_for_logeduser(){
 	console.log("-----loged user --------");
 
@@ -80,10 +88,9 @@ function construct_dom_for_logeduser(){
 	var link = currentUser.get("link");
 	var profile_picture_src = currentUser.get("Profile_picture");
 
-
 	$("#login").html("");
 	$("#profile_pict").html("<img src=" + profile_picture_src + ">");
-	$("#login").html("");
+	$("#logout").html("<a href='javascript:void(0)' onclick='logout()'>logout</a>");
 
 }
 

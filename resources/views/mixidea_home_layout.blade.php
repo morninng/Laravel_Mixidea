@@ -8,9 +8,12 @@
 	<link href='//fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css'>
 </head>
 <body>
-	@yield('config_init')
-	@yield('cxense_init')
 
+@include('include.config_init')
+
+@include('include.cxense_tag')
+
+@include('include.facebook_plug')
 
 
 	<nav class="navbar navbar-default">
@@ -34,6 +37,7 @@
 
 				<ul class="nav navbar-nav navbar-right">
 						<li><span id="profile_pict"></span></li>
+						<li><span id="logout"></span></li>
 						<li><span id="mixidea_remark"></span></li>
 						<li><span id="login"></span></li>
 				</ul>
