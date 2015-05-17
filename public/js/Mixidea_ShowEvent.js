@@ -84,43 +84,89 @@ ShowEvent.prototype.handleEvents = function(){
     var self = this;
 
     var game_container_element = $("#game_container_" + self.game_id);
+
     game_container_element.on("click", ".participate_button", function(e){
       self.JoinGame(e);
     });
+
+    game_container_element.on("click", ".cancel_button", function(e){
+      self.CancelGame(e);
+    });
 };
+
+
+ShowEvent.prototype.CancelGame = function(e){
+  var self = this;
+  var $target = $(e.currentTarget);
+  var role_name =  $target.data('role');
+
+  self.game_object.fetch({
+    success: function(game_obj){
+      self.game_object = game_obj;
+      var attendance = null;
+      var participant_obj = self.game_object.get("participant_role");
+      if(participant_obj){
+        attendance = participant_obj[role_name];
+        if(attendance && attendance==self.current_user_id){
+          delete participant_obj[role_name];
+          self.game_object.set("participant_role", participant_obj);
+          self.game_object.save().then(function(){
+            //update the participant table again
+            self.update_participant_data();
+            self.fill_container();
+
+          },function(error){
+            console.log(error);
+          });
+        }else{
+          console.log("somehow you are not the person who  have canceled");
+        }
+      }else{
+      console.log("the role you are trying to remove do not exist");
+      }
+    },
+    error: function(error){
+      console.log("game obj cannot be found");
+    }
+  });
+}
 
 ShowEvent.prototype.JoinGame = function(e){
       
   var self = this;
   var $target = $(e.currentTarget);
   var role_name =  $target.data('role');
-  console.log(role_name); 
 
-  self.game_object.fetch().then(function(game_obj){
-    self.game_object = game_obj;
-    var attendance = null;
-    var participant_obj = self.game_object.get("participant_role");
-    if(participant_obj){
-      attendance = participant_obj[role_name];
-    }else{
-      participant_obj = new Object();
-    }
-    if(attendance){
-      console.log("someone has already joined before hand")
-    }else{
-      if(self.current_user_id){
-        participant_obj[role_name] = self.current_user_id;
-        self.game_object.set("participant_role", participant_obj); // add users as a participant
-        self.game_object.save().then(function(){
-          //update the participant table again
-          self.update_participant_data();
-          self.fill_container();
-        },function(error){
-          console.log(error);
-        });
+  self.game_object.fetch({
+    success: function(game_obj){
+      self.game_object = game_obj;
+      var attendance = null;
+      var participant_obj = self.game_object.get("participant_role");
+      if(participant_obj){
+        attendance = participant_obj[role_name];
       }else{
-        console.log("you need to login to participate event");
+        participant_obj = new Object();
       }
+      if(attendance){
+        console.log("someone has already joined before hand")
+      }else{
+        if(self.current_user_id){
+          participant_obj[role_name] = self.current_user_id;
+          self.game_object.set("participant_role", participant_obj); // add users as a participant
+          self.game_object.save().then(function(){
+            //update the participant table again
+            self.update_participant_data();
+            self.fill_container();
+          },function(error){
+            console.log("saving user data has been failed");
+          });
+        }else{
+          console.log("you need to login to participate event");
+        }
+      }
+    }, 
+    error: function(error){
+      console.log("game obj cannot be found");
     }
   });
 }
@@ -153,7 +199,7 @@ ShowEvent.prototype.fill_container_currentuser_applied = function(role_name){
   if(self.current_user){
     user_first_name = self.current_user.get("FirstName");
     user_last_name = self.current_user.get("LastName");
-    user_picture_src = self.current_user.get("ProfilePicture");
+    user_picture_src = self.current_user.get("Profile_picture");
   }
 
   var CurrentUserApplied_Template = 
@@ -165,12 +211,40 @@ ShowEvent.prototype.fill_container_currentuser_applied = function(role_name){
                               "</div>" +
                               "<div class='comment' align='center' style='clear:both'>You have joined</div>";
 
-    var participant_container = $("#game_container_" + this.game_id).find("." + self.container_object[role_name]);
+    var participant_container = $("#game_container_" + self.game_id).find("." + self.container_object[role_name]);
     participant_container.html(CurrentUserApplied_Template);
 
 };
 
 ShowEvent.prototype.fill_container_someone_applied = function(role_name){
+
+  var self=this;
+  var user_id = self.participant_user[role_name];
+  console.log(user_id);
+
+  var User = Parse.Object.extend("User");
+  var user_query = new Parse.Query(User);
+  user_query.get(user_id, {
+    success: function(user_obj){
+      var user_first_name = user_obj.get("FirstName");
+      var user_last_name = user_obj.get("LastName");
+      var user_picture_src = user_obj.get("Profile_picture");
+
+       var ParticipantApplied_Template = 
+                             "<div class='role'> <p><font-weight: bol>" + role_name + "</font-weight></p></div>" +
+                             "<div class='participant' style='float:left;'>" + user_first_name+ "&nbsp;" + user_last_name + "</div>";
+
+      var participant_container = $("#game_container_" + self.game_id).find("." + self.container_object[role_name]);
+      participant_container.html(ParticipantApplied_Template);
+
+    },
+    error: function(obj,error){
+      console.log(error);
+    }
+  });
+
+
+
   console.log("someone applied")
 };
 
