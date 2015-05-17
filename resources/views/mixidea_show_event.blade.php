@@ -117,6 +117,8 @@
 
   <div class="tab-content">
 
+
+
 @for ($i = 0; $i < count($event_hierarchy['round_array']); $i++)
   @if( $number_of_game < 2)
 
@@ -133,9 +135,9 @@
     <h2>event description: <span id="event_description"></span></h2>
     <h2>motion: <span id="game_motion"></span></h2>
     <center><span id="hangout_area"></span></center>
+    <div class="participant_table">
 
-
-
+<!--
     @if($game_type === "NorthAmerica")
 
       <table class="table table-bordered">
@@ -217,14 +219,13 @@
             </div></td></tr>
        </tbody>
       </table>
- <!--     <script src="{{ asset('/js/NA_user_mgn.js') }}"></script> -->
 
-/*memo: どこかに、Window.OnLoadで呼び出す処理を書かねば*/
+    
 
     @elseif($game_type === "BP")
 
     @elseif($game_type === "Asian")
-      <table>
+    <table>
        <thead><tr><th>Proposition</th><th>Opposition</th><</tr></thead> 
        <tbody>
         <tr><td><div id="PM_Container"></div></td><td><div id="LO_Container"></div></td></tr>
@@ -233,10 +234,13 @@
         <tr><td><div id="PMR_Container"></div></td><td><div id="LOR_Container"></div></td></tr>
        </tbody>
       </table>
+    
+
     @else
 
     @endif
-
+-->
+    </div>
   </div>
 </div>
 
@@ -255,9 +259,10 @@
     <p> <h2>event title: <span id="event_description"></span></h2></p>
     <p> <h2>motion: <span id="game_motion"></span></h2></p>
     <center><span id="hangout_area"></span></center>
-
-
+    <div class="participant_table">
+<!--
     @if($game_type === "NorthAmerica")
+
       <table class="table table-bordered">
        <thead><tr><th>Government</th><th>Opposition</th><</tr></thead> 
        <tbody>
@@ -337,11 +342,10 @@
             </div></td></tr>
        </tbody>
       </table>
-    
-      <script src="{{ asset('/js/NA_user_mgn.js') }}"></script>
     @elseif($game_type === "BP")
 
     @elseif($game_type === "Asian")
+
       <table>
        <thead><tr><th>Proposition</th><th>Opposition</th><</tr></thead> 
        <tbody>
@@ -351,9 +355,12 @@
         <tr><td><div id="PMR_Container"></div></td><td><div id="LOR_Container"></div></td></tr>
        </tbody>
       </table>
+
     @else
       /* other types of round format */
     @endif
+    -->
+   </div>
   </div>
 </div>
 
@@ -364,9 +371,7 @@
   </div>
 </div>
 
-<script>
-// window.oload(showEventData({{ @initial_game_type }}  {{ @initial_game_id }}))
-</script>
+
 
 @stop
 
@@ -380,7 +385,15 @@
   <script src ="{{ asset('/js/Mixidea_event.js') }}"></script>
   
 
-  <script src ="{{ asset('/js/testscript.js') }}"></script>
+  <script src ="{{ asset('/js/Mixidea_ShowEvent.js') }}"></script>
+<?php
+  $game_first_array = $game_array[0];
+  $initial_game_id = $game_first_array['game_ID'];
+  $initial_game_type = $game_first_array['type'];
+?>
+<script>
+ window.onload(new ShowEvent( "{{ $initial_game_id }}", "{{ $initial_game_type }}" ));
+</script>
 
 @stop
 
