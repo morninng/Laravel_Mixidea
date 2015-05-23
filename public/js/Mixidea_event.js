@@ -40,6 +40,7 @@ function create_event(){
     mixidea_event.set("title", str_title);
     mixidea_event.set("type", str_type);
     mixidea_event.set("style", str_style);
+    mixidea_event.set("description", str_description);
   	mixidea_event.add("round",round_obj);
 
   	var game_obj = round_obj.get("game")[0];
