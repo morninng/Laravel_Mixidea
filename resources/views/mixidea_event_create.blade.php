@@ -37,6 +37,6 @@
 
 @section('page_script')
 
-  <script src ="{{ asset('/js/Mixidea_event.js') }}"></script>
+  <script src ="{{ asset('/js/Mixidea_event_create.js') }}"></script>
   
 @stop

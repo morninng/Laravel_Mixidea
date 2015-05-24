@@ -1,14 +1,9 @@
 <?php namespace App\Http\Controllers;
 
-
 		include(app_path().'/Http/Controllers/include/secret_config.php');
 
 class MixideaUserController extends Controller {
-	/*
-	| Home Controller
-	*/
 	/**
-	 * Create a new controller instance.
 	 * @return void
 	 */
 	public $config_array = array();
@@ -17,7 +12,6 @@ class MixideaUserController extends Controller {
 	{
 		$mixidea_config = new Mixidea_Config();
 		$this->config_array= $mixidea_config->get_config();
-
 	}
 
 	/**
@@ -25,10 +19,27 @@ class MixideaUserController extends Controller {
 	 * @return Response
 	 */
 
-		public function edit_profile()
+	public function mypage()
 	{
+		return view('mixidea_event_create')
+				->with("mixidea_app_config",$this->config_array);
+	}
 
+	public function show_profile($user_id)
+	{
+		return view('mixidea_event_create')
+				->with("mixidea_app_config",$this->config_array);
+	}
+
+	public function edit_profile()
+	{
 		return view('mixidea_edit_profile')
+				->with("mixidea_app_config",$this->config_array);
+	}
+
+	public function show_past_activity($user_id)
+	{
+		return view('mixidea_event_create')
 				->with("mixidea_app_config",$this->config_array);
 	}
 
