@@ -2,6 +2,11 @@
 
 function create_event(){
 
+  var self = this;
+  self.round_obj = new Object();
+  self.game_obj = new Object();
+  self.event_obj = new Object();
+
   var str_title = document.event_creation.title.value;
   var str_date = document.event_creation.date.value;
   var str_time = document.event_creation.time.value;
@@ -27,12 +32,14 @@ function create_event(){
   mixidea_game.set("date_time", event_datetime);
 
   mixidea_game.save().then(function(game_obj){
+    self.game_obj = game_obj;
     var Round = Parse.Object.extend("Round");
     var mixidea_round = new Round();  
-  	mixidea_round.add("game",game_obj);
+  	mixidea_round.add("game",game_obj.id);
   	return mixidea_round.save();
 
   }).then(function(round_obj){
+    self.round_obj = round_obj;
     var Event = Parse.Object.extend("Event");
     var mixidea_event = new Event();
     mixidea_event.set("date_time", event_datetime);
@@ -41,7 +48,7 @@ function create_event(){
     mixidea_event.set("type", str_type);
     mixidea_event.set("style", str_style);
     mixidea_event.set("description", str_description);
-  	mixidea_event.add("round",round_obj);
+  	mixidea_event.add("round",round_obj.id);
 
   	var game_obj = round_obj.get("game")[0];
     var game_obj_id = game_obj.id;
@@ -54,11 +61,20 @@ function create_event(){
   	mixidea_event.set("event_hierarchy", event_obj);
   	return mixidea_event.save();
 
-  }).then(function(obj) {
+  }).then(function(event_obj) {
+    self.event_obj = event_obj;
   	console.log("event,round,game was saved");
-  }, function(error) {
+    self.round_obj.set('parent_event', self.event_obj.id);
+    return self.round_obj.save();
+  }).then(function(obj){
+
+    self.game_obj.set('parent_event', self.event_obj.id);
+    return self.game_obj.save();
+  }).then(function(obj){
+    console.log("everthing is created successfully");
+  }), function(error) {
   	console.log("error happen" + error);
-  });
+  };
 
 
 }
