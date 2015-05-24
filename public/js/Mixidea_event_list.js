@@ -73,6 +73,7 @@ ShowEventList.prototype.ShowInfo = function(event_obj, i, num){
   var event_title = event_obj.get('title');
   var event_date = event_obj.get('date_time');
   var event_description = event_obj.get('description');
+  var event_id = event_obj.id;
   
   self.month_list[i] = event_date.getMonth();
   self.weekday_list[i] = event_date.getDay();
@@ -88,96 +89,84 @@ ShowEventList.prototype.ShowInfo = function(event_obj, i, num){
 
 
   if(i==0){
-      var month_str = self.getMonthString(self.month_list[i]);
-      var month_element = $('<h1>')
-      month_element.text(month_str);
-      month_element.append('<hr>');
-      $("#eventlist_feed").append(month_element);
 
-      var dateOfWeek_str = self.getDateOfWeekString(self.weekday_list[i]);
-      var date_str = self.getDateString(self.date_list[i]);
-      var date_element = $('<h3>');
-      date_element.text(date_str + dateOfWeek_str);
-      $("#eventlist_feed").append(date_element);      
+      self.addMonthElement(self.month_list[i])
+      self.addDateElement(self.date_list[i], self.weekday_list[i]);
 
       var ul_sameDate_element = $('<ul>');
       ul_sameDate_element.addClass("same_date");
-
-      var li_event = $('<li>');
-      li_event.attr('style','border-bottom:1px solid #84b2e0')
-      var div_event = $('<div>');
-      var a_title = $('<a>');
-      var minute_str = self.getMinuteString(self.minute_list[i]);
-      a_title.text("time " + String(self.hour_list[i]) + ":" +  minute_str  + " - - -title" + event_title);
-      var p_description = $('<p>');
-      p_description.text(event_description);
-      div_event.append(a_title);
-      div_event.append(p_description);
-      li_event.append(div_event);
+      var li_event = self.create_event_li_element( event_id, event_title,event_description,
+                                      self.hour_list[i], self.minute_list[i] );
       ul_sameDate_element.append(li_event);
-      $("#eventlist_feed").append(ul_sameDate_element);      
-
+      $("#eventlist_feed").append(ul_sameDate_element);  
 
   }else{
 
     var sameday = true;
-
     if(self.month_list[i] != self.month_list[i-1]){
-      var month_str = self.getMonthString(self.month_list[i]);
-      var month_element = $('<h1>')
-      month_element.text(month_str);
-      month_element.append('<hr>');
-      $("#eventlist_feed").append(month_element);
+      self.addMonthElement(self.month_list[i])
       sameday=false;
     }
 
     if(self.date_list[i] != self.date_list[i-1]){
-      var dateOfWeek_str = self.getDateOfWeekString(self.weekday_list[i]);
-      var date_str = self.getDateString(self.date_list[i]);
-      var date_element = $('<h3>');
-      date_element.text(date_str + dateOfWeek_str);
-      $("#eventlist_feed").append(date_element);   
+      self.addDateElement(self.date_list[i], self.weekday_list[i]);
       sameday=false;
     }
 
     if(sameday){
       var sameday_event_list_ul =  $("#eventlist_feed").find('.same_date').last();
-      var li_event = $('<li>');
-      li_event.attr('style','border-bottom:1px solid #84b2e0')
-      var div_event = $('<div>');
-      var a_title = $('<a>');
-      var minute_str = self.getMinuteString(self.minute_list[i]);
-      a_title.text("time " + String(self.hour_list[i]) + ":" +  minute_str  + " - - -title" + event_title);
-      var p_description = $('<p>');
-      p_description.text(event_description);
-      div_event.append(a_title);
-      div_event.append(p_description);
-      li_event.append(div_event);
+      var li_event = self.create_event_li_element( event_id, event_title,event_description,
+                                      self.hour_list[i], self.minute_list[i] );
+
       sameday_event_list_ul.append(li_event);
     }else{
 
       var ul_sameDate_element = $('<ul>');
       ul_sameDate_element.addClass("same_date");
+      var li_event = self.create_event_li_element( event_id, event_title,event_description,
+                                      self.hour_list[i], self.minute_list[i] );
+      ul_sameDate_element.append(li_event);
+      $("#eventlist_feed").append(ul_sameDate_element);  
+    }
+  }
+  $("#eventlist_ul").append();
+}
+
+ShowEventList.prototype.addMonthElement = function(num_month){
+
+      var self = this;
+      var month_str = self.getMonthString(num_month);
+      var month_element = $('<h1>')
+      month_element.text(month_str);
+      month_element.append('<hr>');
+      $("#eventlist_feed").append(month_element);
+}
+ShowEventList.prototype.addDateElement = function(num_date, num_week_day){
+      var self = this;
+      var dateOfWeek_str = self.getDateOfWeekString(num_week_day);
+      var date_str = self.getDateString(num_date);
+      var date_element = $('<h3>');
+      date_element.text(date_str + dateOfWeek_str);
+      $("#eventlist_feed").append(date_element);  
+}
+ShowEventList.prototype.create_event_li_element = function( event_id,
+                                      event_title,event_description, event_hour, event_min ){
+      var self = this;
 
       var li_event = $('<li>');
       li_event.attr('style','border-bottom:1px solid #84b2e0')
       var div_event = $('<div>');
       var a_title = $('<a>');
-      var minute_str = self.getMinuteString(self.minute_list[i]);
-      a_title.text("time " + String(self.hour_list[i]) + ":" +  minute_str  + " - - -title" + event_title);
+      a_title.attr('href', '/event/showEvent/' + event_id);
+      var minute_str = self.getMinuteString(event_min);
+      a_title.text("time " + String(event_hour) + ":" +  minute_str  + " - - -title" + event_title);
       var p_description = $('<p>');
       p_description.text(event_description);
       div_event.append(a_title);
       div_event.append(p_description);
       li_event.append(div_event);
-      ul_sameDate_element.append(li_event);
-      $("#eventlist_feed").append(ul_sameDate_element);  
 
-    }
-
-
-  }
-  $("#eventlist_ul").append();
+      return li_event;
 }
 
 ShowEventList.prototype.getMonthString = function(num_month){
@@ -207,14 +196,10 @@ ShowEventList.prototype.getDateString = function(num_date){
 }
 
 ShowEventList.prototype.getMinuteString = function(num_minute){
-
   if(num_minute == 0){
     return "00";
   }
-
   return String(num_minute);
-
 }
-
 
 new ShowEventList();

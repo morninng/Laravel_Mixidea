@@ -7,6 +7,10 @@ Route::get('/event/createEvent', 'MixideaEventController@create');
 Route::get('/event/showEvent/{event_id}', 'MixideaEventController@ShowEvent');
 Route::get('/event/showEventList/', 'MixideaEventController@ShowEventList');
 
+
+
+Route::get('/mypage', 'MixideaMypageController@index');
+
 Route::get('/signin', 'AuthController@signin');
 
 

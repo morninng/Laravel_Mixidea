@@ -8,10 +8,10 @@
 
 @stop
 
-
-
 @section('page_context')
- 
+ <div style="float:right; margin-right: 30px;">
+ 	<a class="btn btn-success" href="/event/createEvent">Create New Event</a>
+ </div>
  <div id="eventlist_feed"></div>
 
 @stop
