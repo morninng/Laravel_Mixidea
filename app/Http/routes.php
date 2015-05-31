@@ -19,6 +19,7 @@ Route::get('context/list/type/{type}', 'MixideaContextController@type');
 Route::get('context/show/{game_id}', 'MixideaContextController@keyword');
 
 
+
 Route::controllers([
 	'auth' => 'Auth\AuthController',
 	'password' => 'Auth\PasswordController',

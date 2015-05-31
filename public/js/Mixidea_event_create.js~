@@ -49,10 +49,10 @@ function create_event(){
     mixidea_event.set("style", str_style);
     mixidea_event.set("description", str_description);
   	mixidea_event.add("round",round_obj.id);
-  	mixidea_event.add("game",self.game_obj.id);
+  	mixidea_event.add("game",self.game_obj .id);
 
-
-    var game_obj_id = self.game_obj.id;
+  	var game_obj = round_obj.get("game")[0];
+    var game_obj_id = game_obj.id;
   	var game_object = {game_ID: game_obj_id, type:str_style}
   	var game_array_obj = [game_object];
     var round_obj_id = round_obj.id;

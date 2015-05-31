@@ -1,9 +1,6 @@
-
 function ShowEvent(game_id, game_type){
   this.initialize(game_id, game_type);
 }
-
-
 
 ShowEvent.prototype.initialize = function(game_id, game_type){
 
@@ -132,41 +129,29 @@ ShowEvent.prototype.CancelGame = function(e){
 }
 
 ShowEvent.prototype.JoinGame = function(e){
-      
+
   var self = this;
   var $target = $(e.currentTarget);
   var role_name =  $target.data('role');
 
-  self.game_object.fetch({
-    success: function(game_obj){
+ if(!self.current_user_id){
+  alert("you need to login to join the game");
+  return;
+ } 
+
+  Parse.Cloud.run('JoinGame', { game_id: self.game_object.id, user_id: self.current_user_id, role: role_name},{
+    success: function(game_obj) {
       self.game_object = game_obj;
-      var attendance = null;
-      var participant_obj = self.game_object.get("participant_role");
-      if(participant_obj){
-        attendance = participant_obj[role_name];
-      }else{
-        participant_obj = new Object();
-      }
-      if(attendance){
-        console.log("someone has already joined before hand")
-      }else{
-        if(self.current_user_id){
-          participant_obj[role_name] = self.current_user_id;
-          self.game_object.set("participant_role", participant_obj); // add users as a participant
-          self.game_object.save().then(function(){
-            //update the participant table again
-            self.update_participant_data();
-            self.fill_container();
-          },function(error){
-            console.log("saving user data has been failed");
-          });
-        }else{
-          console.log("you need to login to participate event");
-        }
-      }
-    }, 
-    error: function(error){
-      console.log("game obj cannot be found");
+      self.update_participant_data();
+      self.fill_container();
+    },
+    error: function(error) {
+      var error_JSON = JSON.parse(error.message);
+      alert(error_JSON.code + ":" +  error_JSON.message);
+      var game_obj = error_JSON.game_obj;
+      self.game_object.set("participant_role", game_obj.participant_role);
+      self.update_participant_data();
+      self.fill_container();
     }
   });
 }
