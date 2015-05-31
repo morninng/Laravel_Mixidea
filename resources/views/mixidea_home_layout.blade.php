@@ -32,7 +32,7 @@
 				<ul class="nav navbar-nav">
 					<li><a href="{{ url('/') }}">Home</a></li>
 					<li><a href="{{ url('/event/showEventList') }}">Event</a></li>
-					<li><span id="Mypage"></span></li>
+					<li><a href="{{ url('/user/mypage') }}">MyPage</a></li>
 				</ul>
 
 				<ul class="nav navbar-nav navbar-right">

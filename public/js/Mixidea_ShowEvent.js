@@ -139,7 +139,7 @@ ShowEvent.prototype.JoinGame = function(e){
   return;
  } 
 
-  Parse.Cloud.run('JoinGame', { game_id: self.game_object.id, user_id: self.current_user_id, role: role_name},{
+  Parse.Cloud.run('JoinGame', { game_id: self.game_object.id, role: role_name},{
     success: function(game_obj) {
       self.game_object = game_obj;
       self.update_participant_data();

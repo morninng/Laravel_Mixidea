@@ -15,13 +15,12 @@ class MixideaUserController extends Controller {
 	}
 
 	/**
-	 * Show the application dashboard to the user.
 	 * @return Response
 	 */
 
 	public function mypage()
 	{
-		return view('mixidea_event_create')
+		return view('mixidea_mypage')
 				->with("mixidea_app_config",$this->config_array);
 	}
 
