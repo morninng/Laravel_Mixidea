@@ -5,15 +5,16 @@
 @section('page_context')
 <div class="container">
  <div class="col-sm-3 hidden-xs" id="left_panel">
-   profile
+   follower activity
  </div>
  <div class="col-sm-6 col-xs-12" id="center_context">
    <div id="own_event_list">
-    event you are plannning to join
-    <span id="my_event_list"></span>
+    event you are plannning to join<br><br>
+    <ul id="my_event_list" style="list-style:none;"></ul>
    </div>
    <div id="past_activity">
-     <span id="activity_list">
+    your past activity
+    <ul id="my_activity_list" style="list-style:none;"></ul>
    </div>
  </div>
  <div class="col-sm-3 hidden-xs" >
@@ -28,6 +29,6 @@
 
   <script src ="{{ asset('/js/Mixidea_mypage.js') }}"></script>
   <script>
-   new ShowEvent()
+   new MyPage();
   </script>
 @stop

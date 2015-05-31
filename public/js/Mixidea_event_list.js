@@ -1,12 +1,12 @@
 function ShowEventList(){
 
-  this.initialFilterCondition();
-  this.RetrieveInfo();
   this['month_list'] = new Array();
   this['weekday_list'] = new Array();
   this['date_list'] = new Array();
   this['hour_list'] = new Array();
   this['minute_list'] = new Array();
+  this.initialFilterCondition();
+  this.RetrieveInfo();
 }
 
 ShowEventList.prototype.click_update_feed = function(){
@@ -48,6 +48,7 @@ ShowEventList.prototype.RetrieveInfo = function(){
     event_query.greaterThan('date_time',self.condition.dateFrom);
     console.log(self.condition.dateFrom);
   }
+  event_query.ascending('date_time');
 
   event_query.find({
     success: function(event_objects) {
@@ -64,9 +65,7 @@ ShowEventList.prototype.RetrieveInfo = function(){
 
 ShowEventList.prototype.ShowInfo = function(event_obj, i, num){
 
-
   console.log('show info' + i);
-
   var self = this;
   var dom_event_list = $('<li>');
   dom_event_a = $('<a>');
