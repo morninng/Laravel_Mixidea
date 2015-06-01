@@ -63,7 +63,6 @@ ShowEvent.prototype.initialize = function(game_id, game_type){
 ShowEvent.prototype.update_participant_data = function(){
 
   var self = this;
-  //initialize the participant array
   for(var key in self.participant_user){
     self.participant_user[key] = null;
   }
@@ -79,54 +78,37 @@ ShowEvent.prototype.update_participant_data = function(){
 ShowEvent.prototype.handleEvents = function(){
 
     var self = this;
-
     var game_container_element = $("#game_container_" + self.game_id);
-
     game_container_element.on("click", ".participate_button", function(e){
       self.JoinGame(e);
     });
-
     game_container_element.on("click", ".cancel_button", function(e){
       self.CancelGame(e);
     });
 };
-
 
 ShowEvent.prototype.CancelGame = function(e){
   var self = this;
   var $target = $(e.currentTarget);
   var role_name =  $target.data('role');
 
-  self.game_object.fetch({
-    success: function(game_obj){
+  Parse.Cloud.run('CancelGame', { game_id: self.game_object.id, role: role_name},{
+    success: function(game_obj) {
       self.game_object = game_obj;
-      var attendance = null;
-      var participant_obj = self.game_object.get("participant_role");
-      if(participant_obj){
-        attendance = participant_obj[role_name];
-        if(attendance && attendance==self.current_user_id){
-          delete participant_obj[role_name];
-          self.game_object.set("participant_role", participant_obj);
-          self.game_object.save().then(function(){
-            //update the participant table again
-            self.update_participant_data();
-            self.fill_container();
-
-          },function(error){
-            console.log(error);
-          });
-        }else{
-          console.log("somehow you are not the person who  have canceled");
-        }
-      }else{
-      console.log("the role you are trying to remove do not exist");
-      }
+      self.update_participant_data();
+      self.fill_container();
     },
-    error: function(error){
-      console.log("game obj cannot be found");
+    error: function(error) {
+      var error_JSON = JSON.parse(error.message);
+      alert(error_JSON.code + ":" +  error_JSON.message);
+      var game_obj = error_JSON.game_obj;
+      self.game_object.set("participant_role", game_obj.participant_role);
+      self.update_participant_data();
+      self.fill_container();
     }
   });
 }
+
 
 ShowEvent.prototype.JoinGame = function(e){
 
@@ -269,6 +251,5 @@ ShowEvent.prototype.Set_NA_Template = function(){
       "</table>";
     var game_table_element = $("#game_container_" + this.game_id).find(".participant_table");
     game_table_element.html(NA_html_Template);
-
 };
 
