@@ -15,7 +15,17 @@
  ?>
 
 
-<!-- /**********tab panel for round  info***********/ -->
+
+
+
+    <h2>event title: {{$event_title}}</h2>
+    <h4>description: {{$event_description}}</h4>
+    <h4>date & time: <span id="event_datetime"></span></h4>
+
+
+
+
+<!-- /**********tab panel for game  info***********/ -->
 
 <div role="tabpanel">
   <ul class="nav nav-tabs" role="tablist">
@@ -79,9 +89,7 @@
 <div role="tabpanel" class="tab-pane active" id="{{$Round_name_array[$i]}}">
   <div id="game_container_{{$game_id}}">
 
-    <h2>event title: <span id="event_title"></span></h2>
-    <h2>event description: <span id="event_description"></span></h2>
-    <h2>motion: <span id="game_motion"></span></h2>
+    <p><h3>motion: <span id="game_motion"></span></h3></p><br>
     <center><span id="hangout_area"></span></center>
     <div class="participant_table">
 
@@ -100,12 +108,9 @@
    ?>
 <div role="tabpanel" class="tab-pane" id="{{$Round_name_array[$i]}}Round_{{$Game_name_array[$j]}}">
   <div id="game_container_{{$game_id}}">
-    <p> <h2>event title: <span id="event_title"></span></h2></p>
-    <p> <h2>event title: <span id="event_description"></span></h2></p>
-    <p> <h2>motion: <span id="game_motion"></span></h2></p>
+    <p> <h3>motion: <span id="game_motion"></span></h3></p><br>
     <center><span id="hangout_area"></span></center>
     <div class="participant_table">
-
    </div>
   </div>
 </div>
@@ -116,8 +121,6 @@
 
   </div>
 </div>
-
-
 
 @stop
 

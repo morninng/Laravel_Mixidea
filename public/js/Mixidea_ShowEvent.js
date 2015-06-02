@@ -47,6 +47,8 @@ ShowEvent.prototype.initialize = function(game_id, game_type){
   game_query.get(self.game_id, {
     success: function(game_obj){
       self.game_object = game_obj;
+      self.show_date_time();
+      self.show_game_motion();
       self.update_participant_data();
       self.fill_container();
       self.handleEvents();
@@ -59,6 +61,22 @@ ShowEvent.prototype.initialize = function(game_id, game_type){
   });
 };
 
+
+ShowEvent.prototype.show_game_motion = function(){
+
+    var self = this;
+    var str_motion = self.game_object.get("motion");
+    var game_motion_element = $("#game_container_" + self.game_id).find("#game_motion");
+    game_motion_element.html(str_motion);
+}
+
+ShowEvent.prototype.show_date_time = function(){
+
+    var self = this;
+    var date_time = self.game_object.get("date_time");    
+    var datetime_element = $("#event_datetime");
+    datetime_element.html(date_time);
+};
 
 ShowEvent.prototype.update_participant_data = function(){
 
