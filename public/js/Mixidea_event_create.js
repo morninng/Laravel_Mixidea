@@ -80,3 +80,29 @@ function create_event(){
 }
 
 
+
+function game_number_change_form(){  
+  var number_game_str = document.forms.event_creation.num_game.value;
+  var number_game_num = Number(number_game_str);
+  gamenumber_change(number_game_num);
+
+}
+function gamenumber_change(number_game_num){
+  var game_create_form_data = [{caption_name: "First Game", form_id_num: "game_creation_1"},
+                               {caption_name: "Second Game", form_id_num: "game_creation_2"},
+                               {caption_name: "Third Game", form_id_num: "game_creation_3"},
+                               {caption_name: "Fourth Game", form_id_num: "game_creation_4"},
+                               {caption_name: "Fifth Game", form_id_num: "game_creation_5"},
+                               {caption_name: "Sixth Game", form_id_num: "game_creation_6"}
+                               ];
+
+  game_create_form_data_use = game_create_form_data.slice(0, number_game_num);
+  game_creation_template = _.template($('[data-template="game_create_template"]').html());
+  game_creation_html = game_creation_template({list:game_create_form_data_use});
+  $("#game_feed").html(game_creation_html);
+}
+
+(function initial_game_number(){
+  gamenumber_change(1);
+}());
+
