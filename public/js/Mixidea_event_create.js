@@ -1,6 +1,49 @@
 
+function CreateEvent(){
+  var self = this;
+  var number_game_str = document.forms.event_creation.num_game.value;
+  var number_game_num = Number(number_game_str);
+ 
+  var form_name_game_array = ["game_creation_1", "game_creation_2","game_creation_3",
+                              "game_creation_4", "game_creation_5", "game_creation_6"];
 
-function create_event(){
+  var str_game_genre_array = new Array();
+  var str_game_style_array = new Array();
+  var str_game_motion_array = new Array();
+  var game_obj_array = new Array();
+
+  for(var i=0;i<number_game_num; i++){
+    str_game_genre_array.push( eval( "document." + form_name_game_array[i] + ".genre.value") );
+    str_game_style_array.push( eval( "document." + form_name_game_array[i] + ".style.value") );
+    str_game_motion_array.push( eval( "document." + form_name_game_array[i] + ".motion.value") );
+    var game_obj = {genre: str_game_genre_array[i], style: str_game_style_array[i], motion: str_game_motion_array[i]}
+    game_obj_array.push(game_obj);
+  }
+
+  var event_object = {
+    event_title: document.event_creation.title.value,
+    event_description: document.event_creation.description.value,
+    event_date: document.event_creation.date.value,
+    event_time: document.event_creation.time.value,
+    event_type: document.event_creation.type.value,
+    game_object_array: game_obj_array
+  }
+
+  console.log(event_object);
+  str_event_obj = JSON.stringify(event_object);
+
+  Parse.Cloud.run('Cloud_CreateEvent', { event_obj: str_event_obj},{
+    success: function(game_obj) {
+      alert("event has been successfully created");
+      //redirect to event show screen
+    },
+    error: function(error) {
+      alert("something happen" + error.message);
+      //data should be vaidated before upload and the error should not happen in server side
+    }
+  });
+}
+/*
 
   var self = this;
   self.round_obj = new Object();
@@ -76,6 +119,13 @@ function create_event(){
   }), function(error) {
   	console.log("error happen" + error);
   };
+
+}
+
+*/
+CreateEvent.prototype.create_JSON = function(game_id, game_type){
+
+
 
 }
 

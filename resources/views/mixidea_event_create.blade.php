@@ -38,7 +38,7 @@
 
  <span id="game_feed"></span>
 
-  <center><input value="create event & game" type="button" onClick="create_event()"></center>
+  <center><input value="create event & game" type="button" onClick="CreateEvent()"></center>
 
 
 <script type="text/template" data-template="game_create_template">
@@ -55,12 +55,14 @@
          <option value='technology'>Technology</option>
        </select>
      </li>
-     <li><label>Event Style:&nbsp;&nbsp;&nbsp;&nbsp;<input type='radio' name='style' checked='checked' value='NorthAmerica'>North America</li>
-     <li><label>Event Motion(only if you can decide in advance):&nbsp;&nbsp;&nbsp;&nbsp;<input type='text' name='motion'></li>
+     <li><label>Game Style:&nbsp;&nbsp;&nbsp;&nbsp;
+        <input type='radio' name='style' checked='checked' value='NorthAmerica'>North America
+        <input type='radio' name='style'  value='Asian'>Asian
+    </li>
+     <li><label>Game Motion(you can decide motion later):&nbsp;&nbsp;&nbsp;&nbsp;<input type='text' name='motion'></li>
   </form>
  <% }); %>
 </script>
-
 
 @stop
 
