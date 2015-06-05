@@ -70,17 +70,17 @@ class MixideaEventController extends Controller {
 		  $event_description = $event_obj->get("description");
 		  $event_genre = "";
 
-		  foreach ($event_genre_array as $event_genre_str){
-			  $event_genres = $event_genre . $event_genre_str . ",";
-		  }
-		  $event_genres = substr($event_genres , 0, -1);
+		  // foreach ($event_genre_array as $event_genre_str){
+			 //  $event_genres = $event_genre . $event_genre_str . ",";
+		  // }
+		  // $event_genres = substr($event_genres , 0, -1);
 
 		return view('mixidea_show_event')
 				->with("mixidea_app_config",$this->config_array)
 				->with("event_id",$event_id)
 				->with("event_title",$event_title)
 				->with("event_description",$event_description)
-				->with("event_genres",$event_genres)
+//				->with("event_genres",$event_genres)
 				->with("event_type",$event_type)
 				->with("event_hierarchy",$event_hierarchy)
 				->with("event_style",$event_style);	

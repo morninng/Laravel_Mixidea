@@ -1,13 +1,19 @@
-function ShowEvent(game_id, game_type){
-  this.initialize(game_id, game_type);
+
+function onclick_tab(game_id, game_style){
+  new ShowEvent(game_id, game_style);
 }
 
-ShowEvent.prototype.initialize = function(game_id, game_type){
+
+function ShowEvent(game_id, game_style){
+  this.initialize(game_id, game_style);
+}
+
+ShowEvent.prototype.initialize = function(game_id, game_style){
 
   self=this;
   self.game_container = "";
   self.game_id = game_id;
-  self.game_type = game_type;
+  self.game_style = game_style;
   self.participant_user = new Object();
   self.role_array = new Array();
   self.container_object = new Object();
@@ -19,7 +25,7 @@ ShowEvent.prototype.initialize = function(game_id, game_type){
     self.current_user_id =self.current_user.id;
   }
 
-  switch(game_type){
+  switch(game_style){
     case "NorthAmerica":
       self.Set_NA_Template();
       self.role_array = ["PrimeMinister","LeaderOpposition","MemberGovernment","MemberOpposition","ReplyPM","LOReply"];
