@@ -37,7 +37,7 @@ function CreateEvent(){
     str_game_genre_array.push( eval( "document." + form_name_game_array[i] + ".genre.value") );
     str_game_style_array.push( eval( "document." + form_name_game_array[i] + ".style.value") );
     str_game_motion_array.push( eval( "document." + form_name_game_array[i] + ".motion.value") );
-    var game_obj = {genre: str_game_genre_array[i], style: str_game_style_array[i], motion: str_game_motion_array[i]}
+    var game_obj = {genre: str_game_genre_array[i], style: str_game_style_array[i], motion: str_game_motion_array[i]};
     game_obj_array.push(game_obj);
   }
 
