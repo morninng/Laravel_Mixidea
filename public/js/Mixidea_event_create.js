@@ -12,6 +12,27 @@ function CreateEvent(){
   var str_game_motion_array = new Array();
   var game_obj_array = new Array();
 
+  var str_date = document.event_creation.date.value;
+  var str_time = document.event_creation.time.value;
+  console.log("str_date: " + str_date);
+  console.log("str_time" +  str_time);
+  var event_hour = str_time.split(":")[0];
+  var event_minute = str_time.split(":")[1];
+  var event_datetime = new Date(str_date);
+  event_datetime.setHours(event_hour);
+  event_datetime.setMinutes(event_minute);
+  console.log("input time is " + event_datetime);
+
+  var event_time_obj = new Object();
+  event_time_obj = {
+    year: event_datetime.getUTCFullYear(),
+    month: event_datetime.getUTCMonth(),
+    day: event_datetime.getUTCDate(),
+    hour: event_datetime.getUTCHours(),
+    minutes: event_datetime.getUTCMinutes()
+  };
+  console.log(event_time_obj);
+
   for(var i=0;i<number_game_num; i++){
     str_game_genre_array.push( eval( "document." + form_name_game_array[i] + ".genre.value") );
     str_game_style_array.push( eval( "document." + form_name_game_array[i] + ".style.value") );
@@ -23,8 +44,7 @@ function CreateEvent(){
   var event_object = {
     event_title: document.event_creation.title.value,
     event_description: document.event_creation.description.value,
-    event_date: document.event_creation.date.value,
-    event_time: document.event_creation.time.value,
+    event_date_time_obj: event_time_obj,
     event_type: document.event_creation.type.value,
     game_object_array: game_obj_array
   }

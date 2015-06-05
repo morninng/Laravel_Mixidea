@@ -159,9 +159,7 @@ ShowEvent.prototype.JoinGame = function(e){
 
 
 ShowEvent.prototype.fill_container = function(){
-
   var self = this;
-
   for(var key in self.participant_user){
     if(self.participant_user[key]){
       if(self.participant_user[key] == self.current_user_id){
@@ -198,7 +196,6 @@ ShowEvent.prototype.fill_container_currentuser_applied = function(role_name){
 
     var participant_container = $("#game_container_" + self.game_id).find("." + self.container_object[role_name]);
     participant_container.html(CurrentUserApplied_Template);
-
 };
 
 ShowEvent.prototype.fill_container_someone_applied = function(role_name){
@@ -227,9 +224,6 @@ ShowEvent.prototype.fill_container_someone_applied = function(role_name){
       console.log(error);
     }
   });
-
-
-
   console.log("someone applied")
 };
 
