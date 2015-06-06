@@ -96,7 +96,6 @@
     @endif
 
   <div id="game_container_{{$game_id}}">
-    <?php echo "tab panel game container" . $game_id . "round i" . $i ?>
 
     <p><h3>motion: <span id="game_motion"></span></h3></p><br>
     <center><span id="hangout_area"></span></center>
@@ -139,18 +138,31 @@
 @section('page_script')
 
   <script src="{{ asset('/js/header_nav_draw.js') }}"></script>
-  <script src ="{{ asset('/js/retrieve_user_data.js') }}"></script>
-  <script src ="{{ asset('/js/Mixidea_event.js') }}"></script>
-  
-
   <script src ="{{ asset('/js/Mixidea_ShowEvent.js') }}"></script>
+
+  <?php 
+
+        $number_of_game = count($game_array);
+    ?>
+
+
 <?php
+  $round_array =  $event_hierarchy['round_array'];
+  $round_obj = $round_array[0];
+  $game_array = $round_obj['game_array'];
   $game_first_array = $game_array[0];
   $initial_game_id = $game_first_array['game_ID'];
   $initial_game_style = $game_first_array['style'];
 ?>
 <script>
- new ShowEvent( "{{ $initial_game_id }}", "{{ $initial_game_style }}" );
+  new ShowEvent( "{{ $initial_game_id }}", "{{ $initial_game_style }}" );
+ 
+
+function onclick_tab(game_id, game_style){
+  new ShowEvent(game_id, game_style);
+}
+
+
 </script>
 
 @stop

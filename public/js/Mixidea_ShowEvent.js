@@ -1,11 +1,9 @@
 
-function onclick_tab(game_id, game_style){
-  new ShowEvent(game_id, game_style);
-}
 
 
 function ShowEvent(game_id, game_style){
-  this.initialize(game_id, game_style);
+  var self = this;
+  self.initialize(game_id, game_style);
 }
 
 ShowEvent.prototype.initialize = function(game_id, game_style){
