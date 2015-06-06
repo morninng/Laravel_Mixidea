@@ -138,18 +138,34 @@
 <script type = "text/template" data-template="ParticipantApplied_Template">
 
   <div class='role'> <p><font-weight: bol> <%= usr_info.role_name  %> </font-weight></p></div>
-  <div class='participant' style='float:left;'> <%= usr_info.first_name %>  &nbsp;  <%= usr_info.last_name  %> </div>
+  <div class='participant' style='float:left;'>
+      <div class="image_container" style="float:left; margin-left:5px;">
+        <img src="<%=usr_info.picture_src %>">
+      </div>
+     <div class="profile_container" style="float:left; margin-left:10px;">
+      <%= usr_info.first_name %>  &nbsp;  <%= usr_info.last_name  %> 
+      </div>
+   </div>
 
 </script>
 
 
 <script type = "text/template" data-template="CurrentUserApplied_Template">
   <div class='role'> <p><font-weight: bol> <%= usr_info.role_name %> </font-weight></p></div>
-  <div class='participant' style='float:left;'> <%=  usr_info.first_name  %>  &nbsp;<%=  usr_info.last_name %> </div>
-  <div class='event_button' style='float:right;margin-right:5px; margin-left:5px;'>
-      <button class='cancel_button' data-role= <%= usr_info.role_name  %> >Cancel</button>
+  <div class='participant' style='float:left;'>
+    <div class="image_container" style="float:left; margin-left:5px;">
+      <img src="<%=usr_info.picture_src %>">
+    </div>
+    <div class="profile_container" style="float:left; margin-left:10px;">
+      <%=  usr_info.first_name  %>  &nbsp;<%=  usr_info.last_name %> 
+    </div>
   </div>
-  <div class='comment' align='center' style='clear:both'>You have joined</div>
+  <div class='event_button' style='float:right;margin-right:5px; margin-left:5px;'>
+      <button class='btn btn-inverse cancel_button' data-role= <%= usr_info.role_name  %> >
+        <i class="glyphicon glyphicon-book"></i> Cancel
+      </button>
+  </div>
+  <div class='comment' align='center' style='clear:both'><font color="red">You have joined</font></div>
 </script>
 
 
@@ -169,7 +185,9 @@
 <script type="text/template" data-template="NoApplicant_Template">
   <div class='role'> <p><font-weight: bol> <%= role_name %> </font-weight></p></div>
   <div class='event_button' style='float:right;margin-right:5px; margin-left:5px;'>
-      <button class='participate_button' data-role= <%= role_name %> >Join</button>
+      <button class='btn btn-primary participate_button' data-role= <%= role_name %> >
+        <i class="glyphicon glyphicon-book"></i> Join
+      </button>
   </div>
   <div class='comment' style='clear:both'></div>
 </script>
