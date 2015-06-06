@@ -177,7 +177,7 @@ ShowEvent.prototype.fill_container = function(){
   }
 };
 
-ShowEvent.prototype.fill_container_currentuser_applied = function(role_name){
+ShowEvent.prototype.fill_container_currentuser_applied = function(role_name_str){
 
   var user_first_name = "";
   var user_last_name = "";
@@ -189,40 +189,41 @@ ShowEvent.prototype.fill_container_currentuser_applied = function(role_name){
     user_picture_src = self.current_user.get("Profile_picture");
   }
 
-  var CurrentUserApplied_Template = 
-                             "<div class='role'> <p><font-weight: bol>" + role_name + "</font-weight></p></div>" +
-                             "<div class='participant' style='float:left;'>" + user_first_name+ "&nbsp;" + user_last_name + "</div>" +
-                              "<div class='event_button' style='float:right;margin-right:5px; margin-left:5px;'>" +
-                                "<button class='cancel_button' data-role=" + role_name +
-                                ">Cancel</button>" +
-                              "</div>" +
-                              "<div class='comment' align='center' style='clear:both'>You have joined</div>";
+  var data = { 
+    role_name: role_name_str, 
+    first_name: user_first_name, 
+    last_name: user_last_name, 
+    picture_src: user_picture_src, 
+  };
 
-    var participant_container = $("#game_container_" + self.game_id).find("." + self.container_object[role_name]);
-    participant_container.html(CurrentUserApplied_Template);
+  var CurrentUserApplied_html_Template = _.template($('[data-template="CurrentUserApplied_Template"]').html());
+  var CurrentUserApplied_html_text = CurrentUserApplied_html_Template( {usr_info:data} );
+  var participant_container = $("#game_container_" + this.game_id).find("." + self.container_object[role_name_str]);
+  participant_container.html(CurrentUserApplied_html_text);
+
 };
 
-ShowEvent.prototype.fill_container_someone_applied = function(role_name){
+
+ShowEvent.prototype.fill_container_someone_applied = function(role_name_str){
 
   var self=this;
-  var user_id = self.participant_user[role_name];
+  var user_id = self.participant_user[role_name_str];
   console.log(user_id);
 
   var User = Parse.Object.extend("User");
   var user_query = new Parse.Query(User);
   user_query.get(user_id, {
     success: function(user_obj){
-      var user_first_name = user_obj.get("FirstName");
-      var user_last_name = user_obj.get("LastName");
-      var user_picture_src = user_obj.get("Profile_picture");
-
-       var ParticipantApplied_Template = 
-                             "<div class='role'> <p><font-weight: bol>" + role_name + "</font-weight></p></div>" +
-                             "<div class='participant' style='float:left;'>" + user_first_name+ "&nbsp;" + user_last_name + "</div>";
-
-      var participant_container = $("#game_container_" + self.game_id).find("." + self.container_object[role_name]);
-      participant_container.html(ParticipantApplied_Template);
-
+      var data = { 
+        role_name: role_name_str, 
+        first_name: user_obj.get("FirstName"), 
+        last_name: user_obj.get("LastName"), 
+        picture_src: user_obj.get("Profile_picture"), 
+      };
+      var ParticipantApplied_html_Template = _.template($('[data-template="ParticipantApplied_Template"]').html());
+      var ParticipantApplied_html_text = ParticipantApplied_html_Template( {usr_info:data} );
+      var participant_container = $("#game_container_" + self.game_id).find("." + self.container_object[role_name_str]);
+      participant_container.html(ParticipantApplied_html_text);
     },
     error: function(obj,error){
       console.log(error);
@@ -231,41 +232,25 @@ ShowEvent.prototype.fill_container_someone_applied = function(role_name){
   console.log("someone applied")
 };
 
-ShowEvent.prototype.fill_container_NoApplicant = function(role_name){
 
-  var NoApplicant_Template = "<div class='role'> <p><font-weight: bol>" + role_name +
-                             "</font-weight></p></div>" +
-                              "<div class='event_button' style='float:right;margin-right:5px; margin-left:5px;'>" +
-                                "<button class='participate_button' data-role=" + role_name +
-                                ">Join</button>" +
-                              "</div>" +
-                              "<div class='comment' style='clear:both'></div>";
+ShowEvent.prototype.fill_container_NoApplicant = function(role_name_str){
 
-    var participant_container = $("#game_container_" + this.game_id).find("." + self.container_object[role_name]);
-    participant_container.html(NoApplicant_Template);
+    var self = this;
+    var data = { role_name: role_name_str };
+
+    NoApplicant_html_Template = _.template($('[data-template="NoApplicant_Template"]').html());
+    var NoApplicant_html_text = NoApplicant_html_Template(data);
+    var participant_container = $("#game_container_" + this.game_id).find("." + self.container_object[role_name_str]);
+    participant_container.html(NoApplicant_html_text);
 
 };
 
 
 ShowEvent.prototype.Set_NA_Template = function(){
-  var NA_html_Template = "<table class='table table-bordered'>" +
-       "<thead><tr><th>Government</th><th>Opposition</th></tr></thead>" + 
-       "<tbody>" +
-        "<tr><td><div class='PM_Container'>" +
-            "</div></td>" +
-            "<td><div class='LO_Container'>" +
-            "</div></td></tr>" +
-        "<tr><td><div class='MG_Container'>" +
-            "</div></td>" +
-            "<td><div class='MO_Container'></div>" +
-            "</td></tr>" +
-        "<tr><td><div class='PMR_Container'>" +
-            "</div></td>" +
-            "<td><div class='LOR_Container'>" +
-            "</div></td></tr>" +
-       "</tbody>" +
-      "</table>";
-    var game_table_element = $("#game_container_" + this.game_id).find(".participant_table");
-    game_table_element.html(NA_html_Template);
-};
 
+    NA_html_Template = _.template($('[data-template="NA_Template"]').html());
+    var game_table_element = $("#game_container_" + this.game_id).find(".participant_table");
+    var NA_html_text = NA_html_Template();
+    game_table_element.html(NA_html_text);
+
+};

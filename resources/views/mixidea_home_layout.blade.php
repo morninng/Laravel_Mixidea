@@ -53,6 +53,9 @@
 
   	<script src="{{ asset('/js/header_nav_draw.js') }}"></script>
 
+
+	@yield('page_template')
+
 	@yield('page_script')
 
 

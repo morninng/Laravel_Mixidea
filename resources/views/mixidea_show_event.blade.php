@@ -19,8 +19,6 @@
     <h4>date & time: <span id="event_datetime"></span></h4>
 
 
-
-
 <!-- /**********tab panel for game  info***********/ -->
 
 <div role="tabpanel">
@@ -135,16 +133,60 @@
 
 
 
+@section('page_template')
+
+<script type = "text/template" data-template="ParticipantApplied_Template">
+
+  <div class='role'> <p><font-weight: bol> <%= usr_info.role_name  %> </font-weight></p></div>
+  <div class='participant' style='float:left;'> <%= usr_info.first_name %>  &nbsp;  <%= usr_info.last_name  %> </div>
+
+</script>
+
+
+<script type = "text/template" data-template="CurrentUserApplied_Template">
+  <div class='role'> <p><font-weight: bol> <%= usr_info.role_name %> </font-weight></p></div>
+  <div class='participant' style='float:left;'> <%=  usr_info.first_name  %>  &nbsp;<%=  usr_info.last_name %> </div>
+  <div class='event_button' style='float:right;margin-right:5px; margin-left:5px;'>
+      <button class='cancel_button' data-role= <%= usr_info.role_name  %> >Cancel</button>
+  </div>
+  <div class='comment' align='center' style='clear:both'>You have joined</div>
+</script>
+
+
+
+<script type="text/template" data-template="NA_Template">
+  <table class='table table-bordered'>
+   <thead><tr><th>Government</th><th>Opposition</th></tr></thead>
+   <tbody>
+   <tr><td><div class='PM_Container'></div></td><td><div class='LO_Container'></div></td></tr>
+   <tr><td><div class='MG_Container'></div></td><td><div class='MO_Container'></div></td></tr>
+   <tr><td><div class='PMR_Container'></div></td><td><div class='LOR_Container'></div></td></tr>
+   </tbody>
+  </table>
+</script>
+
+
+<script type="text/template" data-template="NoApplicant_Template">
+  <div class='role'> <p><font-weight: bol> <%= role_name %> </font-weight></p></div>
+  <div class='event_button' style='float:right;margin-right:5px; margin-left:5px;'>
+      <button class='participate_button' data-role= <%= role_name %> >Join</button>
+  </div>
+  <div class='comment' style='clear:both'></div>
+</script>
+
+
+@stop
+
+
+
 @section('page_script')
 
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
   <script src="{{ asset('/js/header_nav_draw.js') }}"></script>
   <script src ="{{ asset('/js/Mixidea_ShowEvent.js') }}"></script>
 
-  <?php 
-
-        $number_of_game = count($game_array);
-    ?>
-
+<?php  $number_of_game = count($game_array); ?>
 
 <?php
   $round_array =  $event_hierarchy['round_array'];
@@ -158,10 +200,9 @@
   new ShowEvent( "{{ $initial_game_id }}", "{{ $initial_game_style }}" );
  
 
-function onclick_tab(game_id, game_style){
-  new ShowEvent(game_id, game_style);
-}
-
+  function onclick_tab(game_id, game_style){
+    new ShowEvent(game_id, game_style);
+  }
 
 </script>
 
