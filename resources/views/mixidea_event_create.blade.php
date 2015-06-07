@@ -58,6 +58,7 @@
      <li><label>Game Style:&nbsp;&nbsp;&nbsp;&nbsp;
         <input type='radio' name='style' checked='checked' value='NorthAmerica'>North America
         <input type='radio' name='style'  value='Asian'>Asian
+        <input type='radio' name='style'  value='BP'>BP
     </li>
      <li><label>Game Motion(you can decide motion later):&nbsp;&nbsp;&nbsp;&nbsp;<input type='text' name='motion'></li>
   </form>

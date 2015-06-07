@@ -254,6 +254,22 @@
   </table>
 </script>
 
+<script type="text/template" data-template="BP_Template">
+  <table class='table table-bordered'>
+   <thead><tr><th>OpeningGovernment</th><th>OpeningOpposition</th></tr></thead>
+   <tbody>
+   <tr><td><div class='PM_Container'></div></td><td><div class='LO_Container'></div></td></tr>
+   <tr><td><div class='DPM_Container'></div></td><td><div class='DLO_Container'></div></td></tr>
+   </tbody>
+   <thead><tr><th>ClosintGovernment</th><th>ClosingOpposition</th></tr></thead>
+   <tbody>
+   <tr><td><div class='MG_Container'></div></td><td><div class='MO_Container'></div></td></tr>
+   <tr><td><div class='GW_Container'></div></td><td><div class='OW_Container'></div></td></tr>
+   </tbody>
+  </table>
+</script>
+
+
 
 @stop
 

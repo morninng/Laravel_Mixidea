@@ -44,7 +44,26 @@ ShowEvent.prototype.initialize_game_structure = function(game_id, game_style){
       self.max_number_Audience = 3;
       break;
     case "BP":
-      console.log("under development");
+      self.Set_BP_Template();
+      self.role_array = ["PrimeMinister","LeaderOpposition","DeptyPrimeMinister","DeptyLeaderOpposition",
+                      "MemberGovernment","MemberOpposition","GovermentWhip","OppositionWhip"];
+      self.role_groupo_obj = {
+        PrimeMinister: "OG",
+        LeaderOpposition: "OO",
+        DeptyPrimeMinister: "OG",
+        DeptyLeaderOpposition: "OO",
+        GovernmentWhip: "CG",
+        OppositionWhip: "CO",
+        GovermentReply: "GW",
+        OppositionReply: "OW",
+      }
+      self.container_array = ["PM_Container","LO_Container","DPM_Container","DLO_Container",
+                            "MG_Container","MO_Container","GW_Container","OW_Container"];
+      for( var i=0; i< self.role_array.length; i++){
+        self.participant_user[self.role_array[i]] = null;
+        self.container_object[self.role_array[i]] = self.container_array[i];
+      }
+      self.max_number_Audience = 2;
       break;
     case "Asian":
       self.Set_Asian_Template();
@@ -494,3 +513,12 @@ ShowEvent.prototype.Set_Asian_Template = function(){
     var Asian_html_text = Asian_html_Template();
     game_table_element.html(Asian_html_text);
 };
+
+ShowEvent.prototype.Set_BP_Template = function(){
+    var self = this;
+    BP_html_Template = _.template($('[data-template="BP_Template"]').html());
+    var game_table_element = $("#game_container_" + self.game_id).find(".participant_table");
+    var BP_html_text = BP_html_Template();
+    game_table_element.html(BP_html_text);
+};
+
