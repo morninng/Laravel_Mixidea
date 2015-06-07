@@ -51,7 +51,7 @@ ShowEvent.prototype.initialize = function(game_id, game_style){
       self.game_object = game_obj;
       self.show_date_time();
       self.show_game_motion();
-      self.update_participant_data();
+      self.update_debater_participant_data();
       self.fill_debater_container();
       self.fill_audience_container();
       self.handleEvents();
@@ -194,7 +194,7 @@ ShowEvent.prototype.JoinGame_Audience = function(e){
 }
 
 
-ShowEvent.prototype.update_participant_data = function(){
+ShowEvent.prototype.update_debater_participant_data = function(){
 
   var self = this;
   for(var key in self.participant_user){
@@ -253,10 +253,13 @@ ShowEvent.prototype.fill_audience_container = function(){
         self.append_other_audience(audience_array[i]);
       }
     }
-  }
-  if( !current_user_participate && audience_array.length < 3){
+    if( !current_user_participate && audience_array.length < 3){
+      self.append_participant_block();
+    }
+  }else{
     self.append_participant_block();
   }
+
 
 
   // if(audience_array.length == self.max_number_Audience){
@@ -265,7 +268,6 @@ ShowEvent.prototype.fill_audience_container = function(){
   //   }
   // }
 
-    self.append_participant_block();
 }
 
 ShowEvent.prototype.append_participant_block = function(){
