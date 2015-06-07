@@ -46,8 +46,27 @@ ShowEvent.prototype.initialize_game_structure = function(game_id, game_style){
     case "BP":
       console.log("under development");
       break;
-    case "Asin":
-      console.log("under development");
+    case "Asian":
+      self.Set_Asian_Template();
+      self.role_array = ["PrimeMinister","LeaderOpposition","DeptyPrimeMinister","DeptyLeaderOpposition",
+                      "GovernmentWhip","OppositionWhip","GovermentReply","OppositionReply"];
+      self.role_groupo_obj = {
+        PrimeMinister: "Gov",
+        LeaderOpposition: "Opp",
+        DeptyPrimeMinister: "Gov",
+        DeptyLeaderOpposition: "Opp",
+        GovernmentWhip: "Gov",
+        OppositionWhip: "Opp",
+        GovermentReply: "Gov",
+        OppositionReply: "Opp",
+      }
+      self.container_array = ["PM_Container","LO_Container","DPM_Container","DLO_Container",
+                            "GW_Container","OW_Container","GR_Container","OR_Container"];
+      for( var i=0; i< self.role_array.length; i++){
+        self.participant_user[self.role_array[i]] = null;
+        self.container_object[self.role_array[i]] = self.container_array[i];
+      }
+      self.max_number_Audience = 2;
       break;
     default:
       console.log("invalid game type");
@@ -257,6 +276,7 @@ ShowEvent.prototype.update_debater_participant_data = function(){
   for(var key in self.participant_user){
     self.participant_user[key] = null;
   }
+  self.group_involved = null;
   //update the participant array with game object data
   participant_array_in_gameobj = self.game_object.get("participant_role");
   if(participant_array_in_gameobj && (typeof self.participant_user) === "object"){
@@ -460,11 +480,17 @@ ShowEvent.prototype.fill_container_NoApplicant = function(role_name_str){
 
 
 ShowEvent.prototype.Set_NA_Template = function(){
-
     var self = this;
     NA_html_Template = _.template($('[data-template="NA_Template"]').html());
     var game_table_element = $("#game_container_" + self.game_id).find(".participant_table");
     var NA_html_text = NA_html_Template();
     game_table_element.html(NA_html_text);
+};
 
+ShowEvent.prototype.Set_Asian_Template = function(){
+    var self = this;
+    Asian_html_Template = _.template($('[data-template="Asian_Template"]').html());
+    var game_table_element = $("#game_container_" + self.game_id).find(".participant_table");
+    var Asian_html_text = Asian_html_Template();
+    game_table_element.html(Asian_html_text);
 };

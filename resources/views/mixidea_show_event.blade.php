@@ -217,18 +217,6 @@
 
 
 
-<script type="text/template" data-template="NA_Template">
-
-  <table class='table table-bordered'>
-   <thead><tr><th>Government</th><th>Opposition</th></tr></thead>
-   <tbody>
-   <tr><td><div class='PM_Container'></div></td><td><div class='LO_Container'></div></td></tr>
-   <tr><td><div class='MG_Container'></div></td><td><div class='MO_Container'></div></td></tr>
-   <tr><td><div class='PMR_Container'></div></td><td><div class='LOR_Container'></div></td></tr>
-   </tbody>
-  </table>
-  <>
-</script>
 
 
 <script type="text/template" data-template="NoApplicant_Template">
@@ -239,6 +227,31 @@
       </button>
   </div>
   <div class='comment' style='clear:both'></div>
+</script>
+
+
+<script type="text/template" data-template="NA_Template">
+  <table class='table table-bordered'>
+   <thead><tr><th>Government</th><th>Opposition</th></tr></thead>
+   <tbody>
+   <tr><td><div class='PM_Container'></div></td><td><div class='LO_Container'></div></td></tr>
+   <tr><td><div class='MG_Container'></div></td><td><div class='MO_Container'></div></td></tr>
+   <tr><td><div class='PMR_Container'></div></td><td><div class='LOR_Container'></div></td></tr>
+   </tbody>
+  </table>
+</script>
+
+
+<script type="text/template" data-template="Asian_Template">
+  <table class='table table-bordered'>
+   <thead><tr><th>Proposition</th><th>Opposition</th></tr></thead>
+   <tbody>
+   <tr><td><div class='PM_Container'></div></td><td><div class='LO_Container'></div></td></tr>
+   <tr><td><div class='DPM_Container'></div></td><td><div class='DLO_Container'></div></td></tr>
+   <tr><td><div class='GW_Container'></div></td><td><div class='OW_Container'></div></td></tr>
+   <tr><td><div class='GR_Container'></div></td><td><div class='OR_Container'></div></td></tr>
+   </tbody>
+  </table>
 </script>
 
 
