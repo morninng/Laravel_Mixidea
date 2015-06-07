@@ -96,10 +96,14 @@
   <div id="game_container_{{$game_id}}">
 
     <p><h3>motion: <span id="game_motion"></span></h3></p><br>
-    <center><span id="hangout_area"></span></center>
-    <div class="participant_table">
 
-    </div>
+    <p><font color="green"><h4>Debater Participant</h4></font></p>
+    <center><span id="hangout_area"></span></center>
+    <div class="participant_table"></div>
+
+    <p><font color="green"><h4>Adjucator/Audience Participant</h4></font></p>
+    <div class="audience_table"></div>
+
   </div>
 </div>
 
@@ -115,9 +119,13 @@
 <div role="tabpanel" class="tab-pane" id="{{$Round_name_array[$i]}}Round_{{$Game_name_array[$j]}}">
   <div id="game_container_{{$game_id}}">
     <p> <h3>motion: <span id="game_motion"></span></h3></p><br>
+
+    <p><font color="green"><h4>Debater Participant</h4></font></p>
     <center><span id="hangout_area"></span></center>
-    <div class="participant_table">
-   </div>
+    <div class="participant_table"></div>
+
+    <p><font color="green"><h4>Adjucator/Audience Participant</h4></font></p>
+    <div class="audience_table"></div>
   </div>
 </div>
 
@@ -146,8 +154,47 @@
       <%= usr_info.first_name %>  &nbsp;  <%= usr_info.last_name  %> 
       </div>
    </div>
-
 </script>
+
+
+
+<script type = "text/template" data-template="Other_Audience_Applied_Template">
+  <div style='border:1px solid; float:left;'>
+    <p>Audience</p>
+    <div class='participant' style='float:left;'>
+      <div class="image_container" style="float:left; margin-left:5px;">
+        <img src="<%=usr_info.picture_src %>">
+      </div>
+      <div class="profile_container" style="float:left; margin-left:10px;">
+        <%=  usr_info.first_name  %>  &nbsp;<%=  usr_info.last_name %> 
+      </div>
+    </div>
+    <div class='comment' align='center' style='clear:both'><font color="red">&nbsp;&nbsp;</font></div>
+  </div>
+</script>
+
+
+
+<script type = "text/template" data-template="CurrentUserApplied_Audience_Template">
+  <div style='border:1px solid; float:left;'>
+    <p>Audience</p>
+    <div class='participant' style='float:left;'>
+      <div class="image_container" style="float:left; margin-left:5px;">
+        <img src="<%=usr_info.picture_src %>">
+      </div>
+      <div class="profile_container" style="float:left; margin-left:10px;">
+        <%=  usr_info.first_name  %>  &nbsp;<%=  usr_info.last_name %> 
+      </div>
+    </div>
+    <div class='event_button' style='float:left;margin-right:5px; margin-left:5px;'>
+        <button class='btn btn-inverse cancel_audience_button' data-role= <%= usr_info.role_name  %> >
+          <i class="glyphicon glyphicon-book"></i> Cancel
+        </button>
+    </div>
+    <div class='comment' align='center' style='clear:both'><font color="red">You have joined</font></div>
+  </div>
+</script>
+
 
 
 <script type = "text/template" data-template="CurrentUserApplied_Template">
@@ -171,6 +218,7 @@
 
 
 <script type="text/template" data-template="NA_Template">
+
   <table class='table table-bordered'>
    <thead><tr><th>Government</th><th>Opposition</th></tr></thead>
    <tbody>
@@ -179,6 +227,7 @@
    <tr><td><div class='PMR_Container'></div></td><td><div class='LOR_Container'></div></td></tr>
    </tbody>
   </table>
+  <>
 </script>
 
 
