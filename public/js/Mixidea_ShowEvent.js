@@ -1,10 +1,12 @@
 
 function ShowEvent(game_id, game_style){
   var self = this;
-  self.initialize(game_id, game_style);
+  self.initialize_game_structure(game_id, game_style);
+  self.update_game_info(game_id, game_style);
 }
 
-ShowEvent.prototype.initialize = function(game_id, game_style){
+
+ShowEvent.prototype.initialize_game_structure = function(game_id, game_style){
 
   self=this;
   self.game_container = "";
@@ -42,8 +44,13 @@ ShowEvent.prototype.initialize = function(game_id, game_style){
       console.log("invalid game type");
       return;
   };
+  self.handleEvents();
 
-//  this.handleEvents();
+}
+
+ShowEvent.prototype.update_game_info = function(game_id, game_style){
+
+  var self = this;
   var Game = Parse.Object.extend("Game");
   var game_query = new Parse.Query(Game);
   game_query.get(self.game_id, {
@@ -54,7 +61,6 @@ ShowEvent.prototype.initialize = function(game_id, game_style){
       self.update_debater_participant_data();
       self.fill_debater_container();
       self.fill_audience_container();
-      self.handleEvents();
       console.log(game_obj);
 
     },
@@ -62,7 +68,9 @@ ShowEvent.prototype.initialize = function(game_id, game_style){
       console.log(error);
     }
   });
-};
+}
+
+
 
 
 ShowEvent.prototype.show_game_motion = function(){
@@ -404,7 +412,7 @@ ShowEvent.prototype.fill_container_someone_applied = function(role_name_str){
         last_name: user_obj.get("LastName"), 
         picture_src: user_obj.get("Profile_picture"), 
       };
-      var ParticipantApplied_html_Template = _.template($('[data-template="ParticipantApplied_Template"]').html());
+      var ParticipantApplied_html_Template = _.template($('[data-template="Other_ParticipantApplied_Template"]').html());
       var ParticipantApplied_html_text = ParticipantApplied_html_Template( {usr_info:data} );
       var participant_container = $("#game_container_" + self.game_id).find("." + self.container_object[role_name_str]);
       participant_container.html(ParticipantApplied_html_text);

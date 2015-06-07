@@ -143,7 +143,7 @@
 
 @section('page_template')
 
-<script type = "text/template" data-template="ParticipantApplied_Template">
+<script type = "text/template" data-template="Other_ParticipantApplied_Template">
 
   <div class='role'> <p><font-weight: bol> <%= usr_info.role_name  %> </font-weight></p></div>
   <div class='participant' style='float:left;'>
@@ -264,11 +264,18 @@
   $initial_game_style = $game_first_array['style'];
 ?>
 <script>
-  new ShowEvent( "{{ $initial_game_id }}", "{{ $initial_game_style }}" );
+  var game_participate_object_{{ $initial_game_id }} = new ShowEvent( "{{ $initial_game_id }}", "{{ $initial_game_style }}" );
  
 
   function onclick_tab(game_id, game_style){
-    new ShowEvent(game_id, game_style);
+
+
+    if( eval("typeof game_participate_object_" + game_id) == 'undefined') {
+      eval("game_participate_object_" + game_id + " = new ShowEvent('" + game_id + "','" + game_style + "');");
+    }else{
+      eval("game_participate_object_" + game_id + ".update_game_info('" + game_id + "','" +game_style + "');");
+    }
+
   }
 
 </script>
