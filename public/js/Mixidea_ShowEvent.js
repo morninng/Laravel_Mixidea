@@ -293,15 +293,8 @@ ShowEvent.prototype.fill_audience_container = function(){
     self.append_participant_block();
   }
 
-  //this is for the error confirmation, should be deleted later
-    self.append_participant_block();
 
 
-  // if(audience_array.length == self.max_number_Audience){
-  // }else if(audience_array.length == 0){
-  //   for(var i=0; i<audience_array.length; i++){
-  //   }
-  // }
 
 }
 
