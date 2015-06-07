@@ -10,6 +10,7 @@ ShowEvent.prototype.initialize_game_structure = function(game_id, game_style){
 
   self=this;
   self.game_container = "";
+  self.group_involved = null;
   self.game_id = game_id;
   self.game_style = game_style;
   self.participant_user = new Object();
@@ -27,6 +28,14 @@ ShowEvent.prototype.initialize_game_structure = function(game_id, game_style){
     case "NorthAmerica":
       self.Set_NA_Template();
       self.role_array = ["PrimeMinister","LeaderOpposition","MemberGovernment","MemberOpposition","ReplyPM","LOReply"];
+      self.role_groupo_obj = {
+        PrimeMinister: "Gov",
+        LeaderOpposition: "Opp",
+        MemberGovernment: "Gov",
+        MemberOpposition: "Opp",
+        ReplyPM: "Gov",
+        LOReply: "Opp",
+      }
       self.container_array = ["PM_Container","LO_Container","MG_Container","MO_Container","PMR_Container","LOR_Container"];
       for( var i=0; i< self.role_array.length; i++){
         self.participant_user[self.role_array[i]] = null;
@@ -153,6 +162,14 @@ ShowEvent.prototype.JoinGame = function(e){
   return;
  } 
 
+
+
+ if( self.group_involved &&  self.role_groupo_obj[role_name] != self.group_involved){
+   console.log(self.group_involved);
+   alert("you cannot join multiple group");
+   return;
+  }
+
   Parse.Cloud.run('JoinGame', { game_id: self.game_object.id, role: role_name},{
     success: function(game_obj) {
       self.game_object = game_obj;
@@ -206,6 +223,13 @@ ShowEvent.prototype.JoinGame_Audience = function(e){
   return;
  } 
 
+ if( self.group_involved  &&  self.group_involved != "audience" ){
+   console.log(self.group_involved);
+   alert("you cannot join multiple group");
+   return;
+  }
+
+
   Parse.Cloud.run('JoinGame_Audience', { game_id: self.game_object.id },{
     success: function(game_obj) {
       self.game_object = game_obj;
@@ -237,7 +261,10 @@ ShowEvent.prototype.update_debater_participant_data = function(){
   participant_array_in_gameobj = self.game_object.get("participant_role");
   if(participant_array_in_gameobj && (typeof self.participant_user) === "object"){
     for(var key in participant_array_in_gameobj){
-      self.participant_user[key] = participant_array_in_gameobj[key]
+      self.participant_user[key] = participant_array_in_gameobj[key];
+      if(self.participant_user[key] == self.current_user_id){
+        self.group_involved = self.role_groupo_obj[key];
+      }
     }
   }
 };
@@ -282,6 +309,7 @@ ShowEvent.prototype.fill_audience_container = function(){
       if(audience_array[i]==self.current_user_id){
         self.append_currentuser_audience();
         current_user_participate = true;
+        self.group_involved = "audience";
       }else{
         self.append_other_audience(audience_array[i]);
       }
