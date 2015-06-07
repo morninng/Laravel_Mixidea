@@ -115,14 +115,17 @@ ShowEvent.prototype.CancelGame = function(e){
       self.game_object = game_obj;
       self.update_debater_participant_data();
       self.fill_debater_container();
+      self.fill_audience_container();
     },
     error: function(error) {
       var error_JSON = JSON.parse(error.message);
       alert(error_JSON.code + ":" +  error_JSON.message);
       var game_obj = error_JSON.game_obj;
       self.game_object.set("participant_role", game_obj.participant_role);
+      self.game_object.set("audience_participants", game_obj.audience_participants);
       self.update_debater_participant_data();
       self.fill_debater_container();
+      self.fill_audience_container();
     }
   });
 }
@@ -153,8 +156,10 @@ ShowEvent.prototype.JoinGame = function(e){
       alert(error_JSON.code + ":" +  error_JSON.message);
       var game_obj = error_JSON.game_obj;
       self.game_object.set("participant_role", game_obj.participant_role);
+      self.game_object.set("audience_participants", game_obj.audience_participants);
       self.update_debater_participant_data();
       self.fill_debater_container();
+      self.fill_audience_container();
     }
   });
 }
@@ -164,10 +169,20 @@ ShowEvent.prototype.CancelGame_Audience = function(e){
 
   Parse.Cloud.run('CancelGame_Audience', { game_id: self.game_object.id },{
     success: function(game_obj) {
-      alert('cancel game succeed');
+      self.game_object = game_obj;
+      self.update_debater_participant_data();
+      self.fill_debater_container();
+      self.fill_audience_container();
     },
     error: function(error) {
-      alert(error.message);
+      var error_JSON = JSON.parse(error.message);
+      alert(error_JSON.code + ":" +  error_JSON.message);
+      var game_obj = error_JSON.game_obj;
+      self.game_object.set("participant_role", game_obj.participant_role);
+      self.game_object.set("audience_participants", game_obj.audience_participants);
+      self.update_debater_participant_data();
+      self.fill_debater_container();
+      self.fill_audience_container();
     }
   });
 
@@ -185,10 +200,20 @@ ShowEvent.prototype.JoinGame_Audience = function(e){
 
   Parse.Cloud.run('JoinGame_Audience', { game_id: self.game_object.id },{
     success: function(game_obj) {
-      alert('join game succeed');
+      self.game_object = game_obj;
+      self.update_debater_participant_data();
+      self.fill_debater_container();
+      self.fill_audience_container();
     },
     error: function(error) {
-      alert(error.message);
+      var error_JSON = JSON.parse(error.message);
+      alert(error_JSON.code + ":" +  error_JSON.message);
+      var game_obj = error_JSON.game_obj;
+      self.game_object.set("participant_role", game_obj.participant_role);
+      self.game_object.set("audience_participants", game_obj.audience_participants);
+      self.update_debater_participant_data();
+      self.fill_debater_container();
+      self.fill_audience_container();
     }
   });
 }
@@ -260,6 +285,8 @@ ShowEvent.prototype.fill_audience_container = function(){
     self.append_participant_block();
   }
 
+  //this is for the error confirmation, should be deleted later
+    self.append_participant_block();
 
 
   // if(audience_array.length == self.max_number_Audience){
