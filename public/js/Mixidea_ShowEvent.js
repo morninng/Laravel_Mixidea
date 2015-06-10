@@ -165,6 +165,8 @@ ShowEvent.prototype.CancelGame = function(e){
   var $target = $(e.currentTarget);
   var role_name =  $target.data('role');
 
+  self.show_loading_icon(role_name);
+
   Parse.Cloud.run('CancelGame', { game_id: self.game_object.id, role: role_name},{
     success: function(game_obj) {
       self.game_object = game_obj;
@@ -208,6 +210,8 @@ ShowEvent.prototype.JoinGame = function(e){
    return;
   }
 
+  self.show_loading_icon(role_name);
+
   Parse.Cloud.run('JoinGame', { game_id: self.game_object.id, role: role_name},{
     success: function(game_obj) {
       self.game_object = game_obj;
@@ -226,6 +230,16 @@ ShowEvent.prototype.JoinGame = function(e){
     }
   });
 }
+
+
+ShowEvent.prototype.show_loading_icon = function(role_name_str){
+
+  var self = this;
+  var participant_container = $("#game_container_" + self.game_id).find("." + self.container_object[role_name_str]);
+  participant_container.html("<div class='loader'>Loading...</div>");
+
+}
+
 
 ShowEvent.prototype.CancelGame_Audience = function(e){
 

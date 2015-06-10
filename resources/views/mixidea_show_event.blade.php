@@ -4,6 +4,9 @@
 
   <meta property="og:title" content= "{{$event_title}}"/>
   <title>Mixidea: {{$event_title}}</title>
+
+  <link rel="stylesheet" type="text/css" href="{{ asset('/css/loading.css') }}">
+
 @stop
 
 
