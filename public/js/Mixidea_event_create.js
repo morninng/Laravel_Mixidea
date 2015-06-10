@@ -52,13 +52,17 @@ function CreateEvent(){
   console.log(event_object);
   str_event_obj = JSON.stringify(event_object);
 
+
+
   Parse.Cloud.run('Cloud_CreateEvent', { event_obj: str_event_obj},{
-    success: function(game_obj) {
+    success: function(evt_obj) {
       alert("event has been successfully created");
       //redirect to event show screen
+      window.location.href = "/event/showEvent/" + evt_obj.id;
+
     },
     error: function(error) {
-      alert("something happen" + error.message);
+      alert("something happen and creating event failed" + error.message);
       //data should be vaidated before upload and the error should not happen in server side
     }
   });
