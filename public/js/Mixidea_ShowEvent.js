@@ -121,11 +121,14 @@ ShowEvent.prototype.update_game_info = function(game_id, game_style){
 
 ShowEvent.prototype.show_hangout_button = function(){
 
-  var self = this;
+  var self = this;  
   var user_id = Parse.User.current().id;
   if(!user_id){
     return;
   }
+  var hangout_container = $("#game_container_" + self.game_id).find(".hangout_container");
+  hangout_container.html("");
+
   var participants_obj = self.game_object.get("participant_role");
   var audience_array = self.game_object.get("audience_participants");
   var is_participate = false;
@@ -175,10 +178,10 @@ ShowEvent.prototype.show_hangout_button = function(){
            + first_query_value + hangout_query_split + second_query_value;
 
     var data = {hangout_link: hangout_link_str};
-  var Hangout_html_Template = _.template($('[data-template="Hangout_button_Template"]').html());
-  var HangoutButton_html_text = Hangout_html_Template( data );
-  var hangout_container = $("#game_container_" + self.game_id).find(".hangout_container");
-  hangout_container.append(HangoutButton_html_text);
+    var Hangout_html_Template = _.template($('[data-template="Hangout_button_Template"]').html());
+    var HangoutButton_html_text = Hangout_html_Template( data );
+    var hangout_container = $("#game_container_" + self.game_id).find(".hangout_container");
+    hangout_container.append(HangoutButton_html_text);
   }
 }
 
@@ -235,6 +238,7 @@ ShowEvent.prototype.CancelGame = function(e){
       self.update_debater_participant_data();
       self.fill_debater_container();
       self.fill_audience_container();
+      self.show_hangout_button();
     },
     error: function(error) {
       var error_JSON = JSON.parse(error.message);
@@ -245,6 +249,7 @@ ShowEvent.prototype.CancelGame = function(e){
       self.update_debater_participant_data();
       self.fill_debater_container();
       self.fill_audience_container();
+      self.show_hangout_button();
     }
   });
 }
@@ -279,6 +284,7 @@ ShowEvent.prototype.JoinGame = function(e){
       self.game_object = game_obj;
       self.update_debater_participant_data();
       self.fill_debater_container();
+      self.show_hangout_button();
     },
     error: function(error) {
       var error_JSON = JSON.parse(error.message);
@@ -289,6 +295,7 @@ ShowEvent.prototype.JoinGame = function(e){
       self.update_debater_participant_data();
       self.fill_debater_container();
       self.fill_audience_container();
+      self.show_hangout_button();
     }
   });
 }
@@ -312,6 +319,7 @@ ShowEvent.prototype.CancelGame_Audience = function(e){
       self.update_debater_participant_data();
       self.fill_debater_container();
       self.fill_audience_container();
+      self.show_hangout_button();
     },
     error: function(error) {
       var error_JSON = JSON.parse(error.message);
@@ -322,6 +330,7 @@ ShowEvent.prototype.CancelGame_Audience = function(e){
       self.update_debater_participant_data();
       self.fill_debater_container();
       self.fill_audience_container();
+      self.show_hangout_button();
     }
   });
 
@@ -350,6 +359,7 @@ ShowEvent.prototype.JoinGame_Audience = function(e){
       self.update_debater_participant_data();
       self.fill_debater_container();
       self.fill_audience_container();
+      self.show_hangout_button();
     },
     error: function(error) {
       var error_JSON = JSON.parse(error.message);
@@ -360,6 +370,7 @@ ShowEvent.prototype.JoinGame_Audience = function(e){
       self.update_debater_participant_data();
       self.fill_debater_container();
       self.fill_audience_container();
+      self.show_hangout_button();
     }
   });
 }
