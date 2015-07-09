@@ -122,65 +122,22 @@ ShowEvent.prototype.update_game_info = function(game_id, game_style){
 ShowEvent.prototype.show_hangout_button = function(){
 
   var self = this;
-  var user_id = Parse.User.current().id;
-  if(!user_id){
-    return;
-  }
-  var participants_obj = self.game_object.get("participant_role");
-  var audience_array = self.game_object.get("audience_participants");
-  var is_participate = false;
+  var hangout_id_obj = self.game_object.get("hangout_id");
 
-  if(audience_array){
-    for(var i=0; i< audience_array.length; i++)   {
-      if(audience_array[i] == user_id){
-        is_participate = true;
-      }
-    }
-  }
-  if(participants_obj){
-    for(key in participants_obj){
-      if(participants_obj[key]== user_id){
-        is_participate = true;
-      }
-    }
-  }
+  var participants_array = self.game_object.get("hangout_id");
+
+
+  var hangout_url = hangout_id_obj.main;
+  var game_id = self.game_object.id;
+  var user_id = Parse.User.current();
   
-  if(is_participate){
+  console.log(hangout_url);
 
-    var hangout_id_obj = self.game_object.get("hangout_id");
-    var hangout_domain = hangout_id_obj.main;
-    var game_style = self.game_object.get("style");
-    var game_id = self.game_object.id;
 
-    switch(game_style){
-      case "NorthAmerica":
-        hangout_app_id = hangout_NA_id;
-      break;
-      case "BP":
-        hangout_app_id = hangout_BP_id;
-      break;
-      case "Asian":
-        hangout_app_id = hangout_Asian_id;
-      break;
 
-    }
-    var hangout_query_key = "&gd=";
-    var hangout_query_value = "?gid=";
-    var hangout_gid = "?gid=";
-    var hangout_query_split = "_";
-    var hangout_app_id = "";
-    var first_query_value = user_id;
-    var second_query_value = game_id;
-    var hangout_link_str= hangout_domain + hangout_gid + hangout_app_id + hangout_query_key
-           + first_query_value + hangout_query_split + second_query_value;
 
-    var data = {hangout_link: hangout_link_str};
-  var Hangout_html_Template = _.template($('[data-template="Hangout_button_Template"]').html());
-  var HangoutButton_html_text = Hangout_html_Template( data );
-  var hangout_container = $("#game_container_" + self.game_id).find(".hangout_container");
-  hangout_container.append(HangoutButton_html_text);
-  }
 }
+
 
 ShowEvent.prototype.show_game_motion = function(){
 

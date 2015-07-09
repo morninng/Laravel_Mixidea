@@ -99,7 +99,7 @@
   <div id="game_container_{{$game_id}}">
 
     <p><h3>motion: <span id="game_motion"></span></h3></p><br>
-
+    <div align="center" class="hangout_container"></div>
     <p><font color="green"><h4>Debater Participant</h4></font></p>
     <center><span id="hangout_area"></span></center>
     <div class="participant_table"></div>
@@ -122,7 +122,7 @@
 <div role="tabpanel" class="tab-pane" id="{{$Round_name_array[$i]}}Round_{{$Game_name_array[$j]}}">
   <div id="game_container_{{$game_id}}">
     <p> <h3>motion: <span id="game_motion"></span></h3></p><br>
-
+     <div align="center" class="hangout_container"></div>
     <p><font color="green"><h4>Debater Participant</h4></font></p>
     <center><span id="hangout_area"></span></center>
     <div class="participant_table"></div>
@@ -270,6 +270,15 @@
    <tr><td><div class='GW_Container'></div></td><td><div class='OW_Container'></div></td></tr>
    </tbody>
   </table>
+</script>
+
+
+<script type = "text/template" data-template="Hangout_button_Template">
+
+  <a class='event_hangout_button' style='text-decoration:none;' href='<%= hangout_link %>' >
+    <img src='https://ssl.gstatic.com/s2/oz/images/stars/hangout/1/gplus-hangout-60x230-normal.png' alt='Start a Hangout' style='border:0;width:230px;height:60px;'/>
+  </a>
+
 </script>
 
 
