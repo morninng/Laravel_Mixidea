@@ -171,7 +171,6 @@ ShowEvent.prototype.show_hangout_button = function(){
     var hangout_query_value = "?gid=";
     var hangout_gid = "?gid=";
     var hangout_query_split = "_";
-    var hangout_app_id = "";
     var first_query_value = user_id;
     var second_query_value = game_id;
     var hangout_link_str= hangout_domain + hangout_gid + hangout_app_id + hangout_query_key
