@@ -3,25 +3,47 @@ window.onload = header_nav_draw;
 
  function RegistFbGraphData(){
    FB.api(
-      "/me?fields=picture,first_name,last_name,timezone,gender,languages,link,religion",
+      "/me?fields=picture,first_name,last_name,middle_name,timezone,gender,languages,link,religion,work,birthday,relationship_status,political,address,id,about,currency,devices,email,age_range,education",
       function (response) {
         if (response && !response.error) {
           /* handle the result */
+          console.log(response);
 
           var currentUser = Parse.User.current();
 
-          console.log(response);
+          var User_Extension = Parse.Object.extend("User_Extension");
+          var user_ext = new User_Extension();
+          user_ext.set("timezone", response.timezone);
+          user_ext.set("gender", response.gender);
+          user_ext.set("languages", response.languages);
+          user_ext.set("link", response.link);
+          user_ext.set("religion", response.religion);
+
+         //  user_ext.set("work", response.work );  think how list can be saved
+          user_ext.set("birthday", response.birthday );
+          user_ext.set("relationship_status", response.relationship_status );
+          user_ext.set("political", response.political );
+          if(response.address){
+	          user_ext.set("address", response.address.country );
+	      }
+          user_ext.set("user_id", response.id );
+          user_ext.set("about", response.about );
+          user_ext.set("email", response.email );
+          user_ext.set("age_range", response.age_range );
+       //   user_ext.set("education", response.education );  think how list can be saved
+          user_ext.setACL(new Parse.ACL(currentUser));
+
           currentUser.set("FirstName", response.first_name);
           currentUser.set("LastName", response.last_name);
-          currentUser.set("timezone", response.timezone);
-          currentUser.set("languages", response.languages);
-          currentUser.set("link", response.link);
-          currentUser.set("religion", response.religion);
+          currentUser.set("MiddleName", response.middle_name);
           currentUser.set("Profile_picture", response.picture.data.url);
+          currentUser.set("ext_data",user_ext)
+
+
           currentUser.save(null, {
             success: function(){
               alert("saved");
-              window.location.href = "./user/edit_profile";
+              location.reload();
             },
             error: function(){
               alert("fail to save");
@@ -45,6 +67,7 @@ function click_fb_login(){
 	      RegistFbGraphData();
 	    } else {
 	      console.log("--------User loged in mixidea--------");
+	      RegistFbGraphData();
 	      construct_dom_for_logeduser();
 	    }
 	  },
@@ -77,6 +100,7 @@ function logout(){
 	$("#profile_pict").html("");
 	$("#logout").html("");
 	construct_dom_for_login();
+    location.reload();
 }
 
 function construct_dom_for_logeduser(){
