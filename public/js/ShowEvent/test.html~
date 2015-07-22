@@ -1,0 +1,255 @@
+
+<html>
+<head>
+	
+  <meta property="og:title" content= "Discussion about the piece of the world"/>
+  <title>Mixidea: Discussion about the piece of the world</title>
+
+  <link rel="stylesheet" type="text/css" href="http://mixidea.org/css/loading.css">
+
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="http://mixidea.org/css/app.css" rel="stylesheet"> 
+	<link href='http://fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css'>
+</head>
+<body>
+
+<script type="text/javascript">
+	console.log("config initialization");
+	var parse_app_id = "EWPPdrDVaAIqhRazWp8K0ZlmafAAPt93JiOAonvX";
+	var parse_js_key = "US6Lheio8PGcBdIpwGFhFSQVpi5GKunGf6hGq5Ze";
+	var cxense_site_id = "1128282842273631937";
+	var facebook_app_id = "719920701452855";
+	var facebook_app_version = "v2.3";
+	var hangout_NA_id = "892922506225";
+	var hangout_Asian_id = "892922506225";
+	var hangout_BP_id = "892922506225";
+</script>
+
+<script src="http//www.parsecdn.com/js/parse-1.4.2.min.js"></script>
+
+<!-- Cxense script begin -->
+<script type="text/javascript">
+	var cX = cX || {}; cX.callQueue = cX.callQueue || [];
+	cX.callQueue.push(['setSiteId', cxense_site_id]);
+	cX.callQueue.push(['sendPageViewEvent']);
+</script>
+<script type="text/javascript">
+	(function(d,s,e,t){e=d.createElement(s);e.type='text/java'+s;e.async='async';
+	e.src='http'+('https:'===location.protocol?'s://s':'://')+'cdn.cxense.com/cx.js';
+	t=d.getElementsByTagName(s)[0];t.parentNode.insertBefore(e,t);})(document,'script');
+</script>
+<!-- Cxense script end -->
+
+<script type="text/javascript">
+  Parse.initialize(parse_app_id, parse_js_key);
+  window.fbAsyncInit = function() {
+    Parse.FacebookUtils.init({ // this line replaces FB.init({
+      appId      : facebook_app_id, // Facebook App ID
+      status     : true,  // check Facebook Login status
+      cookie     : true,  // enable cookies to allow Parse to access the session
+      xfbml      : true,  // initialize Facebook social plugins on the page
+      version    : facebook_app_version // point to the latest Facebook Graph API version
+    });
+ 
+    // Run code after the Facebook SDK is loaded.
+  };
+ 
+  (function(d, s, id){
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) {return;}
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/sdk.js";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+</script>
+
+    <h2>event title: Discussion about the piece of the world</h2>
+    <h4>description: In this event I would like to talk about world piece</h4>
+    <h4>date & time: <span id="event_datetime"></span></h4>
+
+
+<!-- /**********tab panel for game  info***********/ -->
+
+<div role="tabpanel">
+  <ul class="nav nav-tabs" role="tablist">
+ 
+  
+                <li class="active"><a href="#First" aria-controls="First" data-toggle="tab" onClick="onclick_tab( 'cTaJ6f3VMt' , 'NorthAmerica'  )"> First Round</a></li>
+      
+  
+                <li><a href="#Second" aria-controls="Second" data-toggle="tab" onClick="onclick_tab( 'NEi9V549j9' , 'Asian' )"> Second Round</a></li>
+      
+</ul>  
+
+
+<!-- /********** main contents under tab pane  ******/ -->
+
+
+
+  <div class="tab-content">
+
+
+
+       <div role="tabpanel" class="tab-pane active" id="First">
+    
+  <div id="game_container_cTaJ6f3VMt">
+
+    <p><h3>motion: <span id="game_motion"></span></h3></p><br>
+    <div align="center" class="hangout_container"></div>
+    <p><font color="green"><h4>Debater Participant</h4></font></p>
+    <center><span id="hangout_area"></span></center>
+    <div class="participant_table"></div>
+
+    <p><font color="green"><h4>Adjucator/Audience Participant</h4></font></p>
+    <div class="audience_table"></div>
+
+  </div>
+</div>
+
+    
+
+
+  
+       <div role="tabpanel" class="tab-pane" id="Second">
+    
+  <div id="game_container_NEi9V549j9">
+
+    <p><h3>motion: <span id="game_motion"></span></h3></p><br>
+    <div align="center" class="hangout_container"></div>
+    <p><font color="green"><h4>Debater Participant</h4></font></p>
+    <center><span id="hangout_area"></span></center>
+    <div class="participant_table"></div>
+
+    <p><font color="green"><h4>Adjucator/Audience Participant</h4></font></p>
+    <div class="audience_table"></div>
+
+  </div>
+</div>
+
+  
+  </div>
+</div>
+
+
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.1/js/bootstrap.min.js"></script>
+
+
+<script type="text/html" id="user_status_template">
+  <div data-bind= "visible:participant_visible">
+     <div data-bind="css: user_status_css">
+        <img style="max-width:50px; float:left" data-bind="attr: {src: pict_src}">
+        <div style="float:right;">
+         <p data-bind ="text:role"></p>
+         <p data-bind ="text:user_name"></p>
+        </div>
+        <div style="clear:both" align="center" data-bind = "visible:enable_change">
+          <button data-bind = "visible: decline_visible, event:{click:decline}">decline</button>
+          <button data-bind = "visible: join_visible, event:{click:join}">join</button>
+          <button data-bind = "visible: cancel_visible, event:{click:cancel}">cancel</button>
+        </div>
+        <div style="clear:both" class='loader' align="center" data-bind = "visible:loading_visible"> Loading </div>
+     </div>
+  </div>
+</script>
+
+
+<script type="text/template" data-template="audience_list_template">
+ <% _.each(list, function(e,i){ %>
+  <div id= '<%= e.container_name %>'data-bind="template:{name:'user_status_template'}" style="float:left;"></div>
+ <% }); %>
+</script>
+
+
+
+<script type="text/template" data-template="NA_Template">
+  <table class='table table-bordered'>
+   <thead><tr><th>Government</th><th>Opposition</th></tr></thead>
+   <tbody>
+   <tr><td><div id='PM_Container_<%= game_id %>' data-bind="template: {name: 'user_status_template'}"></div></td>
+       <td><div id='LO_Container_<%= game_id %>' data-bind="template: {name: 'user_status_template'}"></div></td></tr>
+   <tr><td><div id='MG_Container_<%= game_id %>' data-bind="template: {name: 'user_status_template'}"></div></td>
+       <td><div id='MO_Container_<%= game_id %>' data-bind="template: {name: 'user_status_template'}"></div></td></tr>
+   <tr><td><div id='PMR_Container_<%= game_id %>' data-bind="template: {name: 'user_status_template'}"></div></td>
+       <td><div id='LOR_Container_<%= game_id %>' data-bind="template: {name: 'user_status_template'}"></div></td></tr>
+   </tbody>
+  </table>
+</script>
+
+
+
+<script type="text/template" data-template="Asian_Template">
+  <table class='table table-bordered'>
+   <thead><tr><th>Proposition</th><th>Opposition</th></tr></thead>
+   <tbody>
+   <tr><td><div id='PM_Container_<%= game_id %>' data-bind="template: {name: 'user_status_template'}"></div></td>
+       <td><div id='LO_Container_<%= game_id %>' data-bind="template: {name: 'user_status_template'}"></div></td></tr>
+   <tr><td><div id='DPM_Container_<%= game_id %>' data-bind="template: {name: 'user_status_template'}"></div></td>
+       <td><div id='DLO_Container_<%= game_id %>' data-bind="template: {name: 'user_status_template'}"></div></td></tr>
+   <tr><td><div id='GW_Container_<%= game_id %>' data-bind="template: {name: 'user_status_template'}"></div></td>
+       <td><div id='OW_Container_<%= game_id %>' data-bind="template: {name: 'user_status_template'}"></div></td></tr>
+   <tr><td><div id='GR_Container_<%= game_id %>' data-bind="template: {name: 'user_status_template'}"></div></td>
+        <td><div id='OR_Container_<%= game_id %>' data-bind="template: {name: 'user_status_template'}"></div></td></tr>
+   </tbody>
+  </table>
+</script>
+
+
+<script type="text/template" data-template="BP_Template">
+  <table class='table table-bordered'>
+   <thead><tr><th>OpeningGovernment</th><th>OpeningOpposition</th></tr></thead>
+   <tbody>
+   <tr><td><div id='PM_Container_<%= game_id %>' data-bind="template: {name: 'user_status_template'}"></div></td>
+       <td><div id='LO_Container_<%= game_id %>' data-bind="template: {name: 'user_status_template'}"></div></td></tr>
+   <tr><td><div id='DPM_Container_<%= game_id %>' data-bind="template: {name: 'user_status_template'}"></div></td>
+       <td><div id='DLO_Container_<%= game_id %>' data-bind="template: {name: 'user_status_template'}"></div></td></tr>
+   </tbody>
+   <thead><tr><th>ClosintGovernment</th><th>ClosingOpposition</th></tr></thead>
+   <tbody>
+   <tr><td><div id='MG_Container_<%= game_id %>' data-bind="template: {name: 'user_status_template'}"></div></td>
+       <td><div id='MO_Container_<%= game_id %>' data-bind="template: {name: 'user_status_template'}"></div></td></tr>
+   <tr><td><div id='GW_Container_<%= game_id %>' data-bind="template: {name: 'user_status_template'}"></div></td>
+       <td><div id='OW_Container_<%= game_id %>' data-bind="template: {name: 'user_status_template'}"></div></td></tr>
+   </tbody>
+  </table>
+</script>
+
+
+
+
+
+<script type = "text/template" data-template="Hangout_button_Template">
+
+  <a class='event_hangout_button' style='text-decoration:none;' href='<%= hangout_link %>' >
+    <img src='https://ssl.gstatic.com/s2/oz/images/stars/hangout/1/gplus-hangout-60x230-normal.png' alt='Start a Hangout' style='border:0;width:230px;height:60px;'/>
+  </a>
+
+</script>
+
+
+
+	
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+  <script src="./GameFrame.js"></script>
+  <script src ="./MixideaShowEvent.js"></script>
+  <script src ="./MixideaParticipangMgr.js"></script>
+  <script src ="./RoleStatus.js"></script>
+
+
+<script>
+
+
+  var first_game_id="cTaJ6f3VMt";
+  var first_game_style = "NorthAmerica";
+
+</script>
+
+
+</body>
+</html>
+
+
+
