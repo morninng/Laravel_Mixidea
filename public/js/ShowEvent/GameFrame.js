@@ -11,9 +11,12 @@ GameFrame.prototype.initialize = function(){
   	self.CreateTableTemplate(self.game_style);
 	self.CreateAudienceTemplate();
 	self.create_rolename_array(self.game_style);	
+	self.participant_object = new ParticipantMgr();
+	self.participant_object.initialize(self.game_style);
+
 	for(var i = 0; i< self.role_array.length; i++){
 		self.CreateUserObj(self.role_array[i], self.container_array[i]);
-		self.UpdateUserObj(self.role_array[i]);
+	//	self.UpdateUserObj(self.role_array[i]);
 	}
 }
 
@@ -27,6 +30,9 @@ GameFrame.prototype.update_game_info = function(){
       self.game_object = game_obj;
       self.show_date_time();
       self.show_game_motion();
+      self.participant_object.update(game_obj);
+	  self.UpdateUserObjAll();
+
 //      self.update_debater_participant_data();
 //      self.fill_debater_container();
 //      self.fill_audience_container();
@@ -47,8 +53,12 @@ GameFrame.prototype.CreateUserObj = function(role_name, container_name){
 	var self = this;
 	console.log("create user obj : " + role_name);
 	console.log("create user obj : " + container_name);
-	eval("self.role_obj_" + role_name + " = new Role_Status_VM('" + role_name + "');" );
+	console.log("self.role_obj_" + role_name + " = new Role_Status_VM('" + role_name + "','" + self.game_id + "'," + self + ");" );
+	eval("self.role_obj_" + role_name + " = new Role_Status_VM();" );
 	var role_obj = eval("self.role_obj_" + role_name);
+	role_obj.initialize(role_name, self.game_id, self);
+	//eval("self.role_obj_" + role_name + " = new Role_Status_VM('" + role_name + "','" + self.game_id +  "','" + self + "');" );
+	//var role_obj = eval("self.role_obj_" + role_name);
 	var applied_element = document.getElementById(container_name);
 	console.log(applied_element)
 	ko.applyBindings( role_obj, applied_element);

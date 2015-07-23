@@ -1,6 +1,14 @@
 
-function Role_Status_VM(role_name){
+function Role_Status_VM(role_name, game_id, parent_gameframe){
   var self = this;
+
+}
+
+Role_Status_VM.prototype.initialize = function(role_name, game_id, parent_gameframe){
+
+  var self = this;
+  self.game_id = game_id;
+  self.parent_gameframe = parent_gameframe;
 
   self.participant_visible = ko.observable(true);
 
@@ -17,8 +25,17 @@ function Role_Status_VM(role_name){
   self.profile_input = ko.observable();
   self.user_declaration = ko.observable();
   self.loading_visible = ko.observable();
-  
+
+
 }
+
+
+
+
+
+
+
+
 
 Role_Status_VM.prototype.Cancel_Game = function(){
   
@@ -29,8 +46,55 @@ Role_Status_VM.prototype.Join_Game = function(){
 }
 
 Role_Status_VM.prototype.update_user_status = function(){
-  
 
+  var self = this;
+  var role_name = self.role_name();
+  var participant_parse_id = self.parent_gameframe.participant_object.get_parse_id_from_rolename(role_name);
+
+  if(participant_parse_id){
+
+    var User = Parse.Object.extend("User");
+    var user_query = new Parse.Query(User);
+    user_query.get(participant_parse_id, {
+      success: function(user_obj) {
+        profile_id = user_obj.profile_id;
+
+        if(!profile_id){
+          self.show_role_status(user_obj, null);
+        }
+
+        var User_Intro = Parse.Object.extend("User_Intro");
+        var user_query = new Parse.Query(User_Intro);
+        user_query.get(profile_id, {
+          success: function(profile_obj){
+            self.show_role_status(user_obj, profile_obj);
+          },
+          error: function(obj,error){
+            console.log("error to retrieve profile info");
+          }
+        });
+      },
+      error: function(object, error) {
+        // The object was not retrieved successfully.
+        // error is a Parse.Error with an error code and message.
+      }
+    });
+
+  }else{
+    self.show_role_status( null, null);
+  }
+}
+
+
+
+Role_Status_VM.prototype.show_role_status = function(user_obj,user_profile){
+
+  var self = this;
+  if(user_obj){
+    var first_name = user_obj.get("FirstName");
+    var last_name = user_obj.get("LastName");
+    self.user_name(first_name + " " + last_name);
+  }
 
 }
 
