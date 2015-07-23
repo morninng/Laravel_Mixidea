@@ -2,16 +2,14 @@
 function Role_Status_VM(role_name){
   var self = this;
 
-  self.myMessage_temp = ko.observable("aaa");
+  self.participant_visible = ko.observable(true);
 
-//  self.participant_visible = ko.observable(false);
-/*
-  self.role_name = ko.observable();
-  self.user_visible = ko.observable(false);
+  self.role_name = ko.observable(role_name);
+  self.user_visible = ko.observable(true);
   self.pict_src = ko.observable();
   self.user_profile_belonging = ko.observable();
   self.user_profile_intro = ko.observable();
-  self.participant_button = ko.observable(false);
+  self.participant_button = ko.observable(true);
   self.cancel_game = ko.observable();
   self.join_game = ko.observable();
   self.user_name = ko.observable();
@@ -19,13 +17,23 @@ function Role_Status_VM(role_name){
   self.profile_input = ko.observable();
   self.user_declaration = ko.observable();
   self.loading_visible = ko.observable();
-  */
+  
 }
 
+Role_Status_VM.prototype.Cancel_Game = function(){
+  
+}
+
+Role_Status_VM.prototype.Join_Game = function(){
+  
+}
 
 Role_Status_VM.prototype.update_user_status = function(){
   
+
+
 }
+
 /*
 Role_Status_VM.prototype.handleEvents = function(){
 
