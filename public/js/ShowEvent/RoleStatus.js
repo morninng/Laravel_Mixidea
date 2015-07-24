@@ -9,7 +9,7 @@ Role_Status_VM.prototype.initialize = function(role_name, game_id, parent_gamefr
   var self = this;
   self.game_id = game_id;
   self.parent_gameframe = parent_gameframe;
-
+  self.role_name_str = role_name;
   self.participant_visible = ko.observable(true);
 
   self.role_name = ko.observable(role_name);
@@ -18,8 +18,8 @@ Role_Status_VM.prototype.initialize = function(role_name, game_id, parent_gamefr
   self.user_profile_belonging = ko.observable();
   self.user_profile_intro = ko.observable();
   self.participant_button = ko.observable(true);
-  self.cancel_game = ko.observable();
-  self.join_game = ko.observable();
+  self.cancel_game_visible = ko.observable();
+  self.join_game_visible = ko.observable();
   self.user_name = ko.observable();
   self.user_dialog = ko.observable();
   self.profile_input = ko.observable();
@@ -48,8 +48,7 @@ Role_Status_VM.prototype.Join_Game = function(){
 Role_Status_VM.prototype.update_user_status = function(){
 
   var self = this;
-  var role_name = self.role_name();
-  var participant_parse_id = self.parent_gameframe.participant_object.get_parse_id_from_rolename(role_name);
+  var participant_parse_id = self.parent_gameframe.participant_object.get_parse_id_from_rolename(self.role_name_str);
 
   if(participant_parse_id){
 
@@ -90,10 +89,24 @@ Role_Status_VM.prototype.update_user_status = function(){
 Role_Status_VM.prototype.show_role_status = function(user_obj,user_profile){
 
   var self = this;
+
+
+  var is_yourself  = self.parent_gameframe.participant_object.is_yourself_from_rolename(self.role_name_str);
+
   if(user_obj){
     var first_name = user_obj.get("FirstName");
     var last_name = user_obj.get("LastName");
+    var pict_src = user_obj.get("Profile_picture");
     self.user_name(first_name + " " + last_name);
+    self.user_name(first_name + " " + last_name);
+    self.pict_src(pict_src);
+
+    if(is_yourself){
+      self.cancel_game_visible(true);
+    }
+
+  }else{
+    self.join_game_visible(true);
   }
 
 }

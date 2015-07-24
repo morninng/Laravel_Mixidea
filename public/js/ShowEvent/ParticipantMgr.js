@@ -37,6 +37,23 @@ ParticipantMgr.prototype.get_parse_id_from_rolename = function(role_name){
 	return self.participant_object_array[role_name];
 }
 
+ParticipantMgr.prototype.is_yourself_from_rolename = function(role_name){
+
+	var self = this;
+	parse_id = self.participant_object_array[role_name];
+	if(!parse_id){
+		return false;
+	}
+
+	current_user = Parse.User.current();
+	if(current_user){
+		if(current_user.id == parse_id){
+			return true;
+		}
+	}
+	return false;
+
+}
 
 ParticipantMgr.prototype.valid_to_join = function(role_name){
 
