@@ -56,7 +56,20 @@ Role_Status_VM.prototype.Cancel_Game = function(){
   self.loading_visible(true);
   self.cancel_game_visible(false);
 
-  Parse.Cloud.run('CancelGame', { game_id: self.game_id, role: self.role_name_str},{
+
+  var is_audience_role = self.parent_gameframe.participant_object.is_audience_role(self.role_name_str);
+  if(is_audience_role){
+    var cancel_type = "CancelGame_Audience"
+    var cancel_obj = { game_id: self.game_id };
+
+  }else{
+    //debater
+    var cancel_type = "CancelGame"
+    var cancel_obj = { game_id: self.game_id, role: self.role_name_str};
+
+  }
+
+  Parse.Cloud.run(cancel_type,cancel_obj,{
     success: function(game_obj) {
        game_obj;
       var debate_participant_object_array = game_obj.get("participant_role");
@@ -91,7 +104,6 @@ Role_Status_VM.prototype.Join_Game = function(){
  var is_your_group_role = self.parent_gameframe.participant_object.is_your_group_role(self.role_name_str);
  var is_yourself_have_role = self.parent_gameframe.participant_object.is_yourself_have_role();
 
-
  if(!is_your_group_role && is_yourself_have_role){
    alert("you cannot join multiple group");
    return;
@@ -100,7 +112,19 @@ Role_Status_VM.prototype.Join_Game = function(){
   self.loading_visible(true);
 
 
-  Parse.Cloud.run('JoinGame', { game_id: self.game_id, role: self.role_name_str},{
+  var is_audience_role = self.parent_gameframe.participant_object.is_audience_role(self.role_name_str);
+  if(is_audience_role){
+    var join_type = "JoinGame_Audience"
+    var join_obj = { game_id: self.game_id };
+
+  }else{
+    //debater
+    var join_type = "JoinGame"
+    var join_obj = { game_id: self.game_id, role: self.role_name_str};
+
+  }
+
+  Parse.Cloud.run(join_type, join_obj,{
     success: function(game_obj) {
        game_obj;
       var debate_participant_object_array = game_obj.get("participant_role");
@@ -225,137 +249,3 @@ Role_Status_VM.prototype.show_button = function(){
   }
 
 }
-
-/*
-Role_Status_VM.prototype.handleEvents = function(){
-
-    var self = this;
-    var game_container_element = $("#game_container_" + self.game_id);
-    game_container_element.on("click", ".participate_button", function(e){
-      self.JoinGame(e);
-    });
-    game_container_element.on("click", ".cancel_button", function(e){
-      self.CancelGame(e);
-    });
-    game_container_element.on("click", ".participate_audience_button", function(e){
-      self.JoinGame_Audience(e);
-    });
-    game_container_element.on("click", ".cancel_audience_button", function(e){
-      self.CancelGame_Audience(e);
-    });
-
-};
-
-
-
-Role_Status_VM.prototype.show_loading_icon = function(role_name_str){
-
-  var self = this;
-  var participant_container = $("#game_container_" + self.game_id).find("." + self.container_object[role_name_str]);
-  participant_container.html("<div class='loader'>Loading...</div>");
-
-}
-
-
-Role_Status_VM.prototype.append_currentuser_audience = function(){
-
-  var self = this;
-  var user_first_name = "";
-  var user_last_name = "";
-  var user_picture_src = "";
-
-  if(self.current_user){
-    user_first_name = self.current_user.get("FirstName");
-    user_last_name = self.current_user.get("LastName");
-    user_picture_src = self.current_user.get("Profile_picture");
-  }
-
-  var data = { 
-    role_name: null, 
-    first_name: user_first_name, 
-    last_name: user_last_name, 
-    picture_src: user_picture_src, 
-  };
-
-  var CurrentUserApplied_html_Template = _.template($('[data-template="CurrentUserApplied_Audience_Template"]').html());
-  var CurrentUserApplied_html_text = CurrentUserApplied_html_Template( {usr_info:data} );
-  var audience_list = $("#game_container_" + self.game_id).find(".audience_table");
-  audience_list.append(CurrentUserApplied_html_text);
-
-}
-
-
-
-
-Role_Status_VM.prototype.fill_debater_container_currentuser_applied = function(role_name_str){
-
-  var user_first_name = "";
-  var user_last_name = "";
-  var user_picture_src = "";
-
-  if(self.current_user){
-    user_first_name = self.current_user.get("FirstName");
-    user_last_name = self.current_user.get("LastName");
-    user_picture_src = self.current_user.get("Profile_picture");
-  }
-
-  var data = { 
-    role_name: role_name_str, 
-    first_name: user_first_name, 
-    last_name: user_last_name, 
-    picture_src: user_picture_src, 
-  };
-
-  var CurrentUserApplied_html_Template = _.template($('[data-template="CurrentUserApplied_Template"]').html());
-  var CurrentUserApplied_html_text = CurrentUserApplied_html_Template( {usr_info:data} );
-  var participant_container = $("#game_container_" + this.game_id).find("." + self.container_object[role_name_str]);
-  participant_container.html(CurrentUserApplied_html_text);
-
-};
-
-
-
-Role_Status_VM.prototype.fill_container_someone_applied = function(role_name_str){
-
-  var self=this;
-  var user_id = self.participant_user[role_name_str];
-  console.log(user_id);
-
-  var User = Parse.Object.extend("User");
-  var user_query = new Parse.Query(User);
-  user_query.get(user_id, {
-    success: function(user_obj){
-      var data = { 
-        role_name: role_name_str, 
-        first_name: user_obj.get("FirstName"), 
-        last_name: user_obj.get("LastName"), 
-        picture_src: user_obj.get("Profile_picture"), 
-      };
-      var ParticipantApplied_html_Template = _.template($('[data-template="Other_ParticipantApplied_Template"]').html());
-      var ParticipantApplied_html_text = ParticipantApplied_html_Template( {usr_info:data} );
-      var participant_container = $("#game_container_" + self.game_id).find("." + self.container_object[role_name_str]);
-      participant_container.html(ParticipantApplied_html_text);
-    },
-    error: function(obj,error){
-      console.log(error);
-    }
-  });
-  console.log("someone applied")
-};
-
-
-
-Role_Status_VM.prototype.fill_container_NoApplicant = function(role_name_str){
-
-    var self = this;
-    var data = { role_name: role_name_str };
-
-    NoApplicant_html_Template = _.template($('[data-template="NoApplicant_Template"]').html());
-    var NoApplicant_html_text = NoApplicant_html_Template(data);
-    var participant_container = $("#game_container_" + self.game_id).find("." + self.container_object[role_name_str]);
-    participant_container.html(NoApplicant_html_text);
-
-};
-
-
-*/
