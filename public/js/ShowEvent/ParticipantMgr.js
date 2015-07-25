@@ -25,11 +25,13 @@ ParticipantMgr.prototype.update = function(debate_participant_object_array, audi
 	for(var key in self.participant_object_array){
     	delete self.participant_object_array[key];
 	}
-
-	self.participant_object_array = debate_participant_object_array;
-
-	for(var i=0; i<audience_array.length; i++){
-		self.participant_object_array[audience_role_array[i]] = audience_array[i];
+	if(debate_participant_object_array){
+		self.participant_object_array = debate_participant_object_array;
+	}
+	if(audience_array){
+		for(var i=0; i<audience_array.length; i++){
+			self.participant_object_array[audience_role_array[i]] = audience_array[i];
+		}
 	}
 	self.own_role_array = self.get_own_role_array();
 	self.own_group_name = self.get_own_group_name()
