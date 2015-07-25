@@ -1,6 +1,6 @@
 
 // window.onloadで初めのタブの情報を読み出し
-  window.onload = init();
+  init();
 
   function init(){
   

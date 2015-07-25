@@ -105,7 +105,7 @@
     <div class="participant_table"></div>
 
     <p><font color="green"><h4>Adjucator/Audience Participant</h4></font></p>
-    <div class="audience_table"></div>
+    <div class="audience_list"></div>
 
   </div>
 </div>
@@ -128,7 +128,7 @@
     <div class="participant_table"></div>
 
     <p><font color="green"><h4>Adjucator/Audience Participant</h4></font></p>
-    <div class="audience_table"></div>
+    <div class="audience_list"></div>
   </div>
 </div>
 
@@ -146,100 +146,74 @@
 
 @section('page_template')
 
-<script type = "text/template" data-template="Other_ParticipantApplied_Template">
 
-  <div class='role'> <p><font-weight: bol> <%= usr_info.role_name  %> </font-weight></p></div>
-  <div class='participant' style='float:left;'>
-      <div class="image_container" style="float:left; margin-left:5px;">
-        <img src="<%=usr_info.picture_src %>">
+
+
+<script type="text/html" id="role_status_template">
+  <div data-bind= "visible:participant_visible">
+     <div class='role'>
+       <p><font-weight: bol> <span data-bind ="text:role_name"> </span> </font-weight></p>
+     </div>
+     <div class="user_container" data-bind="visible: user_visible">
+        <div class="image_container" style="float:left; margin-left:5px;">
+          <img data-bind="attr: {src: pict_src}">
+        </div>
+        <div class="profile_container"  style="float:left; margin-left:10px;">
+          <div data-bind ="text:user_name"></div>
+          <p data-bind = "text:user_profile_belonging"></p>
+          <p data-bind = "text:user_profile_intro"></p> 
+        </div>
+     </div>
+     <div class="button-container" data-bind="visible:participant_button">
+        <div class='event_button' style='float:right;margin-right:5px; margin-left:5px;'>
+            <div data-bind="visible:cancel_game_visible">
+              <button class='btn btn-inverse cancel_button' data-bind = "click:Cancel_Game" >
+                <i class="glyphicon glyphicon-book"></i> Cancel
+              </button>
+            </div>
+            <div data-bind="visible:join_game_visible">
+              <button class='btn btn-primary participate_button' data-bind = "click:Join_Game"  >
+                <i class="glyphicon glyphicon-book"></i> Join
+              </button>
+            </div>
+        </div>
       </div>
-     <div class="profile_container" style="float:left; margin-left:10px;">
-      <%= usr_info.first_name %>  &nbsp;  <%= usr_info.last_name  %> 
+      <div style='clear:both'>
       </div>
-   </div>
-</script>
-
-
-
-<script type = "text/template" data-template="Other_Audience_Applied_Template">
-  <div style='border:1px solid; float:left;'>
-    <p>Audience</p>
-    <div class='participant' style='float:left;'>
-      <div class="image_container" style="float:left; margin-left:5px;">
-        <img src="<%=usr_info.picture_src %>">
+      <div align='center' data-bind="visible:user_dialog">
+        <div data-bind="visible:profile_input">
+          <form></form>
+        </div>
+        <div data-bind="visible: user_declaration">
+          <form></form>
+        </div>
       </div>
-      <div class="profile_container" style="float:left; margin-left:10px;">
-        <%=  usr_info.first_name  %>  &nbsp;<%=  usr_info.last_name %> 
-      </div>
-    </div>
-    <div class='comment' align='center' style='clear:both'><font color="red">&nbsp;&nbsp;</font></div>
-  </div>
-</script>
-
-
-
-<script type = "text/template" data-template="CurrentUserApplied_Audience_Template">
-  <div style='border:1px solid; float:left;'>
-    <p>Audience</p>
-    <div class='participant' style='float:left;'>
-      <div class="image_container" style="float:left; margin-left:5px;">
-        <img src="<%=usr_info.picture_src %>">
-      </div>
-      <div class="profile_container" style="float:left; margin-left:10px;">
-        <%=  usr_info.first_name  %>  &nbsp;<%=  usr_info.last_name %> 
-      </div>
-    </div>
-    <div class='event_button' style='float:left;margin-right:5px; margin-left:5px;'>
-        <button class='btn btn-inverse cancel_audience_button' data-role= <%= usr_info.role_name  %> >
-          <i class="glyphicon glyphicon-book"></i> Cancel
-        </button>
-    </div>
-    <div class='comment' align='center' style='clear:both'><font color="red">You have joined</font></div>
-  </div>
-</script>
-
-
-
-<script type = "text/template" data-template="CurrentUserApplied_Template">
-  <div class='role'> <p><font-weight: bol> <%= usr_info.role_name %> </font-weight></p></div>
-  <div class='participant' style='float:left;'>
-    <div class="image_container" style="float:left; margin-left:5px;">
-      <img src="<%=usr_info.picture_src %>">
-    </div>
-    <div class="profile_container" style="float:left; margin-left:10px;">
-      <%=  usr_info.first_name  %>  &nbsp;<%=  usr_info.last_name %> 
-    </div>
-  </div>
-  <div class='event_button' style='float:right;margin-right:5px; margin-left:5px;'>
-      <button class='btn btn-inverse cancel_button' data-role= <%= usr_info.role_name  %> >
-        <i class="glyphicon glyphicon-book"></i> Cancel
-      </button>
-  </div>
-  <div class='comment' align='center' style='clear:both'><font color="red">You have joined</font></div>
+      <div style="clear:both" class='loader' align="center" data-bind = "visible:loading_visible"> Loading </div>
 </script>
 
 
 
 
-
-<script type="text/template" data-template="NoApplicant_Template">
-  <div class='role'> <p><font-weight: bol> <%= role_name %> </font-weight></p></div>
-  <div class='event_button' style='float:right;margin-right:5px; margin-left:5px;'>
-      <button class='btn btn-primary participate_button' data-role= <%= role_name %> >
-        <i class="glyphicon glyphicon-book"></i> Join
-      </button>
-  </div>
-  <div class='comment' style='clear:both'></div>
+<script type="text/template" data-template="audience_list_template">
+ <% _.each(list, function(e,i){ %>
+  <div id= '<%= e.container_name %>'data-bind="template:{name:'role_status_template'}" style="float:left;"></div>
+ <% }); %>
 </script>
+
+
+
 
 
 <script type="text/template" data-template="NA_Template">
   <table class='table table-bordered'>
    <thead><tr><th>Government</th><th>Opposition</th></tr></thead>
    <tbody>
-   <tr><td><div class='PM_Container'></div></td><td><div class='LO_Container'></div></td></tr>
-   <tr><td><div class='MG_Container'></div></td><td><div class='MO_Container'></div></td></tr>
-   <tr><td><div class='PMR_Container'></div></td><td><div class='LOR_Container'></div></td></tr>
+   <tr><td><div id='PM_Container_<%= game_id %>' data-bind="template: {name: 'role_status_template'}"></div></td>
+       <td><div id='LO_Container_<%= game_id %>' data-bind="template: {name: 'role_status_template'}"></div></td></tr>
+   <tr><td><div id='MG_Container_<%= game_id %>' data-bind="template: {name: 'role_status_template'}"></div></td>
+       <td><div id='MO_Container_<%= game_id %>' data-bind="template: {name: 'role_status_template'}"></div></td></tr>
+   <tr><td><div id='PMR_Container_<%= game_id %>' data-bind="template: {name: 'role_status_template'}"></div></td>
+       <td><div id='LOR_Container_<%= game_id %>' data-bind="template: {name: 'role_status_template'}"></div></td></tr>
    </tbody>
   </table>
 </script>
@@ -249,10 +223,14 @@
   <table class='table table-bordered'>
    <thead><tr><th>Proposition</th><th>Opposition</th></tr></thead>
    <tbody>
-   <tr><td><div class='PM_Container'></div></td><td><div class='LO_Container'></div></td></tr>
-   <tr><td><div class='DPM_Container'></div></td><td><div class='DLO_Container'></div></td></tr>
-   <tr><td><div class='GW_Container'></div></td><td><div class='OW_Container'></div></td></tr>
-   <tr><td><div class='GR_Container'></div></td><td><div class='OR_Container'></div></td></tr>
+   <tr><td><div id='PM_Container_<%= game_id %>' data-bind="template: {name: 'role_status_template'}"></div></td>
+       <td><div id='LO_Container_<%= game_id %>' data-bind="template: {name: 'role_status_template'}"></div></td></tr>
+   <tr><td><div id='DPM_Container_<%= game_id %>' data-bind="template: {name: 'role_status_template'}"></div></td>
+       <td><div id='DLO_Container_<%= game_id %>' data-bind="template: {name: 'role_status_template'}"></div></td></tr>
+   <tr><td><div id='GW_Container_<%= game_id %>' data-bind="template: {name: 'role_status_template'}"></div></td>
+       <td><div id='OW_Container_<%= game_id %>' data-bind="template: {name: 'role_status_template'}"></div></td></tr>
+   <tr><td><div id='GR_Container_<%= game_id %>' data-bind="template: {name: 'role_status_template'}"></div></td>
+        <td><div id='OR_Container_<%= game_id %>' data-bind="template: {name: 'role_status_template'}"></div></td></tr>
    </tbody>
   </table>
 </script>
@@ -261,13 +239,17 @@
   <table class='table table-bordered'>
    <thead><tr><th>OpeningGovernment</th><th>OpeningOpposition</th></tr></thead>
    <tbody>
-   <tr><td><div class='PM_Container'></div></td><td><div class='LO_Container'></div></td></tr>
-   <tr><td><div class='DPM_Container'></div></td><td><div class='DLO_Container'></div></td></tr>
+   <tr><td><div id='PM_Container_<%= game_id %>' data-bind="template: {name: 'role_status_template'}"></div></td>
+       <td><div id='LO_Container_<%= game_id %>' data-bind="template: {name: 'role_status_template'}"></div></td></tr>
+   <tr><td><div id='DPM_Container_<%= game_id %>' data-bind="template: {name: 'role_status_template'}"></div></td>
+       <td><div id='DLO_Container_<%= game_id %>' data-bind="template: {name: 'role_status_template'}"></div></td></tr>
    </tbody>
    <thead><tr><th>ClosintGovernment</th><th>ClosingOpposition</th></tr></thead>
    <tbody>
-   <tr><td><div class='MG_Container'></div></td><td><div class='MO_Container'></div></td></tr>
-   <tr><td><div class='GW_Container'></div></td><td><div class='OW_Container'></div></td></tr>
+   <tr><td><div id='MG_Container_<%= game_id %>' data-bind="template: {name: 'role_status_template'}"></div></td>
+       <td><div id='MO_Container_<%= game_id %>' data-bind="template: {name: 'role_status_template'}"></div></td></tr>
+   <tr><td><div id='GW_Container_<%= game_id %>' data-bind="template: {name: 'role_status_template'}"></div></td>
+       <td><div id='OW_Container_<%= game_id %>' data-bind="template: {name: 'role_status_template'}"></div></td></tr>
    </tbody>
   </table>
 </script>
@@ -289,11 +271,6 @@
 
 @section('page_script')
 
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
-  <script src="{{ asset('/js/header_nav_draw.js') }}"></script>
-  <script src ="{{ asset('/js/Mixidea_ShowEvent.js') }}"></script>
-
 <?php  $number_of_game = count($game_array); ?>
 
 <?php
@@ -304,22 +281,23 @@
   $initial_game_id = $game_first_array['game_ID'];
   $initial_game_style = $game_first_array['style'];
 ?>
+
 <script>
-  var game_participate_object_{{ $initial_game_id }} = new ShowEvent( "{{ $initial_game_id }}", "{{ $initial_game_style }}" );
- 
 
-  function onclick_tab(game_id, game_style){
-
-
-    if( eval("typeof game_participate_object_" + game_id) == 'undefined') {
-      eval("game_participate_object_" + game_id + " = new ShowEvent('" + game_id + "','" + game_style + "');");
-    }else{
-      eval("game_participate_object_" + game_id + ".update_game_info('" + game_id + "','" +game_style + "');");
-    }
-
-  }
+  var first_game_id="{{ $initial_game_id }}";
+  var first_game_style = "{{ $initial_game_style }}";
 
 </script>
+
+  <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/knockout/3.3.0/knockout-min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+  <script src="{{ asset('/js/header_nav_draw.js') }}"></script>
+  <script src ="{{ asset('/js/ShowEvent/RoleStatus.js') }}"></script>
+  <script src ="{{ asset('/js/ShowEvent/ParticipantMgr.js') }}"></script>
+  <script src="{{ asset('/js/ShowEvent/GameFrame.js') }}"></script>
+  <script src ="{{ asset('/js/ShowEvent/MixideaShowEvent.js') }}"></script>
+
+
 
 @stop
 
