@@ -56,6 +56,7 @@ Role_Status_VM.prototype.Cancel_Game = function(){
   self.loading_visible(true);
   self.cancel_game_visible(false);
 
+  self.parent_gameframe.hide_all_button();
 
   var is_audience_role = self.parent_gameframe.participant_object.is_audience_role(self.role_name_str);
   if(is_audience_role){
@@ -108,6 +109,8 @@ Role_Status_VM.prototype.Join_Game = function(){
    alert("you cannot join multiple group");
    return;
   }
+
+  self.parent_gameframe.hide_all_button();
   self.join_game_visible(false);
   self.loading_visible(true);
 

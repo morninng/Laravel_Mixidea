@@ -121,6 +121,13 @@ GameFrame.prototype.UpdateUserObj = function(role_name){
 	role_obj.update_user_status();
 }
 
+GameFrame.prototype.hide_all_button = function(){
+	var self = this;
+	for(var i = 0; i< self.role_array.length; i++){
+		var role_obj = eval("self.role_obj_" + self.role_array[i]);
+		role_obj.reset_button();
+	}
+}
 
 GameFrame.prototype.CreateUserObj = function(role_name, container_name){
 	var self = this;
