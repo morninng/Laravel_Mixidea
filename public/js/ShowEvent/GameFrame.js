@@ -16,7 +16,6 @@ GameFrame.prototype.initialize = function(){
 
 	for(var i = 0; i< self.role_array.length; i++){
 		self.CreateUserObj(self.role_array[i], self.container_array[i]);
-	//	self.UpdateUserObj(self.role_array[i]);
 	}
 }
 
@@ -30,7 +29,10 @@ GameFrame.prototype.update_game_info = function(){
       self.game_object = game_obj;
       self.show_date_time();
       self.show_game_motion();
-      self.participant_object.update(game_obj);
+
+      var debate_participant_object_array = game_obj.get("participant_role");
+      var audience_array = game_obj.get("audience_participants");	
+      self.participant_object.update(debate_participant_object_array, audience_array);
 	  self.UpdateUserObjAll();
 
 //      self.update_debater_participant_data();
@@ -47,6 +49,25 @@ GameFrame.prototype.update_game_info = function(){
   });
 }
 
+GameFrame.prototype.update_game_participant_info = function(debate_participant_object_array, audience_array){
+	
+	  var self = this;
+      self.participant_object.update(debate_participant_object_array, audience_array);
+	  self.UpdateUserObjAll();
+}
+
+GameFrame.prototype.UpdateUserObjAll = function(){
+	var self = this;
+	for(var i = 0; i< self.role_array.length; i++){
+		self.UpdateUserObj(self.role_array[i]);
+	}
+}
+
+GameFrame.prototype.UpdateUserObj = function(role_name){
+	var self = this;
+	var role_obj = eval("self.role_obj_" + role_name);
+	role_obj.update_user_status();
+}
 
 
 GameFrame.prototype.CreateUserObj = function(role_name, container_name){
@@ -67,19 +88,9 @@ GameFrame.prototype.CreateUserObj = function(role_name, container_name){
 }
 
 
-GameFrame.prototype.UpdateUserObjAll = function(){
-	var self = this;
-	for(var i = 0; i< self.role_array.length; i++){
-		self.UpdateUserObj(self.role_array[i]);
-	}
-}
 
-GameFrame.prototype.UpdateUserObj = function(role_name){
-	var self = this;
-	var role_obj = eval("self.role_obj_" + role_name);
-	role_obj.update_user_status();
-//	eval("self.user_obj_" + role_name + ".update_user_status();");
-}
+
+
 
 GameFrame.prototype.create_rolename_array = function(game_style){
 	

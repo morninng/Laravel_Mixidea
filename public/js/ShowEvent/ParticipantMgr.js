@@ -13,9 +13,11 @@ ParticipantMgr.prototype.initialize = function(game_style){
 	self.setGameData();
 	self.audience_object_array = new Object();
 	self.participant_object_array = new Object();
+	self.own_role_array = new Array();
+	self.own_group_name = null;
 	
 }
-ParticipantMgr.prototype.update = function(game_obj){
+ParticipantMgr.prototype.update = function(debate_participant_object_array, audience_array){
 
 	var self = this;
 	var audience_role_array = ["audience1","audience2","audience3","audience4"];
@@ -23,13 +25,75 @@ ParticipantMgr.prototype.update = function(game_obj){
 	for(var key in self.participant_object_array){
     	delete self.participant_object_array[key];
 	}
-	self.participant_object_array = game_obj.get("participant_role");
 
-	var audience_array = game_obj.get("audience_participants");	
+	self.participant_object_array = debate_participant_object_array;
+
 	for(var i=0; i<audience_array.length; i++){
 		self.participant_object_array[audience_role_array[i]] = audience_array[i];
 	}
+	self.own_role_array = self.get_own_role_array();
+	self.own_group_name = self.get_own_group_name()
+
 }
+
+
+ParticipantMgr.prototype.get_own_role_array = function(){
+
+	var self = this;
+	var role_array = new Array();
+	var current_user = Parse.User.current();
+
+	for(var key in self.participant_object_array){
+		if(self.participant_object_array[key] == current_user.id){
+			role_array.push(key);
+		}
+	}
+	return role_array;
+}
+
+ParticipantMgr.prototype.is_yourself_have_role = function(){
+
+	var self = this;
+	if(self.own_role_array){
+		if(self.own_role_array.length > 0){
+			return true;
+		}
+	}
+	return false;
+}
+
+
+ParticipantMgr.prototype.get_own_group_name = function(){
+
+	var self = this;
+	if(!self.own_role_array){
+		return null;
+	}
+	var own_group_name = self.get_group_name(self.own_role_array[0]);
+
+	return own_group_name;
+}
+
+
+ParticipantMgr.prototype.get_group_name = function(in_role_name){
+
+	var self = this;
+	return self.role_group_array[in_role_name];
+}
+
+ParticipantMgr.prototype.is_audience_role = function(in_role_name){
+
+	var self = this;
+	var group_name = self.role_group_array[in_role_name];
+	if(group_name == "Aud"){
+		return true;
+	}
+	return false;
+
+}
+
+
+
 
 ParticipantMgr.prototype.get_parse_id_from_rolename = function(role_name){
 
@@ -53,6 +117,31 @@ ParticipantMgr.prototype.is_yourself_from_rolename = function(role_name){
 	}
 	return false;
 
+}
+
+
+ParticipantMgr.prototype.not_your_group_role = function(role_name){
+	var self = this;
+	var role_group_name = self.get_group_name(role_name);
+	if(!role_group_name){
+		return true;
+	}
+
+	if(role_group_name == self.own_group_name){
+		return false;
+	}
+	return true;
+
+}
+
+ParticipantMgr.prototype.is_your_group_role = function(role_name){
+
+	var self = this;
+	var role_group_name = self.get_group_name(role_name);
+	if(role_group_name == self.own_group_name){
+		return true;
+	}
+	return false;
 }
 
 ParticipantMgr.prototype.valid_to_join = function(role_name){
