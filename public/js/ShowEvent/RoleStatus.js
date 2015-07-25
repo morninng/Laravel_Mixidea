@@ -88,9 +88,11 @@ Role_Status_VM.prototype.Join_Game = function(){
   alert("you need to login to join the game");
   return;
  }
- is_your_group_role = self.parent_gameframe.participant_object.is_your_group_role(self.role_name_str);
+ var is_your_group_role = self.parent_gameframe.participant_object.is_your_group_role(self.role_name_str);
+ var is_yourself_have_role = self.parent_gameframe.participant_object.is_yourself_have_role();
 
- if(!is_your_group_role){
+
+ if(!is_your_group_role && is_yourself_have_role){
    alert("you cannot join multiple group");
    return;
   }
@@ -144,7 +146,6 @@ Role_Status_VM.prototype.update_user_status = function(){
 
         if(!profile_id){
           self.show_user_profile(user_obj, null);
-          self.show_button();
           return;
         }
 
@@ -153,7 +154,6 @@ Role_Status_VM.prototype.update_user_status = function(){
         user_query.get(profile_id, {
           success: function(profile_obj){
             self.show_user_profile(user_obj, profile_obj);
-            self.show_button();
           },
           error: function(obj,error){
             console.log("error to retrieve profile info");
