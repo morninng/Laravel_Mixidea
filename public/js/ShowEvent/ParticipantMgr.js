@@ -45,6 +45,10 @@ ParticipantMgr.prototype.get_own_role_array = function(){
 	var role_array = new Array();
 	var current_user = Parse.User.current();
 
+	if(!current_user){
+		return role_array;
+	}
+
 	for(var key in self.participant_object_array){
 		if(self.participant_object_array[key] == current_user.id){
 			role_array.push(key);
