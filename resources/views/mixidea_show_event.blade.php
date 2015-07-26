@@ -70,7 +70,6 @@
 <!-- /********** main contents under tab pane  ******/ -->
 
 
-
   <div class="tab-content">
 
 
@@ -164,7 +163,7 @@
           <p data-bind = "text:user_profile_intro"></p> 
         </div>
      </div>
-     <div class="button-container" data-bind="visible:participant_button">
+     <div class="button-container" data-bind="visible:participant_button_visible">
         <div class='event_button' style='float:right;margin-right:5px; margin-left:5px;'>
             <div data-bind="visible:cancel_game_visible">
               <button class='btn btn-inverse cancel_button' data-bind = "click:Cancel_Game" >
@@ -172,7 +171,7 @@
               </button>
             </div>
             <div data-bind="visible:join_game_visible">
-              <button class='btn btn-primary participate_button' data-bind = "click:Join_Game"  >
+              <button class='btn btn-primary participate_button' data-bind = "click:Join_Game_trigger"  >
                 <i class="glyphicon glyphicon-book"></i> Join
               </button>
             </div>
@@ -180,18 +179,71 @@
       </div>
       <div style='clear:both'>
       </div>
-      <div align='center' data-bind="visible:user_dialog">
-        <div data-bind="visible:profile_input">
-          <form></form>
+      <div align='center' data-bind="visible:user_dialog_visible">
+        <div data-bind="visible:profile_input_visible">
+          <div style="border: 1px solid;">
+              <form>
+                  <p align="left">
+                    Nationaltity: 
+                    <select data-bind="options:availableCountries, selectedOptions:chosenCountries "></select>
+                  </p>
+                  <p align="left">
+                    Belongings:
+                    <input type="text" data-bind="textInput:user_profile_belonging"></input>
+                  </p>
+                  <p align="left">
+                    self introduction:
+                    <textarea data-bind="textInput:user_profile_introduction"></textarea>
+                  </p>
+                  <p align="center">
+                    <button data-bind="click: click_input_profile">next</button>
+                    <button data-bind="click: click_cancel_joining">cancel</button>
+                  </p>
+              </form>
+          </div>
         </div>
-        <div data-bind="visible: user_declaration">
-          <form></form>
+
+        <div data-bind="visible:profile_confirm_visible">
+          <div style="border: 1px solid;">
+              <form>
+                  <p align="left">
+                    Nationaltity: 
+                    <span data-bind="text:user_nationality"></span>
+                  </p>
+                  <p align="left">
+                    Belongings:
+                    <span data-bind="text:user_profile_belonging"></span>
+                  </p>
+                  <p align="left">
+                    self introduction:
+                    <span data-bind="textInput:user_profile_introduction"></span>
+                  </p>
+                  <p align="center">
+                    <button data-bind="click: click_goto_declaration">next</button>
+                    <button data-bind="click: click_cancel_joining">cancel</button>
+                  </p>
+              </form>
+          </div>
+        </div>
+
+        <div data-bind="visible: user_declaration_visible">
+          <div style="border: 1px solid;">
+            <form>
+              <p align="left"><input type="checkbox" value="use_pc" data-bind="checked:declaration_check, click:declaration_check_click ">You need to use Desktop or Laptop to join game</p>
+              <p align="left"><input type="checkbox" value="join_on_time" data-bind="checked:declaration_check, click:declaration_check_click ">You should join at this timing, if you cannot you need to cancel in advance</p>
+              <p align="left"><input type="checkbox" value="share_experience" data-bind="checked:declaration_check, click:declaration_check_click">You should summerize what is discussed after the game </p>
+              <p align="left"><input type="checkbox" value="use_chrome" data-bind="checked:declaration_check, click:declaration_check_click">Chrome browser is better for qualified condition </p>
+              <p align="center">
+                    <button class="btn btn-inverse" data-bind="click: click_cancel_joining">cancel</button>
+                    <button data-bind="visible:before_declaration_visible" disabled class="btn btn-primary">Join</button>
+                    <button class="btn btn-primary" data-bind="click: click_confirm_join , visible:after_declaration_visible">Join confirm<i class="glyphicon glyphicon-book"></i></button>
+              </p>
+            </form>
+          <div>
         </div>
       </div>
       <div style="clear:both" class='loader' align="center" data-bind = "visible:loading_visible"> Loading </div>
 </script>
-
-
 
 
 <script type="text/template" data-template="audience_list_template">
@@ -199,10 +251,6 @@
   <div id= '<%= e.container_name %>'data-bind="template:{name:'role_status_template'}" style="float:left;"></div>
  <% }); %>
 </script>
-
-
-
-
 
 <script type="text/template" data-template="NA_Template">
   <table class='table table-bordered'>

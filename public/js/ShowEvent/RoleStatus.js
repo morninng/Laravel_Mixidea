@@ -15,18 +15,103 @@ Role_Status_VM.prototype.initialize = function(role_name, game_id, parent_gamefr
   self.role_name = ko.observable(role_name);
   self.user_visible = ko.observable(false);
   self.pict_src = ko.observable();
-  self.user_profile_belonging = ko.observable();
   self.user_profile_intro = ko.observable();
-  self.participant_button = ko.observable(true);
+  self.participant_button_visible = ko.observable(true);
   self.cancel_game_visible = ko.observable();
   self.join_game_visible = ko.observable();
   self.user_name = ko.observable();
-  self.user_dialog = ko.observable();
-  self.profile_input = ko.observable();
-  self.user_declaration = ko.observable();
+  self.user_dialog_visible = ko.observable();
   self.loading_visible = ko.observable();
   self.current_user_id = null;
+/*
+  self.use_pc = ko.observable(true);
+  self.join_on_time = ko.observable(true);
+  self.share_experience = ko.observable(true);
+  self.use_chrome = ko.observable(true);
+  */
+  self.declaration_check = ko.observableArray();
 
+  self.user_nationality = ko.observable();
+  self.profile_input_visible = ko.observable();
+  self.user_declaration_visible = ko.observable();
+  self.availableCountries = ko.observable(['France', 'Germany', 'Spain','Japan','Korea','Phillipine','Algentin','Brazil','Chili']);
+  self.chosenCountries = ko.observable(null);
+  self.user_profile_belonging = ko.observable();
+  self.user_profile_introduction = ko.observable();
+  self.profile_confirm_visible = ko.observable();
+
+  self.before_declaration_visible = ko.observable(false);
+  self.after_declaration_visible = ko.observable(true);
+
+}
+
+
+Role_Status_VM.prototype.declaration_check_click = function(){
+  var self = this;
+  var num_checked = self.declaration_check().length;
+  console.log(num_checked); 
+
+}
+
+
+Role_Status_VM.prototype.click_cancel_joining = function(){
+  var self = this;
+  self.user_declaration_visible(false);
+  self.user_dialog_visible(false);
+  self.profile_confirm_visible(false);
+  self.profile_input_visible(false);
+
+  var num_checked = self.observableArray().length;
+  console.log(num_checked); 
+}
+
+
+Role_Status_VM.prototype.click_confirm_join = function(){
+  var self = this;
+  self.user_declaration_visible(false);
+  self.user_dialog_visible(false);
+
+
+  var is_audience_role = self.parent_gameframe.participant_object.is_audience_role(self.role_name_str);
+  if(is_audience_role){
+    var join_type = "JoinGame_Audience"
+    var join_obj = { game_id: self.game_id };
+  }else{
+    //debater
+    var join_type = "JoinGame"
+    var join_obj = { game_id: self.game_id, role: self.role_name_str};
+  }
+  Parse.Cloud.run(join_type, join_obj,{
+    success: function(game_obj) {
+      var debate_participant_object_array = game_obj.get("participant_role");
+      var audience_array = game_obj.get("audience_participants");
+       self.parent_gameframe.update_game_participant_info(debate_participant_object_array, audience_array);
+       self.loading_visible(false);
+    },
+    error: function(error) {
+      var error_JSON = JSON.parse(error.message);
+      alert(error_JSON.code + ":" +  error_JSON.message);
+      var game_obj = error_JSON.game_obj;
+      self.parent_gameframe.update_game_participant_info(game_obj.participant_role, game_obj.audience_participants)
+      self.loading_visible(false);
+    }
+  });
+}
+
+
+
+
+Role_Status_VM.prototype.click_goto_declaration = function(){
+  var self = this;
+  self.user_declaration_visible(true);
+  self.profile_confirm_visible(false);
+
+}
+
+Role_Status_VM.prototype.click_input_profile = function(){
+  var self = this;
+  self.user_declaration_visible(true);
+  self.profile_input_visible(false);
 
 }
 
@@ -88,12 +173,9 @@ Role_Status_VM.prototype.Cancel_Game = function(){
     }
   });
 
-
-
-
 }
 
-Role_Status_VM.prototype.Join_Game = function(){
+Role_Status_VM.prototype.Join_Game_trigger = function(){
   
   var self = this;
   var current_user = Parse.User.current();
@@ -112,42 +194,20 @@ Role_Status_VM.prototype.Join_Game = function(){
 
   self.parent_gameframe.hide_all_button();
   self.join_game_visible(false);
-  self.loading_visible(true);
+  self.loading_visible(false);
+  self.participant_button_visible(false);
+  self.popup_dialog();
+}
 
 
-  var is_audience_role = self.parent_gameframe.participant_object.is_audience_role(self.role_name_str);
-  if(is_audience_role){
-    var join_type = "JoinGame_Audience"
-    var join_obj = { game_id: self.game_id };
 
-  }else{
-    //debater
-    var join_type = "JoinGame"
-    var join_obj = { game_id: self.game_id, role: self.role_name_str};
-
-  }
-
-  Parse.Cloud.run(join_type, join_obj,{
-    success: function(game_obj) {
-       game_obj;
-      var debate_participant_object_array = game_obj.get("participant_role");
-      var audience_array = game_obj.get("audience_participants");
-
-       self.parent_gameframe.update_game_participant_info(debate_participant_object_array, audience_array);
-       self.loading_visible(false);
-    },
-    error: function(error) {
-      var error_JSON = JSON.parse(error.message);
-      alert(error_JSON.code + ":" +  error_JSON.message);
-      var game_obj = error_JSON.game_obj;
-
-      self.parent_gameframe.update_game_participant_info(game_obj.participant_role, game_obj.audience_participants)
-      self.loading_visible(false);
-
-    }
-  });
+Role_Status_VM.prototype.popup_dialog = function(){
+  var self = this;
+  self.user_dialog_visible(true);
+  self.profile_input_visible(true);
 
 }
+
 
 Role_Status_VM.prototype.update_user_status = function(){
 
