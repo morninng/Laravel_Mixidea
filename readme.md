@@ -1,5 +1,3 @@
-## Laravel PHP Framework
-
 
 
 * Bug memo
