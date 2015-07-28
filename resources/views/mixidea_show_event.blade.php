@@ -257,7 +257,7 @@
 
 <script type = "text/template" data-template="Hangout_button_Template">
 
-  <a class='event_hangout_button' style='text-decoration:none;' href='<%= hangout_link %>' >
+  <a class='event_hangout_button' target="_blank" style='text-decoration:none;' href='<%= hangout_link %>' >
     <img src='https://ssl.gstatic.com/s2/oz/images/stars/hangout/1/gplus-hangout-60x230-normal.png' alt='Start a Hangout' style='border:0;width:230px;height:60px;'/>
   </a>
 

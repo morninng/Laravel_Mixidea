@@ -87,8 +87,9 @@ GameFrame.prototype.show_hangout_button = function(){
   var hangout_query_split = "_";
   var first_query_value = user_id;
   var second_query_value = game_id;
+  var thierd_query_value = hangout_app_id
   var hangout_link_str= hangout_domain + hangout_gid + hangout_app_id + hangout_query_key
-         + first_query_value + hangout_query_split + second_query_value;
+         + first_query_value + hangout_query_split + second_query_value + hangout_query_split +thierd_query_value;
 
   var data = {hangout_link: hangout_link_str};
   var Hangout_html_Template = _.template($('[data-template="Hangout_button_Template"]').html());
