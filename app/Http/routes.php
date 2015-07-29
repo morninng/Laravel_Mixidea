@@ -18,9 +18,13 @@ Route::get('context/list/category/{genre}', 'MixideaContextController@category')
 Route::get('context/list/type/{type}', 'MixideaContextController@type');
 Route::get('context/show/{game_id}', 'MixideaContextController@keyword');
 
-
+Route::get('Admin/TermOfService', 'MixideaAdminController@term_of_service');
+Route::get('Admin/PrivacyPolicy', 'MixideaAdminController@privacy_policy');
+Route::get('Admin/UserSupport', 'MixideaAdminController@user_support');
+Route::get('Admin/Marketing', 'MixideaAdminController@mixidea_marketing');
 
 Route::controllers([
 	'auth' => 'Auth\AuthController',
 	'password' => 'Auth\PasswordController',
 ]);
+
