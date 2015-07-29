@@ -28,10 +28,17 @@ class MixideahomeController extends Controller {
 	 * @return Response
 	 */
 
+		public function root()
+	{
+
+		return view('mixidea_blank')
+				->with("mixidea_app_config",$this->config_array);
+	}
+
 		public function home()
 	{
 
-		return view('mixidea_home')
+		return view('mixidea_blank')
 				->with("mixidea_app_config",$this->config_array);
 	}
 

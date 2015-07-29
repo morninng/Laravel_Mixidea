@@ -1,6 +1,6 @@
 <?php
 
-Route::get('/', 'WelcomeController@index');
+Route::get('/', 'MixideahomeController@root');
 Route::get('home', 'MixideahomeController@home');
 
 Route::get('/event/createEvent', 'MixideaEventController@create');
