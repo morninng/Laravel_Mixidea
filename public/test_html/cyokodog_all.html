@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0">
+	<meta http-equiv="Content-Language" content="ja" />
+	<meta name="keywords" content="jquery,javascript,css" />
+	<meta name="description" content="" />
+	<title>ブラウザのみで音声認識とテキスト読み上げを実現する Web Speech API | CYOKODOG</title>
+	<link rel="shortcut icon" href="http://www.cyokodog.net/wp-content/themes/cyokodog-0.5/favicon.ico">
+	<link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+	<link href='http://fonts.googleapis.com/css?family=Raleway:300' rel='stylesheet' type='text/css'>
+
+<!--[if lte IE 8]>
+<script src="http://www.cyokodog.net/wp-content/themes/cyokodog-0.5/html5.js" type="text/javascript"></script>
+<![endif]-->
+	<!-- START [wpEnqueueScriptsAction] --><!-- END [wpEnqueueScriptsAction] --><link rel="alternate" type="application/rss+xml" title="CYOKODOG &raquo; フィード" href="http://www.cyokodog.net/feed/" />
+<link rel="alternate" type="application/rss+xml" title="CYOKODOG &raquo; コメントフィード" href="http://www.cyokodog.net/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="CYOKODOG &raquo; ブラウザのみで音声認識とテキスト読み上げを実現する Web Speech API のコメントのフィード" href="http://www.cyokodog.net/blog/web-speechi-api/feed/" />
+<link rel='stylesheet' id='style-css'  href='http://www.cyokodog.net/wp-content/themes/cyokodog-0.5/style.css?ver=4.0.6' type='text/css' media='all' />
+<!-- START [wpPrintScriptsAction] --><!-- END [wpPrintScriptsAction] --><link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://www.cyokodog.net/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://www.cyokodog.net/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='TOC（目次メニュー）の実装方法について考えてみる' href='http://www.cyokodog.net/blog/thinking-toc/' />
+<link rel='next' title='Media Capture and Streams と Web Audio API で実現する録画・録音・ WAVファイルの生成' href='http://www.cyokodog.net/blog/media-capture-and-streams-web-audio-api/' />
+<meta name="generator" content="WordPress 4.0.6" />
+<link rel='canonical' href='http://www.cyokodog.net/blog/web-speechi-api/' />
+<link rel='shortlink' href='http://www.cyokodog.net/?p=220' />
+<meta name="fb:admins" content="100001731701653" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@cyokodog" />
+<meta name="og:locale" content="ja_JP" />
+<meta name="og:site_name" content="CYOKODOG" />
+<meta name="og:image" content="http://lh6.googleusercontent.com/-frDTerYNb8A/VQoRmf3edQI/AAAAAAAAI6I/Snu-6hQOYR8/s800/mike.png" />
+<meta name="og:type" content="blog" />
+<meta name="og:description" content="HTML5 の Web Speech API をご存知でしょうか？
+ブラウザベースで音声認識とテキストの読み上げを実現する API です。
+今回はこの Web Speech API について試したことをまとめてみました。
+ちなみに少し前の Chrome では Speech Input API という INPUT 要素に x-webkit-speech という属性を記述するのみで、手軽に音声認識を実" />
+<meta name="og:title" content="ブラウザのみで音声認識とテキスト読み上げを実現する Web Speech API" />
+<meta name="og:url" content="http://www.cyokodog.net/blog/web-speechi-api/" />
+</head>
+<body class="single single-post postid-220 single-format-standard" >
+	<div class="l-header">
+		<div class="u-layout-center">
+			
+				<div class="site-header">
+					
+					<a class="site-header__logo" href="http://www.cyokodog.net/">
+						<img src="https://lh4.googleusercontent.com/-u47wdUJYuNk/Tuiz2w6sLuI/AAAAAAAAEGA/v0cmgN4ZysU/s144/DSC01588.JPG"/>
+					</a>
+				
+					<div class="site-header__text">
+						<h1>
+							<a href="http://www.cyokodog.net/">CYOKODOG</a>
+							<span class="social-icons">
+								<a class="fa fa-github-square" href="https://github.com/cyokodog"></a>
+								<a class="fa fa-twitter-square" href="https://twitter.com/cyokodog"></a>
+								<a class="fa fa-facebook-square" href="https://www.facebook.com/cyokodog.net"></a>
+								<a class="fa fa-google-plus-square" href="https://plus.google.com/u/0/115524754009910942363/posts"></a>
+							</span>
+						</h1>
+						<h2>DEVELOPER BLOG
+						</h2>
+					</div>
+					<div class="site-header__search">
+						<form role="search" method="get" id="searchform" action="http://www.cyokodog.net/">
+							<input type="text" value="" name="s" id="s"/>
+						</form>
+					</div>
+				</div>
+					</div>
+	</div>
+	<div class="l-site-nav">
+		<div class="u-layout-center">
+			<div class="tab site-nav"><ul><li class="page_item page-item-145"><a href="http://www.cyokodog.net/">HOME</a></li><li class="page_item page-item-146 page_item_has_children current_page_parent"><a href="http://www.cyokodog.net/blog/">BLOG</a></li></ul></div>
+		</div>
+	</div>
+
+
+	
+
+
+
+
+
+
+
+
+<div class="l-contents">
+	<div class="u-layout-center">
+		<div class="l-article">
+												<article class="article">
+
+						
+							<div class="article__header">
+								<h1 class="article__title"><a href="http://www.cyokodog.net/blog/web-speechi-api/" title="">ブラウザのみで音声認識とテキスト読み上げを実現する Web Speech API</a></h1>
+								
+				<ul class="article__info">
+					<li class="article__info__date">2015-03-18</li>
+		<li class="article__info__category"><a href="http://www.cyokodog.net/blog/category/programming/challenge-html5/" rel="category tag">作って覚えるHTML5</a></li></ul>							</div>
+							<div class="article__body">
+								
+											<div class="article__eyecatch">
+												<a href="http://www.cyokodog.net/blog/web-speechi-api/"><img src="http://lh6.googleusercontent.com/-frDTerYNb8A/VQoRmf3edQI/AAAAAAAAI6I/Snu-6hQOYR8/s800/mike.png"/></a>
+											</div>
+										<p>HTML5 の Web Speech API をご存知でしょうか？
+ブラウザベースで音声認識とテキストの読み上げを実現する API です。
+今回はこの Web Speech API について試したことをまとめてみました。
+ちなみに少し前の Chrome では Speech Input API という INPUT 要素に x-webkit-speech という属性を記述するのみで、手軽に音声認識を実現できるという機能がありましたが現バージョンでは廃止されてるようです・・・<br />
+Web Speech API の対応ブラウザは <a href="http://caniuse.com/#feat=web-speech">Can I Use</a> よりご確認ください。</p>
+
+<span id="more-220"></span>
+
+<h2>テキストの読み上げを行う Speech Synthesis API</h2>
+
+<p>Speech Synthesis API を使用すると、指定したテキストを PC に読み上げさせることできます。
+使い方は非常に簡単で、new SpeechSynthesisUtterance( 読み上げテキスト ) で得たオブジェクトを speechSynthesis.speak() メソッドに渡すのみです。
+RUN をクリックすると読み上げが行われます。</p>
+
+<h4>code demo noAuto</h4>
+
+<h5>script</h5>
+
+<pre><code>speechSynthesis.speak(
+    new SpeechSynthesisUtterance("No Programming, No Life")
+);
+</code></pre>
+
+<p><br/>
+以下のよう各種パラメータを指定することもできます。パラメータの詳細は <a href="https://dvcs.w3.org/hg/speech-api/raw-file/tip/speechapi.html">Web Speech API Specification | W3C</a> をご参照ください。</p>
+
+<h4>code demo noAuto</h4>
+
+<h5>script</h5>
+
+<pre><code>var synthes = new SpeechSynthesisUtterance();
+synthes.voiceURI = 'native';
+synthes.volume = 1;
+synthes.rate = 1;
+synthes.pitch = 2;
+synthes.text = 'No Programming, No Life';
+synthes.lang = 'en-US';
+synthes.onend = function(e) {
+    alert('Finished in ' + event.elapsedTime + ' seconds.');
+};
+speechSynthesis.speak(synthes);
+</code></pre>
+
+<h3>日本語テキストを認識させてみる</h3>
+
+<p>日本語のテキストを認識させるには lang 属性に ja-JP を指定します。</p>
+
+<h4>code demo noAuto</h4>
+
+<h5>script</h5>
+
+<pre><code>var synthes = new SpeechSynthesisUtterance(
+    '日本語のテキストを認識させるには、lang 属性に ja-JP を指定します。'
+);
+synthes.lang = "ja-JP"
+speechSynthesis.speak( synthes );
+</code></pre>
+
+<h3>指定した音声で読み上げを行う</h3>
+
+<p>SpeechSynthesisUtterance オブジェクトの voice 属性に任意の SpeechSynthesisVoice オブジェクトを指定することで音声を変更することができます。
+SpeechSynthesisVoice オブジェクトは speechSynthesis.getVoices() により得られる音声リストの中に保持されますので、利用したい音声をそこから選ぶ事になります。
+例えばイタリア人風に読み上げを行う場合は以下のように記述します。</p>
+
+<h4>code demo</h4>
+
+<h5>html</h5>
+
+<pre><code>&lt;button&gt;イタリア人風に読み上げる&lt;/button&gt;
+</code></pre>
+
+<h5>script</h5>
+
+<pre><code>var speakBtn = $DEMO[0].querySelector('button');
+speakBtn.addEventListener('click', function(){
+    var synthes = new SpeechSynthesisUtterance('No Programming, No Life');
+    var voices = speechSynthesis.getVoices();
+    voices.forEach(function(v, i){
+        //イタリア人風
+        if(v.name == 'Google Italiano') synthes.voice = v;
+    });
+    speechSynthesis.speak(synthes);
+}, false);
+</code></pre>
+
+<p>ちなみにページロード直後に speechSynthesis.getVoices() を実行しても音声リストが取得できないというバグ？があるようなので、getVoice() を行うタイミングには注意が必要です。上記例ではボタンクリック時に取得してます。</p>
+
+<ul>
+<li><a href="http://stackoverflow.com/questions/21513706/getting-the-list-of-voices-in-speechsynthesis-of-chrome-web-speech-api">javascript events &#8211; Getting the list of voices in speechSynthesis of Chrome (Web Speech API) &#8211; Stack Overflow</a></li>
+<li><a href="https://code.google.com/p/chromium/issues/detail?id=340160">Issue 340160:getVoices on page load | chromium</a></li>
+</ul>
+
+<h3>指定可能な音声を調べる</h3>
+
+<p>前述のとおり speechSynthesis.getVoices() により音声リストが取得できるので、この中身を参照することで利用可能な音声を調べることができます。
+ちなみに MAC と Windows では取得できる音声の数が大きく異なり、Windows は MAC の一部の音声しか利用できません。（MAC のみの音声はネット非接続環境でも利用できることから内蔵音声かと思われます）</p>
+
+<h4>code demo</h4>
+
+<h5>html</h5>
+
+<pre><code>&lt;button class="loadVoiceBtn"&gt;Show Voice List&lt;/button&gt;
+&lt;ul&gt;&lt;/ul&gt;
+</code></pre>
+
+<h5>script</h5>
+
+<pre><code>var loadVoiceBtn = $DEMO[0].querySelector('.loadVoiceBtn')
+loadVoiceBtn.addEventListener('click', function(){
+    var voices = speechSynthesis.getVoices();
+    Array.prototype.forEach.call(voices, function(v, i){
+        var li = document.createElement('li');
+        li.textContent = v.name;
+        $DEMO[0].querySelector('ul').appendChild(li);
+    });
+    this.remove();
+}, false);
+</code></pre>
+
+<h3>いろいろな音声で読み上げを行う</h3>
+
+<p>では、利用可能な音声の種類分の再生ボタンを生成し、任意の音声による読み上げができるようにしてみます。</p>
+
+<h4>code demo</h4>
+
+<h5>html</h5>
+
+<pre><code>&lt;button class="getVoiceBtn"&gt;Get Voice&lt;/button&gt;  
+</code></pre>
+
+<h5>script</h5>
+
+<pre><code>var Speech = {
+    voices: null,
+    synthes: null,
+    init: function(){
+        var o = this;
+        o.loadVoices();
+        o.synthes = new SpeechSynthesisUtterance();
+    },
+    loadVoices: function(){
+        var o = this;
+        o.voices = window.speechSynthesis.getVoices();
+    },
+    say: function(msgText, voiceName){
+        var o = this;
+        o.synthes.voice = null;
+        if(voiceName){
+            for (var i = 0; i &lt; o.voices.length; i++){
+                if (o.voices[i].name == voiceName)
+                    o.synthes.voice = o.voices[i];
+            }
+        }
+        o.sayStop();
+        o.synthes.text = msgText;
+        speechSynthesis.speak(o.synthes);
+    },
+    sayStop: function(){
+        speechSynthesis.cancel();
+    }
+}
+var View = {
+    getVoiceButtons : function(voices){
+        var buttons = document.createElement('div');
+        for (var i = 0; i &lt; voices.length; i++){
+            var voice = voices[i];
+            var button = document.createElement('button');
+            button.textContent = voice.name;
+            buttons.appendChild(button);
+        }
+        return buttons;
+    }
+}
+var App = {
+    el: {
+        getVoiceBtn : $DEMO[0].querySelector('.getVoiceBtn')
+    },
+    init: function(){
+        var o = this;
+        Speech.init();
+        o.el.getVoiceBtn.addEventListener('click', function(){
+            o.showVoiceButtons();
+            this.remove();
+        }, false);
+    },
+    showVoiceButtons : function(){
+        Speech.loadVoices();
+        var buttons = View.getVoiceButtons(Speech.voices)
+        buttons.addEventListener('click', function(evt){
+            Speech.say(
+                'No Programming, No Life',
+                evt.target.textContent
+            );
+        }, false);
+        $DEMO[0].appendChild(buttons);
+    }
+}
+App.init();
+</code></pre>
+
+<h2>音声認識を行う Speech Recognition API</h2>
+
+<p>Speech Recognition API を使用すると、PC 接続されたマイクからの入力音声を解析し、テキスト変換させることができます。</p>
+
+<p>下記コードを実行するとマイクデバイスへのアクセス許可を求められるので、許可を選択してみてください。
+録音状態であることを示すアイコンがタブ脇に一定時間表示されるので、その間に適当な言葉を喋ってみてください。
+録音状態が終了するとテキスト変換された文字列が表示されます。</p>
+
+<h4>code demo noAuto</h4>
+
+<h5>script</h5>
+
+<pre><code>window.SpeechRecognition = window.SpeechRecognition || webkitSpeechRecognition;
+var recognition = new webkitSpeechRecognition();
+recognition.lang = 'ja';
+
+// 録音終了時トリガー
+recognition.addEventListener('result', function(event){
+    alert(event.results.item(0).item(0).transcript)
+}, false);
+
+// 録音開始
+recognition.start();
+</code></pre>
+
+<p><br/>
+変換されたテキストの表示処理部分をみると、.item(0).item(0).. と、なにやら配列の入れ子のようなデータを表示してます。</p>
+
+<pre><code>alert(event.results.item(0).item(0).transcript)
+</code></pre>
+
+<p><br/>
+配列の中身を全て走査するようにすると、以下のような記述になります。</p>
+
+<pre><code>//配列１
+var results = event.results;
+for(var i = 0; i &lt; results.length; i++){
+    //配列２
+    var result = results.item(i);
+    for(var j = 0; j &lt; result.length; j++){
+        var alternative = result.item(j);
+        alert(alternative.transcript)
+    }
+}
+</code></pre>
+
+<p>results とその子である result の２つの配列で構成されてます。</p>
+
+<p>まず１つ目の resutls ですが、ここには認識した音声の音節単位の解析結果が格納されます。
+例えば、文章を音声入力した場合、発音の区切り目から複数の音節から構成されていると解釈され、音節単位に区切られた形で配列に格納されます。
+このような<strong>連続音節認識</strong>をさせる場合は、continuous パラメータ（後述）に true を指定し録音を行います。</p>
+
+<p>次に ２つ目の result ですが、ここには変換候補リストが格納されます。
+例えば「javascript」と発音すると、解析結果として「javascript」「ジャバスクリプト」「java script」などが候補として挙げれられ、配列に格納されます。
+このように複数の<strong>変換候補リスト</strong>を求める場合は、maxAlternatives パラメータ（後述）に要求する候補数を指定します。</p>
+
+<h3>複数の変換候補を求める</h3>
+
+<p>では、入力音声に対する変換候補を複数表示させるため、recognition オブジェクトの maxAlternatives 属性に変換候補数を指定し試してみます。</p>
+
+<h4>code demo noAuto</h4>
+
+<h5>script</h5>
+
+<pre><code>window.SpeechRecognition = window.SpeechRecognition || webkitSpeechRecognition;
+var recognition = new SpeechRecognition();
+recognition.lang = 'ja';
+
+//変換候補数を指定
+recognition.maxAlternatives = 3;
+
+// 録音終了時トリガー
+recognition.addEventListener('result', function(event){
+    var results = event.results;
+    for(var i = 0; i &lt; results.length; i++){
+        var result = results.item(i);
+        for(var j = 0; j &lt; result.length; j++){
+            var alternavive = result.item(j);
+            alert(
+                alternavive.transcript + 
+                '(' + alternavive.confidence + ')'
+            )
+        }
+    }
+
+}, false);
+
+// 録音開始
+recognition.start();
+</code></pre>
+
+<p>いかがでしょうか？変換候補が複数表示されましたでしょうか？
+かっこ内の数値は候補の信頼度を表しています。</p>
+
+<h3>連続音節認識で文章の変換を行う</h3>
+
+<p>次に recognition オブジェクトの continuous 属性に true を指定し、連続音節認識も試してみます。
+連続音節認識の場合、音声入力待ち状態が長いので、任意のタイミングでコントロールできるよう以下サンプルでは録音の開始／停止を行うトグルボタンを用意しました。
+また、音声認識で得られたテキストを Speech Synthesis API により読み上げるようにしています。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+----------------------------------------
+--------------------demo------------------
+-------------------------
+
+<h4>code demo</h4>
+
+<h5>html</h5>
+
+<pre><code>&lt;div class="recPlayer"&gt;
+    &lt;div class="recPlayer__tools"&gt;
+        &lt;button class="recPlayer__recBtn"&gt;録音&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;div class="recPlayer__results"&gt;
+        &lt;ul&gt;&lt;/ul&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+
+<h5>script</h5>
+
+<pre><code>window.SpeechRecognition = window.SpeechRecognition || webkitSpeechRecognition;
+var Recorder = {
+    recognition : null,
+    init: function(){
+        var o = this;
+        o.recognition = new SpeechRecognition();
+        o.recognition.lang = 'ja';
+        o.recognition.continuous = true;
+    },
+    recStart: function(){
+        var o = this;
+        o.recognition.start();
+    },
+    recStop: function(){
+        var o = this;
+        o.recognition.stop();
+    },
+    getRecText: function(results, resultIndex){
+        var text;
+        for(var i = resultIndex; i &lt; results.length; i++){
+            var result = results.item(i);
+            if(result.final === true || result.isFinal === true){
+                text = result.item(0).transcript;
+            }
+        }
+        return text;
+    }
+}
+var Speeker = {
+    synthes: null,
+    init: function(){
+        var o = this;
+        o.synthes = new SpeechSynthesisUtterance();
+        o.synthes.lang = "ja-JP"
+    },
+    say: function(msgText){
+        var o = this;
+        o.synthes.text = msgText;
+        speechSynthesis.speak(o.synthes);
+    }
+}
+var View = {
+    getResultItem: function(text){
+        var el = document.createElement('li');
+        el.textContent = text;
+        return el;
+    }
+}
+var App = {
+    el: {
+        recBtn: $DEMO[0].querySelector('.recPlayer__recBtn'),
+        resultList: $DEMO[0].querySelector('.recPlayer__results ul')
+    },
+    status: {
+        nowRec: false,
+        recorderText: ''
+    },
+    init: function(){
+        var o = this;
+        Recorder.init();
+        Speeker.init();
+        Recorder.recognition.addEventListener('start', function(){
+            o.status.nowRec = true;
+            o.el.recBtn.textContent = '停止';
+        });
+        Recorder.recognition.addEventListener('end', function(){
+            o.status.nowRec = false;
+            o.el.recBtn.textContent = '録音';
+        });
+        Recorder.recognition.addEventListener('result', function(event){
+            var text = Recorder.getRecText(event.results, event.resultIndex);
+            o.el.resultList.insertBefore(
+                View.getResultItem(text),
+                o.el.resultList.firstChild
+            );
+            Speeker.say(text);
+        });
+        o.el.recBtn.addEventListener('click', function(){
+            if(o.status.nowRec){
+                Recorder.recStop();
+            }
+            else{
+                Recorder.recStart();
+            }
+        });
+    }
+}
+App.init();
+</code></pre>
+
+
+
+----------------------------------------
+--------------------demo------------------
+-------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2>最後に</h2>
+
+<p>いかがだったでしょうか？
+日本語はイマイチなとこもありますが、英語の音声再生の出来はすごいですね。
+英会話を勉強されてる方向けに、英語サイトで選択範囲を英語で音声再生させるなんてゆう Chrome エクステンションを作ってみたらおもしろいかもしれませんね。</p>
+							</div>
+							
+<div id="disqus_thread">
+    </div>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    var disqus_url = 'http://www.cyokodog.net/blog/web-speechi-api/';
+    var disqus_identifier = '220 http://www.cyokodog.net/?p=220';
+    var disqus_container_id = 'disqus_thread';
+    var disqus_domain = 'disqus.com';
+    var disqus_shortname = 'cyokolog';
+    var disqus_title = "ブラウザのみで音声認識とテキスト読み上げを実現する Web Speech API";
+        var disqus_config = function () {
+        var config = this; // Access to the config object
+        config.language = '';
+
+        /*
+           All currently supported events:
+            * preData — fires just before we request for initial data
+            * preInit - fires after we get initial data but before we load any dependencies
+            * onInit  - fires when all dependencies are resolved but before dtpl template is rendered
+            * afterRender - fires when template is rendered but before we show it
+            * onReady - everything is done
+         */
+
+        config.callbacks.preData.push(function() {
+            // clear out the container (its filled for SEO/legacy purposes)
+            document.getElementById(disqus_container_id).innerHTML = '';
+        });
+                config.callbacks.onReady.push(function() {
+            // sync comments in the background so we don't block the page
+            var script = document.createElement('script');
+            script.async = true;
+            script.src = '?cf_action=sync_comments&post_id=220';
+
+            var firstScript = document.getElementsByTagName( "script" )[0];
+            firstScript.parentNode.insertBefore(script, firstScript);
+        });
+                    };
+/* ]]> */
+</script>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    var DsqLocal = {
+        'trackbacks': [
+        ],
+        'trackback_url': "http:\/\/www.cyokodog.net\/blog\/web-speechi-api\/trackback\/"    };
+/* ]]> */
+</script>
+
+<script type="text/javascript">
+
+</script>
+						
+					</article>
+									</div>
+
+
+		
+			<div class="l-page-nav">
+				
+				<div class="l-page-nav__header">
+					<div class="page-eyecatch">
+						<div class="page-eyecatch__header">BLOG</div>
+						<div class="page-eyecatch__body">
+							<img src="http://lh5.googleusercontent.com/-7cggVHG-i74/U5M05ee0DAI/AAAAAAAAHWA/iM3hb0gONVc/s144/IMG_1727.png"/>
+						</div>
+					</div>
+				</div>
+				<div class="l-page-nav__body"><div class="wp-widget"><div class="wp-widget__header">OTHER BLOG</div><div class="menu-other-blog-container"><ul id="menu-other-blog" class="menu"><li id="menu-item-207" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-207"><a href="http://cyokodog.tumblr.com/">CYOKOLOG | Tumblr</a></li>
+<li id="menu-item-208" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-208"><a href="http://d.hatena.ne.jp/cyokodog/">Cyokodog :: Diary | Hatena</a></li>
+<li id="menu-item-209" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-209"><a href="http://d.hatena.ne.jp/cyokodog-memo/">Cyokodog :: Memo | Hatena</a></li>
+</ul></div></div><div class="wp-widget"><div class="wp-widget__header">Category</div>		<ul>
+	<li class="cat-item cat-item-20"><a href="http://www.cyokodog.net/blog/category/info/" >INFORMATION</a> (6)
+<ul class='children'>
+	<li class="cat-item cat-item-85"><a href="http://www.cyokodog.net/blog/category/info/info-hello/" >ご挨拶</a> (1)
+</li>
+	<li class="cat-item cat-item-86"><a href="http://www.cyokodog.net/blog/category/info/info-update/" >更新情報</a> (5)
+</li>
+</ul>
+</li>
+	<li class="cat-item cat-item-22"><a href="http://www.cyokodog.net/blog/category/diary/" >LIFE LOG</a> (13)
+<ul class='children'>
+	<li class="cat-item cat-item-84"><a href="http://www.cyokodog.net/blog/category/diary/umikaze-sk8/" >うみかぜスケートライフ</a> (1)
+</li>
+	<li class="cat-item cat-item-67"><a href="http://www.cyokodog.net/blog/category/diary/garamodel/" >ガラクタで作る重厚なおもちゃ</a> (2)
+</li>
+	<li class="cat-item cat-item-65"><a href="http://www.cyokodog.net/blog/category/diary/find-fg/" >フィギュア探しの旅</a> (3)
+</li>
+	<li class="cat-item cat-item-66"><a href="http://www.cyokodog.net/blog/category/diary/zenryoku_dorwing/" >大人だけど全力で絵を描いてみる</a> (2)
+</li>
+	<li class="cat-item cat-item-68"><a href="http://www.cyokodog.net/blog/category/diary/making-fg/" >挑戦！自作フィギュア</a> (5)
+</li>
+</ul>
+</li>
+	<li class="cat-item cat-item-50"><a href="http://www.cyokodog.net/blog/category/products/" >PRODUCTS</a> (22)
+<ul class='children'>
+	<li class="cat-item cat-item-38"><a href="http://www.cyokodog.net/blog/category/products/bookmarklet/" >BOOKMARKLET</a> (1)
+</li>
+	<li class="cat-item cat-item-3"><a href="http://www.cyokodog.net/blog/category/products/jquery-plugin/" >JQUERY PLUGIN</a> (19)
+</li>
+	<li class="cat-item cat-item-87"><a href="http://www.cyokodog.net/blog/category/products/service/" >SERVICE</a> (1)
+</li>
+	<li class="cat-item cat-item-12"><a href="http://www.cyokodog.net/blog/category/products/wordpress-plugin/" >WORDPRESS PLUGIN</a> (1)
+</li>
+</ul>
+</li>
+	<li class="cat-item cat-item-64"><a href="http://www.cyokodog.net/blog/category/programming/" >PROGRAMMING</a> (25)
+<ul class='children'>
+	<li class="cat-item cat-item-51"><a href="http://www.cyokodog.net/blog/category/programming/tips/" >ちょっと便利なTipsメモ</a> (4)
+</li>
+	<li class="cat-item cat-item-89"><a href="http://www.cyokodog.net/blog/category/programming/challenge-html5/" >作って覚えるHTML5</a> (3)
+</li>
+	<li class="cat-item cat-item-45"><a href="http://www.cyokodog.net/blog/category/programming/tutorial/" >初めて動かすチュートリアル</a> (8)
+</li>
+	<li class="cat-item cat-item-63"><a href="http://www.cyokodog.net/blog/category/programming/logic-programming/" >日々勉強！実装方法を考える</a> (10)
+</li>
+</ul>
+</li>
+		</ul>
+</div>		<div class="wp-widget">		<div class="wp-widget__header">Recent Posts</div>		<ul>
+					<li>
+				<a href="http://www.cyokodog.net/blog/media-capture-and-streams-web-audio-api/">Media Capture and Streams と Web Audio API で実現する録画・録音・ WAVファイルの生成</a>
+							<span class="post-date">4月 8, 2015</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/web-speechi-api/">ブラウザのみで音声認識とテキスト読み上げを実現する Web Speech API</a>
+							<span class="post-date">3月 18, 2015</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/thinking-toc/">TOC（目次メニュー）の実装方法について考えてみる</a>
+							<span class="post-date">3月 9, 2015</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/web-audio-api-music/">HTML5 の Web Audio API で音楽してみる</a>
+							<span class="post-date">2月 21, 2015</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/first-node-js/">Windows ではじめてみる Node.js</a>
+							<span class="post-date">1月 28, 2015</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/angularjs/">MVWフロントエンド・フレームワーク、AngularJS をはじめてみる</a>
+							<span class="post-date">1月 17, 2015</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/backbone-js/">Backbone.js ではじめるクライアントサイド MVC プログラミング</a>
+							<span class="post-date">1月 7, 2015</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/pull-request-github/">Pull Request ではじめてみる！GitHub ソーシャルコーディング</a>
+							<span class="post-date">12月 23, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/javascript-prototype/">JavaScript の prototype オブジェクト入門</a>
+							<span class="post-date">12月 14, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/jstock-doc/">[JSTOCK] JavaScript ライブラリ、製作者、レビュー記事、レビュアーのまとめサイト</a>
+							<span class="post-date">11月 30, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/easy-code-prettify-doc/">[Easy Code Prettify] マークダウンにも優しいライブデモ対応シンタックスハイライター jQuery プラグイン</a>
+							<span class="post-date">11月 16, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/ex-code-prettify-v05/">Ex Code Prettify をバージョンアップしました【追記あり】</a>
+							<span class="post-date">11月 6, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/sk8-bs-bordslide/">うちの小３男子がダウンレールでＢ／Ｓボードスライドを習得した</a>
+							<span class="post-date">10月 26, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/twitter-cards/">WordPress 製のブログを Twitter カードに対応させてみた</a>
+							<span class="post-date">10月 5, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/wordpress-ogp/">WordPress 製のブログを OGP(Open Graph Protocol) に対応させてみた</a>
+							<span class="post-date">10月 2, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/fade-page-doc/">[Fade Page] フェード効果で「ふわっ」とページ切替を行う jQuery プラグイン</a>
+							<span class="post-date">9月 29, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/fade-page-change/">フェードイン／フェードアウトで「ふわっ」とページを切り替える【追記あり】</a>
+							<span class="post-date">9月 24, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/fit-sidebar-doc/">[Fit Sidebar] レスポンシブ対応でサイドメニューを一定範囲で固定表示する jQuery プラグイン</a>
+							<span class="post-date">9月 23, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/making-fg-chopper/">挑戦！自作フィギュア　ワンピース・チョッパー編</a>
+							<span class="post-date">9月 15, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/sketch-akuma-cyoojin/">大人だけど全力で「７人の悪魔超人編」の絵を描いてみた</a>
+							<span class="post-date">7月 24, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/making-fg-ramen-2/">挑戦！自作フィギュア　ラーメンマン編　その２</a>
+							<span class="post-date">7月 15, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/making-fg-ramen-1/">挑戦！自作フィギュア　ラーメンマン編　その１</a>
+							<span class="post-date">7月 11, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/fitbar-doc/">[Fitbar] ツールバーをスクロール位置に応じ画面の上下にピタっと固定表示する jQuery プラグイン</a>
+							<span class="post-date">6月 24, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/picasa-zoom-doc/">[Picasa Zoom] Picasa の写真の拡大／縮小を簡単に行うことできる jQuery プラグイン</a>
+							<span class="post-date">6月 17, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/making-fg-2/">挑戦！自作フィギュア　ウォーズマン編　その２</a>
+							<span class="post-date">6月 9, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/dqy-excel/">システム管理者におすすめ！SQL の実行結果を手軽にエクセルに出力する方法</a>
+							<span class="post-date">6月 9, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/update-easy-social-buttons-and-social-info/">Easy Social Buttons と Social Info で Google+ の共有数を表示／取得できるようにしました</a>
+							<span class="post-date">6月 9, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/mailto-doc/">[Mailto] mailto:リンク機能を利用しやすくする jQuery プラグイン</a>
+							<span class="post-date">6月 5, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/ml-narisumasi-gmail-and-gas/">メーリングリストの「なりすまし」判定を Gmail と Google Apps Script で回避する方法</a>
+							<span class="post-date">5月 28, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/making-fg-1/">挑戦！自作フィギュア　ウォーズマン編　その１</a>
+							<span class="post-date">5月 25, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/find-fg-akiba-3/">第３回アキバ・フィギュア探しの旅</a>
+							<span class="post-date">5月 18, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/easy-social-buttons-doc/">[Easy Social Buttons] はてブ、Twitter、Facebook、Google+ のソーシャルボタンをシンプルに表示する jQuery プラグイン</a>
+							<span class="post-date">3月 25, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/update_ex-table-filter_ex-code-prettify_others_201403/">jQuery プラグインの Ex Code Prettify、Ex Table Filter、Hash Contents をバージョンアップしました</a>
+							<span class="post-date">3月 19, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/wordpress-openshift/">PaaS で動かす WordPress ＋ OpenShift 入門</a>
+							<span class="post-date">3月 5, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/first-appengine-and-struts2/">Google App Engine for Java 入門 ＋ Struts2 デプロイ手順</a>
+							<span class="post-date">3月 2, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/first-struts2/">2014年度版 Eclipse + Struts2 による Java Web アプリ開発入門</a>
+							<span class="post-date">2月 25, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/social-info-doc/">[Social Info] はてブ、Twitter、Facebook、Google+ などのソーシャル系サービスの API を手軽に使用できるようにする jQuery プラグイン</a>
+							<span class="post-date">2月 6, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/easy-feed-doc/">[Easy Feed] Google Feed API を手軽に利用できるようにする jQuery プラグイン</a>
+							<span class="post-date">1月 28, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/find-fg-akiba-2/">第２回アキバ・フィギュア探しの旅</a>
+							<span class="post-date">1月 4, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/sketch-kinnikuman/">大人だけど全力でキン肉マンの絵を描いてみた</a>
+							<span class="post-date">12月 17, 2013</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/hash-contents-doc/">[Hash Contents] location.hash に応じタブ、アコーディオン、ツリービュー形式等でコンテンツを切り替える jQuery プラグイン</a>
+							<span class="post-date">12月 8, 2013</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/keep-position-doc/">[Keep Position] ページのスクロール位置を維持したままフォーム送信やページ切り替えができる jQuery プラグイン</a>
+							<span class="post-date">12月 3, 2013</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/find-fg-akiba-1/">第１回アキバ・フィギュア探しの旅</a>
+							<span class="post-date">12月 2, 2013</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/gplus-autoload-js/">[gplus-autoload.js] Google+ のストリームを自動更新するブックマークレット</a>
+							<span class="post-date">12月 1, 2013</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/bookmarklet-doc/">[Bookmarklet] JS ファイルのリンクをブックマークレット形式に変換する jQuery プラグイン</a>
+							<span class="post-date">11月 27, 2013</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/keyinfo-doc/">[Keyinfo] 入力キーの種類を調べることができる jQuery プラグイン</a>
+							<span class="post-date">11月 25, 2013</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/parse-url-doc/">[Parse URL] URL の構成要素や QueryString の値を簡単に参照できるようにする jQuery プラグイン</a>
+							<span class="post-date">11月 5, 2013</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/ex-scroll-doc/">[Ex Scroll] スクロールイベントの開始／終了、方向を判別できる jQuery プラグイン</a>
+							<span class="post-date">10月 31, 2013</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/ex-code-prettify-doc/">[Ex Code Prettify] その場で編集／実行できるシンタックスハイライター jQuery プラグイン</a>
+							<span class="post-date">9月 23, 2013</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/garamodel02/">ガラクタで重厚感のあるおもちゃを作ってみた ～その２～</a>
+							<span class="post-date">9月 7, 2013</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/garamodel/">ガラクタで重厚感のあるおもちゃを作ってみた</a>
+							<span class="post-date">9月 4, 2013</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/extablefilter02/">jQuery Ex Table Filter を select > option 要素の value 属性でもフィルタリングできるようにしました</a>
+							<span class="post-date">9月 2, 2013</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/bootstrap-datetimepicker-ja/">[Bootstrap Datetimepicker JA] Bootstrap ベースの日付／時刻ピッカーを日本語環境向けにカスタマイズした jQuery プラグイン</a>
+							<span class="post-date">8月 14, 2013</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/jquery-hash-contents/">location.hash の値に応じ表示コンテンツを切り替える jQuery プラグインを作ってみた</a>
+							<span class="post-date">8月 12, 2013</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/jquery-keep-position/">フォームデータ登録後もページスクロール位置を維持する方法を考えてみた</a>
+							<span class="post-date">7月 31, 2013</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/jquery-sitekit/">[Sitekit] Web サイト作成時に必要になりがちな機能をまとめた jQuery プラグイン</a>
+							<span class="post-date">7月 3, 2013</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/jquery-ex-code-prettify/">Google Code Prettify のかゆいとこをなんとかする jQuery プラグインを書いてみた</a>
+							<span class="post-date">4月 24, 2013</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/wordpress-markdown-behave_js/">WordPress の Markdown 環境を『Behave.js』でさらに快適にしてみる</a>
+							<span class="post-date">4月 17, 2013</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/prezi-japanese/">オンラインプレゼンサービス「Prezi」の日本語入力方法</a>
+							<span class="post-date">4月 15, 2013</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/gmail-client/">Google 以外のメールアカウントで Gmail をメールクライアントとして使用する方法</a>
+							<span class="post-date">4月 11, 2013</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/wordpress-my-setting-plugin-social/">WordPress のこまごま設定プラグインにソーシャルボタン設置機能、他を追加した</a>
+							<span class="post-date">3月 31, 2013</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/wordpress-my-setting-plugin/">[My Setting] こまごました設定をまとめてできる WordPress プラグイン</a>
+							<span class="post-date">3月 25, 2013</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/extablefilter/">[Ex Table Filter] 汎用性重視のテーブルフィルタリング系 jQuery プラグイン</a>
+							<span class="post-date">3月 6, 2013</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/jquery19-browser/">jQuery 1.9 で $.browser が使えなくなってしまった対策</a>
+							<span class="post-date">2月 27, 2013</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/jquery-simple-table-filter/">jQuery によるシンプルなテーブルフィルタリング処理の実装を考えてみる</a>
+							<span class="post-date">2月 25, 2013</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/first-post/">引っ越してきました</a>
+							<span class="post-date">2月 25, 2013</span>
+						</li>
+				</ul>
+		</div><div class="wp-widget">			<div class="textwidget"></div>
+		</div>
+				</div>
+					</div>
+
+		
+	</div>
+</div>
+
+
+
+
+<div class="l-footer">
+	<div class="u-layout-center">
+		<div class="wp-widget"><div class="wp-widget__header">jQuery Products</div><div class="menu-jquery-products-container"><ul id="menu-jquery-products" class="menu"><li id="menu-item-132" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-132"><a title="Bootstrap ベースの日付／時刻ピッカーを日本語環境向けにカスタマイズした jQuery プラグイン" href="http://www.cyokodog.net/blog/bootstrap-datetimepicker-ja/">Bootstrap Datetimepicker JA</a></li>
+<li id="menu-item-131" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-131"><a title="その場で編集／実行できるシンタックスハイライター jQuery プラグイン" href="http://www.cyokodog.net/blog/ex-code-prettify-doc/">Ex Code Prettify</a></li>
+<li id="menu-item-120" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-120"><a title="汎用性重視のテーブルフィルタリング系 jQuery プラグイン" href="http://www.cyokodog.net/blog/extablefilter/">Ex Table Filter</a></li>
+<li id="menu-item-125" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-125"><a title="location.hash に応じタブ、アコーディオン、ツリービュー形式等でコンテンツを切り替える jQuery プラグイン" href="http://www.cyokodog.net/blog/hash-contents-doc/">Hash Contents</a></li>
+<li id="menu-item-121" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-121"><a title="Web サイト作成時に必要になりがちな機能をまとめた jQuery プラグイン" href="http://www.cyokodog.net/blog/jquery-sitekit/">Sitekit</a>
+<ul class="sub-menu">
+	<li id="menu-item-122" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-122"><a title="はてブ、Twitter、Facebook、Google+ のソーシャルボタンをシンプルに表示する jQuery プラグイン" href="http://www.cyokodog.net/blog/easy-social-buttons-doc/">Easy Social Buttons</a></li>
+	<li id="menu-item-124" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-124"><a title="Google Feed API を手軽に利用できるようにする jQuery プラグイン" href="http://www.cyokodog.net/blog/easy-feed-doc/">Easy Feed</a></li>
+	<li id="menu-item-123" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-123"><a title="はてブ、Twitter、Facebook、Google+ などのソーシャル系サービスの API を手軽に使用できるようにする jQuery プラグイン" href="http://www.cyokodog.net/blog/social-info-doc/">Social Info</a></li>
+</ul>
+</li>
+<li id="menu-item-127" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-127"><a href="https://github.com/cyokodog/jquery.utility-kit">UtilityKit</a>
+<ul class="sub-menu">
+	<li id="menu-item-133" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-133"><a title="JS ファイルのリンクをブックマークレット形式に変換する jQuery プラグイン" href="http://www.cyokodog.net/blog/bookmarklet-doc/">Bookmarklet</a></li>
+	<li id="menu-item-130" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-130"><a title="スクロールイベントの開始／終了、方向を判別できる jQuery プラグイン" href="http://www.cyokodog.net/blog/ex-scroll-doc/">Ex Scroll</a></li>
+	<li id="menu-item-126" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-126"><a title="ページのスクロール位置を維持したままフォーム送信やページ切り替えができる jQuery プラグイン" href="http://www.cyokodog.net/blog/keep-position-doc/">Keep Positon</a></li>
+	<li id="menu-item-128" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-128"><a title="入力キーの種類を調べることができる jQuery プラグイン" href="http://www.cyokodog.net/blog/keyinfo-doc/">Keyinfo</a></li>
+	<li id="menu-item-129" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-129"><a title="URL の構成要素や QueryString の値を簡単に参照できるようにする jQuery プラグイン" href="http://www.cyokodog.net/blog/parse-url-doc/">Parse URL</a></li>
+</ul>
+</li>
+</ul></div></div>		<div class="wp-widget">		<div class="wp-widget__header">All Posts</div>		<ul>
+					<li>
+				<a href="http://www.cyokodog.net/blog/media-capture-and-streams-web-audio-api/">Media Capture and Streams と Web Audio API で実現する録画・録音・ WAVファイルの生成</a>
+							<span class="post-date">4月 8, 2015</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/web-speechi-api/">ブラウザのみで音声認識とテキスト読み上げを実現する Web Speech API</a>
+							<span class="post-date">3月 18, 2015</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/thinking-toc/">TOC（目次メニュー）の実装方法について考えてみる</a>
+							<span class="post-date">3月 9, 2015</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/web-audio-api-music/">HTML5 の Web Audio API で音楽してみる</a>
+							<span class="post-date">2月 21, 2015</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/first-node-js/">Windows ではじめてみる Node.js</a>
+							<span class="post-date">1月 28, 2015</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/angularjs/">MVWフロントエンド・フレームワーク、AngularJS をはじめてみる</a>
+							<span class="post-date">1月 17, 2015</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/backbone-js/">Backbone.js ではじめるクライアントサイド MVC プログラミング</a>
+							<span class="post-date">1月 7, 2015</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/pull-request-github/">Pull Request ではじめてみる！GitHub ソーシャルコーディング</a>
+							<span class="post-date">12月 23, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/javascript-prototype/">JavaScript の prototype オブジェクト入門</a>
+							<span class="post-date">12月 14, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/jstock-doc/">[JSTOCK] JavaScript ライブラリ、製作者、レビュー記事、レビュアーのまとめサイト</a>
+							<span class="post-date">11月 30, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/easy-code-prettify-doc/">[Easy Code Prettify] マークダウンにも優しいライブデモ対応シンタックスハイライター jQuery プラグイン</a>
+							<span class="post-date">11月 16, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/ex-code-prettify-v05/">Ex Code Prettify をバージョンアップしました【追記あり】</a>
+							<span class="post-date">11月 6, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/sk8-bs-bordslide/">うちの小３男子がダウンレールでＢ／Ｓボードスライドを習得した</a>
+							<span class="post-date">10月 26, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/twitter-cards/">WordPress 製のブログを Twitter カードに対応させてみた</a>
+							<span class="post-date">10月 5, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/wordpress-ogp/">WordPress 製のブログを OGP(Open Graph Protocol) に対応させてみた</a>
+							<span class="post-date">10月 2, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/fade-page-doc/">[Fade Page] フェード効果で「ふわっ」とページ切替を行う jQuery プラグイン</a>
+							<span class="post-date">9月 29, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/fade-page-change/">フェードイン／フェードアウトで「ふわっ」とページを切り替える【追記あり】</a>
+							<span class="post-date">9月 24, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/fit-sidebar-doc/">[Fit Sidebar] レスポンシブ対応でサイドメニューを一定範囲で固定表示する jQuery プラグイン</a>
+							<span class="post-date">9月 23, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/making-fg-chopper/">挑戦！自作フィギュア　ワンピース・チョッパー編</a>
+							<span class="post-date">9月 15, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/sketch-akuma-cyoojin/">大人だけど全力で「７人の悪魔超人編」の絵を描いてみた</a>
+							<span class="post-date">7月 24, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/making-fg-ramen-2/">挑戦！自作フィギュア　ラーメンマン編　その２</a>
+							<span class="post-date">7月 15, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/making-fg-ramen-1/">挑戦！自作フィギュア　ラーメンマン編　その１</a>
+							<span class="post-date">7月 11, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/fitbar-doc/">[Fitbar] ツールバーをスクロール位置に応じ画面の上下にピタっと固定表示する jQuery プラグイン</a>
+							<span class="post-date">6月 24, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/picasa-zoom-doc/">[Picasa Zoom] Picasa の写真の拡大／縮小を簡単に行うことできる jQuery プラグイン</a>
+							<span class="post-date">6月 17, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/making-fg-2/">挑戦！自作フィギュア　ウォーズマン編　その２</a>
+							<span class="post-date">6月 9, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/dqy-excel/">システム管理者におすすめ！SQL の実行結果を手軽にエクセルに出力する方法</a>
+							<span class="post-date">6月 9, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/update-easy-social-buttons-and-social-info/">Easy Social Buttons と Social Info で Google+ の共有数を表示／取得できるようにしました</a>
+							<span class="post-date">6月 9, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/mailto-doc/">[Mailto] mailto:リンク機能を利用しやすくする jQuery プラグイン</a>
+							<span class="post-date">6月 5, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/ml-narisumasi-gmail-and-gas/">メーリングリストの「なりすまし」判定を Gmail と Google Apps Script で回避する方法</a>
+							<span class="post-date">5月 28, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/making-fg-1/">挑戦！自作フィギュア　ウォーズマン編　その１</a>
+							<span class="post-date">5月 25, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/find-fg-akiba-3/">第３回アキバ・フィギュア探しの旅</a>
+							<span class="post-date">5月 18, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/easy-social-buttons-doc/">[Easy Social Buttons] はてブ、Twitter、Facebook、Google+ のソーシャルボタンをシンプルに表示する jQuery プラグイン</a>
+							<span class="post-date">3月 25, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/update_ex-table-filter_ex-code-prettify_others_201403/">jQuery プラグインの Ex Code Prettify、Ex Table Filter、Hash Contents をバージョンアップしました</a>
+							<span class="post-date">3月 19, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/wordpress-openshift/">PaaS で動かす WordPress ＋ OpenShift 入門</a>
+							<span class="post-date">3月 5, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/first-appengine-and-struts2/">Google App Engine for Java 入門 ＋ Struts2 デプロイ手順</a>
+							<span class="post-date">3月 2, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/first-struts2/">2014年度版 Eclipse + Struts2 による Java Web アプリ開発入門</a>
+							<span class="post-date">2月 25, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/social-info-doc/">[Social Info] はてブ、Twitter、Facebook、Google+ などのソーシャル系サービスの API を手軽に使用できるようにする jQuery プラグイン</a>
+							<span class="post-date">2月 6, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/easy-feed-doc/">[Easy Feed] Google Feed API を手軽に利用できるようにする jQuery プラグイン</a>
+							<span class="post-date">1月 28, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/find-fg-akiba-2/">第２回アキバ・フィギュア探しの旅</a>
+							<span class="post-date">1月 4, 2014</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/sketch-kinnikuman/">大人だけど全力でキン肉マンの絵を描いてみた</a>
+							<span class="post-date">12月 17, 2013</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/hash-contents-doc/">[Hash Contents] location.hash に応じタブ、アコーディオン、ツリービュー形式等でコンテンツを切り替える jQuery プラグイン</a>
+							<span class="post-date">12月 8, 2013</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/keep-position-doc/">[Keep Position] ページのスクロール位置を維持したままフォーム送信やページ切り替えができる jQuery プラグイン</a>
+							<span class="post-date">12月 3, 2013</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/find-fg-akiba-1/">第１回アキバ・フィギュア探しの旅</a>
+							<span class="post-date">12月 2, 2013</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/gplus-autoload-js/">[gplus-autoload.js] Google+ のストリームを自動更新するブックマークレット</a>
+							<span class="post-date">12月 1, 2013</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/bookmarklet-doc/">[Bookmarklet] JS ファイルのリンクをブックマークレット形式に変換する jQuery プラグイン</a>
+							<span class="post-date">11月 27, 2013</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/keyinfo-doc/">[Keyinfo] 入力キーの種類を調べることができる jQuery プラグイン</a>
+							<span class="post-date">11月 25, 2013</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/parse-url-doc/">[Parse URL] URL の構成要素や QueryString の値を簡単に参照できるようにする jQuery プラグイン</a>
+							<span class="post-date">11月 5, 2013</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/ex-scroll-doc/">[Ex Scroll] スクロールイベントの開始／終了、方向を判別できる jQuery プラグイン</a>
+							<span class="post-date">10月 31, 2013</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/ex-code-prettify-doc/">[Ex Code Prettify] その場で編集／実行できるシンタックスハイライター jQuery プラグイン</a>
+							<span class="post-date">9月 23, 2013</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/garamodel02/">ガラクタで重厚感のあるおもちゃを作ってみた ～その２～</a>
+							<span class="post-date">9月 7, 2013</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/garamodel/">ガラクタで重厚感のあるおもちゃを作ってみた</a>
+							<span class="post-date">9月 4, 2013</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/extablefilter02/">jQuery Ex Table Filter を select > option 要素の value 属性でもフィルタリングできるようにしました</a>
+							<span class="post-date">9月 2, 2013</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/bootstrap-datetimepicker-ja/">[Bootstrap Datetimepicker JA] Bootstrap ベースの日付／時刻ピッカーを日本語環境向けにカスタマイズした jQuery プラグイン</a>
+							<span class="post-date">8月 14, 2013</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/jquery-hash-contents/">location.hash の値に応じ表示コンテンツを切り替える jQuery プラグインを作ってみた</a>
+							<span class="post-date">8月 12, 2013</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/jquery-keep-position/">フォームデータ登録後もページスクロール位置を維持する方法を考えてみた</a>
+							<span class="post-date">7月 31, 2013</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/jquery-sitekit/">[Sitekit] Web サイト作成時に必要になりがちな機能をまとめた jQuery プラグイン</a>
+							<span class="post-date">7月 3, 2013</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/jquery-ex-code-prettify/">Google Code Prettify のかゆいとこをなんとかする jQuery プラグインを書いてみた</a>
+							<span class="post-date">4月 24, 2013</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/wordpress-markdown-behave_js/">WordPress の Markdown 環境を『Behave.js』でさらに快適にしてみる</a>
+							<span class="post-date">4月 17, 2013</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/prezi-japanese/">オンラインプレゼンサービス「Prezi」の日本語入力方法</a>
+							<span class="post-date">4月 15, 2013</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/gmail-client/">Google 以外のメールアカウントで Gmail をメールクライアントとして使用する方法</a>
+							<span class="post-date">4月 11, 2013</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/wordpress-my-setting-plugin-social/">WordPress のこまごま設定プラグインにソーシャルボタン設置機能、他を追加した</a>
+							<span class="post-date">3月 31, 2013</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/wordpress-my-setting-plugin/">[My Setting] こまごました設定をまとめてできる WordPress プラグイン</a>
+							<span class="post-date">3月 25, 2013</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/extablefilter/">[Ex Table Filter] 汎用性重視のテーブルフィルタリング系 jQuery プラグイン</a>
+							<span class="post-date">3月 6, 2013</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/jquery19-browser/">jQuery 1.9 で $.browser が使えなくなってしまった対策</a>
+							<span class="post-date">2月 27, 2013</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/jquery-simple-table-filter/">jQuery によるシンプルなテーブルフィルタリング処理の実装を考えてみる</a>
+							<span class="post-date">2月 25, 2013</span>
+						</li>
+					<li>
+				<a href="http://www.cyokodog.net/blog/first-post/">引っ越してきました</a>
+							<span class="post-date">2月 25, 2013</span>
+						</li>
+				</ul>
+		</div>	</div>
+</div>
+
+
+<!-- START [wpEnqueueScriptsAction] -->				<script type="text/javascript">
+					var _gaq = _gaq || [];
+					_gaq.push(['_setAccount', 'UA-4142215-12']);
+					_gaq.push(['_trackPageview']);
+					(function() {
+						var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+						ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+						var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+					})();
+				</script>
+			<!-- END [wpEnqueueScriptsAction] --><script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js?ver=1.0'></script>
+<script type='text/javascript' src='http://www.cyokodog.net/wp-content/themes/cyokodog-0.5/index.js?ver=1.0'></script>
+
+
+

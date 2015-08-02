@@ -98,7 +98,7 @@
 
   <div id="game_container_{{$game_id}}">
 
-    <p><h3>motion: <span id="game_motion"></span></h3></p><br>
+    <p><h3>motion: <span class="game_motion"></span></h3></p><br>
     <div align="center" class="hangout_container"></div>
     <p><font color="green"><h4>Debater Participant</h4></font></p>
     <center><span id="hangout_area"></span></center>
