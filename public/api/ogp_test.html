@@ -1,0 +1,54 @@
+<html>
+<head>
+
+
+</head>
+<body>
+
+
+<script>
+	
+	
+	function EncodeHTMLForm(data){
+	    var params = [];
+	    for( var name in data )
+	    {
+	        var value = data[ name ];
+	        var param = encodeURIComponent( name ).replace( /%20/g, '+' )
+	            + '=' + encodeURIComponent( value ).replace( /%20/g, '+' );
+	        params.push( param );
+	    }
+	    return params.join('&');
+	}
+	
+	function callback_OgpReq(e){
+	    if(xmlHttpRequest.readyState == 4) {
+	        if(xmlHttpRequest.status == 200 || xmlHttpRequest.status == 201) {
+	            // リクエストの処理
+	            var response_array = xmlHttpRequest.responseText;
+	            var ogp_array = JSON.parse(response_array);
+	            console.log(ogp_array);
+	        } else {
+	            console.log("error");
+	        }
+	    }
+	}
+
+
+	data_url = 'http://cookpad.com/recipe/1606942';	
+	var xmlHttpRequest = new XMLHttpRequest();
+	xmlHttpRequest.open( 'POST', './get_ogp.php' );
+	xmlHttpRequest.onreadystatechange = callback_OgpReq;
+	xmlHttpRequest.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded' );
+	xmlHttpRequest.send( EncodeHTMLForm(data_url) )
+
+
+
+
+
+</script>
+
+
+
+</body>
+</html>

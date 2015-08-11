@@ -1,0 +1,52 @@
+<html>
+<head>
+
+	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+</head>
+<body>
+
+
+<script>
+	
+	
+	function EncodeHTMLForm(data){
+	    var params = [];
+	    for( var name in data )
+	    {
+	        var value = data[ name ];
+	        var param = encodeURIComponent( name ).replace( /%20/g, '+' )
+	            + '=' + encodeURIComponent( value ).replace( /%20/g, '+' );
+	        params.push( param );
+	    }
+	    return params.join('&');
+	}
+	
+
+	function ogp_regrieve(data_url){
+
+		var data_sent = EncodeHTMLForm(data_url)
+		var response_array = $.ajax({
+		  url: "./get_ogp.php",
+		  data: data_sent,
+		  type: "POST",
+		  headers: {
+		    'Content-Type': 'application/x-www-form-urlencoded'
+		  },
+		  async: false
+		 }).responseText;
+	     var ogp_array = JSON.parse(response_array);
+
+	     return ogp_array;
+	}
+
+	var retrieved_context = ogp_regrieve('http://cookpad.com/recipe/1606942');
+	console.log(retrieved_context);
+
+
+</script>
+
+
+
+</body>
+</html>
