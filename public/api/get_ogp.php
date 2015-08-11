@@ -14,8 +14,7 @@
 
 	$ogp_json = array();
 	foreach ($graph as $key => $value) {
-		$one_ogp = array( $key => $value );
-		array_push($ogp_json, $one_ogp);
+		$ogp_json[$key] = $value;
 	}
 	$ogp_json_str = json_encode($ogp_json);
 	echo $ogp_json_str;
