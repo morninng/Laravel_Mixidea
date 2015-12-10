@@ -50,7 +50,6 @@ function update_user_profile(response, currentUser, user_ext){
 	// if(response.address){
 	//   user_ext.set("address", response.address.country );
 	// }
-	// user_ext.set("user_id", response.id );
 	// user_ext.set("about", response.about );
 	user_ext.set("email", response.email );
 	// user_ext.set("age_range", response.age_range );
@@ -59,6 +58,7 @@ function update_user_profile(response, currentUser, user_ext){
 	user_ext_ACL.setPublicReadAccess(true);
 	user_ext.setACL(user_ext_ACL);
 
+	currentUser.set("fb_id", response.id );
 	currentUser.set("FirstName", response.first_name);
 	currentUser.set("LastName", response.last_name);
 //	currentUser.set("MiddleName", response.middle_name);
