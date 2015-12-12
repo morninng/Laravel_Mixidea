@@ -3,7 +3,7 @@ window.onload = header_nav_draw;
 
  function RegistFbGraphData(){
    FB.api(
-   	"/me?fields=picture,first_name,last_name, email,timezone,link",
+   	"/me?fields=picture,first_name,last_name,email,timezone,link",
       function (response) {
         if (response && !response.error) {
 
