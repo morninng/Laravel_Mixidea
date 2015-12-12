@@ -40,6 +40,8 @@ function update_user_profile(response, currentUser, user_ext){
 
 
 	user_ext.set("email", response.email );
+	user_ext.set("link", response.link );
+	user_ext.set("timezone", response.timezone );
 	user_ext_ACL = new Parse.ACL(currentUser);
 	user_ext_ACL.setPublicReadAccess(true);
 	user_ext.setACL(user_ext_ACL);
