@@ -54,6 +54,9 @@ function update_user_profile(response, currentUser, user_ext){
 
 	currentUser.save(null, {
 	success: function(){
+	  // var duration = 60000 * 60 * 24 * 30;
+	  var duration = 60000;
+	  set_cookie("recent_login", "a", duration);
 	  alert("saved");
 	  location.reload();
 	},
@@ -150,9 +153,32 @@ function construct_dom_for_logeduser(){
 
 function header_nav_draw(){
 	var currentUser = Parse.User.current();
-	if (currentUser) {
+	var recent_login =  get_value_fromCookie("recent_login")
+	if (currentUser && recent_login) {
 	    construct_dom_for_logeduser();
 	} else {
 	    construct_dom_for_login();
 	}
+}
+
+var set_cookie = function(key,value, duration){
+	var dt = new Date();
+	dt.setTime(dt.getTime() + duration );
+	d.cookie = key + '=' + value + ';  expires=' + dt.toGMTString() + '; path=/';
+	return;
+}
+
+
+var get_value_fromCookie = function(key){
+
+	var cookie_data = d.cookie;
+	var cookie_array = cookie_data.split("; ");
+
+	for(var i=0; i < cookie_array.length;i++){
+		var c = cookie_array[i].split("=");
+		if(c[0] === key){
+			return c[1];
+		}
+	}
+	return null;
 }
