@@ -75,15 +75,37 @@ function click_fb_login(){
 	    } else {
 	      console.log("--------User loged in mixidea--------");
 	      RegistFbGraphData();
-	      construct_dom_for_logeduser();
+	    //  construct_dom_for_logeduser();
 	    }
 	  },
 	  error: function(user, error) {
+	  	Parse.User.logOut();
+	  	remove_all_mixidea_local_data();
 	  	construct_dom_for_login();
+	  	alert("please click login button again");
 	    console.log("--------user do not loged in either mixidea and facebook--------");
 	  }
 	});
 }
+
+function remove_all_mixidea_local_data(){
+
+	var cookie_data = d.cookie;
+	var cookie_array = cookie_data.split("; ");
+	for(var i=0; i < cookie_array.length;i++){
+		var c = cookie_array[i].split("=");
+		var key = c[0];
+		remove_cookie(key);
+	}
+	return;
+}
+
+function remove_cookie(key){
+	var date1 = new Date();
+	date1.setTime(0);
+	document.cookie = key + "=;expires=" + date1.toGMTString();
+}
+
 
 function construct_dom_for_login(){
 		var dom_div = $('<div>');
