@@ -90,7 +90,7 @@ function click_fb_login(){
 
 function remove_all_mixidea_local_data(){
 
-	var cookie_data = d.cookie;
+	var cookie_data = document.cookie;
 	var cookie_array = cookie_data.split("; ");
 	for(var i=0; i < cookie_array.length;i++){
 		var c = cookie_array[i].split("=");
