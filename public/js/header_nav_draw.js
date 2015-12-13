@@ -81,7 +81,7 @@ function click_fb_login(){
 	  error: function(user, error) {
 	  	Parse.User.logOut();
 	  	//remove_all_mixidea_local_data();
-	  	alert("please click login button again");
+	  	alert("please click login button again after this page is refreshed");
     	location.reload();
 	  }
 	});
