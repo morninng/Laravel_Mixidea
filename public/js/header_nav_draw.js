@@ -80,14 +80,14 @@ function click_fb_login(){
 	  },
 	  error: function(user, error) {
 	  	Parse.User.logOut();
-	  	remove_all_mixidea_local_data();
-	  	construct_dom_for_login();
+	  	//remove_all_mixidea_local_data();
 	  	alert("please click login button again");
-	    console.log("--------user do not loged in either mixidea and facebook--------");
+    	location.reload();
 	  }
 	});
 }
 
+/*
 function remove_all_mixidea_local_data(){
 
 	var cookie_data = document.cookie;
@@ -106,7 +106,7 @@ function remove_cookie(key){
 	var data = key + '=dummy; expires=' + date1.toGMTString() + '; path=/';
 	document.cookie = data;
 }
-
+*/
 
 function construct_dom_for_login(){
 		var dom_div = $('<div>');
