@@ -102,8 +102,8 @@ function remove_all_mixidea_local_data(){
 
 function remove_cookie(key){
 	var date1 = new Date();
-	date1.setTime(0);
-	var value = key + "=; expires=" + date1.toGMTString() + "; path=/";
+	date1.setTime(date1.getTime() - 1000 );
+	var data = key + '=dummy; expires=' + date1.toGMTString() + '; path=/';
 	document.cookie = value
 }
 
