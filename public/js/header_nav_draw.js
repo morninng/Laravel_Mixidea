@@ -164,14 +164,14 @@ function header_nav_draw(){
 var set_cookie = function(key,value, duration){
 	var dt = new Date();
 	dt.setTime(dt.getTime() + duration );
-	d.cookie = key + '=' + value + ';  expires=' + dt.toGMTString() + '; path=/';
+	document.cookie = key + '=' + value + ';  expires=' + dt.toGMTString() + '; path=/';
 	return;
 }
 
 
 var get_value_fromCookie = function(key){
 
-	var cookie_data = d.cookie;
+	var cookie_data = document.cookie;
 	var cookie_array = cookie_data.split("; ");
 
 	for(var i=0; i < cookie_array.length;i++){
