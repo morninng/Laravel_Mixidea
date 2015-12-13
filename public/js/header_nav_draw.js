@@ -103,7 +103,7 @@ function remove_all_mixidea_local_data(){
 function remove_cookie(key){
 	var date1 = new Date();
 	date1.setTime(0);
-	document.cookie = key + "=;expires=" + date1.toGMTString();
+	document.cookie = key + "=;expires=" + date1.toGMTString() + ";path=/";
 }
 
 
