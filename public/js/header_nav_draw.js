@@ -54,8 +54,8 @@ function update_user_profile(response, currentUser, user_ext){
 
 	currentUser.save(null, {
 	success: function(){
-	  // var duration = 60000 * 60 * 24 * 30;
-	  var duration = 60000;
+	  var duration = 60000 * 60 * 24 * 30;
+	  //var duration = 60000;
 	  set_cookie("recent_login", "a", duration);
 	  alert("saved");
 	  location.reload();
@@ -70,6 +70,7 @@ function update_user_profile(response, currentUser, user_ext){
 
 
 function click_fb_login(){
+
 	Parse.FacebookUtils.logIn(null, {
 	  success: function(user) {
 	    if (!user.existed()) {
@@ -157,6 +158,7 @@ function header_nav_draw(){
 	if (currentUser && recent_login) {
 	    construct_dom_for_logeduser();
 	} else {
+	    Parse.User.logOut();
 	    construct_dom_for_login();
 	}
 }
