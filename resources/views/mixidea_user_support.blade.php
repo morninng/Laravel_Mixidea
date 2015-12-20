@@ -20,7 +20,6 @@
 
 @section('page_script')
 
-  <script src="{{ asset('/js/header_nav_draw.js') }}"></script>
 
 @stop
 

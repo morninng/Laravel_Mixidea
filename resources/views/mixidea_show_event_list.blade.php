@@ -21,7 +21,6 @@
 
 @section('page_script')
 
-  <script src="{{ asset('/js/header_nav_draw.js') }}"></script>
   <script src ="{{ asset('/js/Mixidea_event_list.js') }}"></script>
 
 @stop

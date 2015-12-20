@@ -77,7 +77,6 @@ t=d.getElementsByTagName(s)[0];t.parentNode.insertBefore(e,t);})(document,'scrip
 
 @section('page_script')
 
-  <script src="{{ asset('/js/header_nav_draw.js') }}"></script>
   <script src ="{{ asset('/js/retrieve_user_data.js') }}"></script>
   
 @stop

@@ -5,7 +5,8 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link href="{{ asset('/css/app.css') }}" rel="stylesheet"> 
-	<link href='//fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css'>
+  <link href="/css/Header_nav.css" rel="stylesheet"> 
+  <link href="/css/original_bootstrap.css" rel="stylesheet"> 
 </head>
 <body>
 
@@ -15,35 +16,20 @@
 
 @include('include.facebook_plug')
 
+  <header>
+    <div id="Head_Logo">Mixidea</div>
+    <nav>
+      <ul class="main-nav">
+        <li id="nav_home"><a href="/">Home</a></li>
+        <li id="nav_eventlist"><a href="/event/showEventList">Event</a></li>
+        <li id="nav_mypage"><a href="/user/mypage">MyPage</a></li>
 
-	<nav class="navbar navbar-default">
-		<div class="container-fluid">
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-					<span class="sr-only">Toggle Navigation</span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</button>
-				<a class="navbar-brand" href="#">Mixidea</a>
-			</div>
-
-			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-				<ul class="nav navbar-nav">
-					<li><a href="{{ url('/') }}">Home</a></li>
-					<li><a href="{{ url('/event/showEventList') }}">Event</a></li>
-					<li><a href="{{ url('/user/mypage') }}">MyPage</a></li>
-				</ul>
-
-				<ul class="nav navbar-nav navbar-right">
-						<li><span id="profile_pict"></span></li>
-						<li><span id="logout"></span></li>
-						<li><span id="mixidea_remark"></span></li>
-						<li><span id="login"></span></li>
-				</ul>
-			</div>
-		</div>
-	</nav>
+        <li id="nav_profile_pict"></li>
+        <li id="nav_logout"></li>
+        <li id="nav_login"></li>
+      </ul>
+    </nav>
+  </header>
 
 	@yield('page_context')
 
@@ -51,8 +37,14 @@
 	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.1/js/bootstrap.min.js"></script>
 
-  	<script src="{{ asset('/js/header_nav_draw.js') }}"></script>
-
+  <script src="{{ asset('/js/Header_User.js') }}"></script>
+	<script>
+	  var header_obj = new Header_User();
+	  function onloadfunc(){
+	    header_obj.initialize();
+	  }
+	  window.onload = onloadfunc;
+	</script>
 
 	@yield('page_template')
 

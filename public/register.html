@@ -1,0 +1,206 @@
+<html>
+
+
+<head>
+    <link rel="stylesheet" type="text/css" href="./register.css">
+</head>
+
+<body>
+
+<script type="text/javascript">
+	console.log("config initialization");
+	var parse_app_id = "EWPPdrDVaAIqhRazWp8K0ZlmafAAPt93JiOAonvX";
+	var parse_js_key = "US6Lheio8PGcBdIpwGFhFSQVpi5GKunGf6hGq5Ze";
+	var facebook_app_id = "817436101604719";
+	var facebook_app_version = "v2.3";
+</script>
+
+<script type="text/javascript" src="https://www.parsecdn.com/js/parse-1.4.2.min.js"></script>
+
+<script> 
+ var lang_type = null;
+ Parse.initialize(parse_app_id, parse_js_key);
+
+	function RegistFbGraphData(){
+    FB.api("/me?fields=picture,first_name,last_name,timezone,gender,link",
+      function (response) {
+        if (response && !response.error) {
+          var currentUser = Parse.User.current();
+          var ext_data = currentUser.get("ext_data");
+          if(ext_data){
+            var User_Extension = Parse.Object.extend("User_Extension");
+            var user_ext_query = new Parse.Query(User_Extension);  
+            user_ext_query.get(ext_data.id, {
+              success: function(ext_data_found){
+                update_user_profile(response, currentUser, ext_data_found);
+              },
+              error: function(){
+                console.log("ext data cannot be found");
+                var User_Extension = Parse.Object.extend("User_Extension");
+                var user_ext = new User_Extension();
+                ext_data = user_ext;
+                update_user_profile(response, currentUser, ext_data);
+              }
+            });
+          }else{
+            var User_Extension = Parse.Object.extend("User_Extension");
+            var user_ext = new User_Extension();
+            ext_data = user_ext;
+            update_user_profile(response, currentUser, ext_data);
+          }
+        }
+      }
+  );
+ }
+
+function update_user_profile(response, currentUser, user_ext){
+
+  user_ext.set("email", response.email );
+  user_ext.set("link", response.link );
+  user_ext.set("timezone", response.timezone );
+  user_ext.set("user_obj", currentUser );
+  user_ext_ACL = new Parse.ACL(currentUser);
+  user_ext_ACL.setPublicReadAccess(true);
+  user_ext.setACL(user_ext_ACL);
+
+  currentUser.set("fb_id", response.id );
+  currentUser.set("FirstName", response.first_name);
+  currentUser.set("LastName", response.last_name);
+  currentUser.set("Profile_picture", response.picture.data.url);
+  currentUser.set("ext_data",user_ext);
+  if(lang_type){
+    currentUser.set("lang_type",lang_type);
+  }
+
+  currentUser.save(null, {
+  success: function(){
+
+/*
+    var recent_login = get_value_fromCookie("recent_login");
+    if(!recent_login){
+      var duration = 60000 * 60 * 24 * 30;
+      set_cookie("recent_login", "a", duration);
+    }
+*/
+    if(document.referrer){
+      window.location.href = document.referrer;
+    }else{
+      location.reload();
+    }
+  },
+  error: function(obj,error){
+    alert("fail to save");
+    window.location.href = "/event/showEventList";
+  }
+  });
+
+}
+
+
+
+  function checkLoginState() {
+
+    var lang_radioList = document.getElementsByName("lang_type");
+    for(var i=0; i< lang_radioList.length; i++){
+      if(lang_radioList[i].checked){
+        lang_type = lang_radioList[i].value;
+        break;
+      }
+    }
+    if(!lang_type){
+      alert("please chose your language type");
+      return;
+    }
+
+    Parse.FacebookUtils.logIn(null, {
+      success: function(user) {
+        if (!user.existed()) {
+          console.log("user data already registered");
+        } else {
+          console.log("New User registration");
+        }
+        this.RegistFbGraphData();
+      },
+      error: function(user, error) {
+        alert("User cancelled the Facebook login or did not fully authorize.");
+      }
+    });
+  }
+
+/*
+function get_value_fromCookie(key){
+
+  var cookie_data = document.cookie;
+  var cookie_array = cookie_data.split("; ");
+
+  for(var i=0; i < cookie_array.length;i++){
+    var c = cookie_array[i].split("=");
+    if(c[0] === key){
+      return c[1];
+    }
+  }
+  return null;
+}
+*/
+/*
+function set_cookie(key,value, duration ){
+  var dt = new Date();
+  dt.setTime(dt.getTime() + duration );
+  document.cookie = key + '=' + value + ';  expires=' + dt.toGMTString() + '; path=/';
+  return;
+}
+*/
+
+  window.fbAsyncInit = function() {
+    Parse.FacebookUtils.init({
+      appId      : facebook_app_id,
+      cookie     : true, 
+                          // the session
+      xfbml      : true,  // parse social plugins on this page
+      version    : facebook_app_version // use version 2.1
+    });
+    FB.getLoginStatus(function(response) {
+    //  statusChangeCallback(response);
+    });
+  };
+
+  // Load the SDK asynchronously
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/sdk.js";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+
+</script>
+<div id="register_container" align="center">
+
+  <p>Mixidea Login Window</p>
+  <div>
+    before clicking login button, please select your English pronounciation pattern
+  </div>
+  <br>
+  <div align="left" style="width:600px">
+    <form name="lang_form">
+      <input type="radio" name="lang_type" value="En-Au"> English Australia<br>
+      <input type="radio" name="lang_type" value="En-Ca"> English Canada<br>
+      <input type="radio" name="lang_type" value="En-In"> English India<br>
+      <input type="radio" name="lang_type" value="En-NZ"> English NewZealand<br>
+      <input type="radio" name="lang_type" value="En-SA"> English South Africa<br>
+      <input type="radio" name="lang_type" value="En-UK"> English United Kingdom<br>
+      <input type="radio" name="lang_type" value="En-US"> English United States<br>
+    </form>
+    This information is used for the speech transcription.<br>
+    If you do not know which language pattern much your pronounciation, please go to following page and check it out.<br>
+    https://www.google.com/intl/en/chrome/demos/speech.html<br>
+  </div>
+  <br>
+  <div>
+    <fb:login-button scope="public_profile,email" data-size="xlarge" onlogin="checkLoginState();">
+    </fb:login-button>
+  </div>
+
+</div>
+</body>
+</html>

@@ -291,7 +291,6 @@
 
   <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/knockout/3.3.0/knockout-min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
-  <script src="{{ asset('/js/header_nav_draw.js') }}"></script>
   <script src ="{{ asset('/js/ShowEvent/RoleStatus.js') }}"></script>
   <script src ="{{ asset('/js/ShowEvent/ParticipantMgr.js') }}"></script>
   <script src="{{ asset('/js/ShowEvent/GameFrame.js') }}"></script>
