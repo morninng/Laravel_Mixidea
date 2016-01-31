@@ -26,6 +26,15 @@ function fb_login(){
 			console.log(error.detail);
 		} else {
 			console.log("Authenticated successfully with payload:", authData);
+			var uid = authData.uid;
+			var display_name = authData.facebook.displayName;
+			mixidea_root_ref.child("users").child(uid).set({
+				provider: authData.provider,
+				name: display_name
+			})
+
+
+
 		}
 	})
 
