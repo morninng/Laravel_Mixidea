@@ -1,0 +1,37 @@
+<html>
+
+<head>
+
+
+<script src="https://cdn.firebase.com/js/client/2.4.0/firebase.js"></script>
+<script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+
+</head>
+<body>
+
+
+
+<script>
+
+function fb_login(){
+
+	var ref = new Firebase("https://mixidea.firebaseio.com");
+	ref.authWithOAuthPopup("facebook", function(error, authData) {
+		if (error) {
+			console.log("Login Failed!", error);
+			console.log(error.message);
+			console.log(error.code);
+			console.log(error.detail);
+		} else {
+			console.log("Authenticated successfully with payload:", authData);
+		}
+	})
+
+}
+</script>
+
+
+<input type="button" onclick="fb_login()" value = "fb_login">
+
+</body>
+</html>

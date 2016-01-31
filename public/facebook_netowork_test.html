@@ -6,46 +6,6 @@
 
 
 
-<script src="//www.parsecdn.com/js/parse-1.4.2.min.js"></script>
-
-<script type="text/javascript">
-	console.log("config initialization");
-	var parse_app_id = "EWPPdrDVaAIqhRazWp8K0ZlmafAAPt93JiOAonvX";
-	var parse_js_key = "US6Lheio8PGcBdIpwGFhFSQVpi5GKunGf6hGq5Ze";
-	var cxense_site_id = "1128282842273631937";
-	var facebook_app_id = "719920701452855";
-	var facebook_app_version = "v2.3";
-	var hangout_NA_id = "892922506225";
-	var hangout_Asian_id = "892922506225";
-	var hangout_BP_id = "892922506225";
-</script>
-
-
-<script type="text/javascript">
-  Parse.initialize(parse_app_id, parse_js_key);
-  window.fbAsyncInit = function() {
-    Parse.FacebookUtils.init({ // this line replaces FB.init({
-      appId      : facebook_app_id, // Facebook App ID
-      status     : true,  // check Facebook Login status
-      cookie     : true,  // enable cookies to allow Parse to access the session
-      xfbml      : true,  // initialize Facebook social plugins on the page
-      version    : facebook_app_version // point to the latest Facebook Graph API version
-    });
- 
-    // Run code after the Facebook SDK is loaded.
-  };
- 
-  (function(d, s, id){
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) {return;}
-    js = d.createElement(s); js.id = id;
-    js.src = "//connect.facebook.net/en_US/sdk.js";
-    fjs.parentNode.insertBefore(js, fjs);
-  }(document, 'script', 'facebook-jssdk'));
-</script>
-
-
-
 
 
 
