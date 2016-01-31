@@ -13,10 +13,12 @@
 
 <script>
 
+
+var mixidea_root_ref = new Firebase("https://mixidea.firebaseio.com");
+
 function fb_login(){
 
-	var ref = new Firebase("https://mixidea.firebaseio.com");
-	ref.authWithOAuthPopup("facebook", function(error, authData) {
+	mixidea_root_ref.authWithOAuthPopup("facebook", function(error, authData) {
 		if (error) {
 			console.log("Login Failed!", error);
 			console.log(error.message);
@@ -28,10 +30,23 @@ function fb_login(){
 	})
 
 }
+
+function check_auth_state(){
+
+	var authData = mixidea_root_ref.getAuth();
+	if (authData) {
+		console.log("User " + authData.uid + " is logged in with " + authData.provider);
+	} else {
+		console.log("User is logged out");
+	}
+
+}
+
 </script>
 
 
 <input type="button" onclick="fb_login()" value = "fb_login">
+<input type="button" onclick="check_auth_state()" value = "check_auth_state">
 
 </body>
 </html>
