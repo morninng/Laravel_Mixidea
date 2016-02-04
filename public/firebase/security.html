@@ -1,0 +1,238 @@
+
+
+
+<html>
+<head></head>
+<body>
+
+<script src="https://cdn.firebase.com/js/client/2.4.0/firebase.js"></script>
+<script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+
+
+<script>
+function create_data(){
+	 var rootRef = new Firebase("https://mixidea.firebaseio.com/");
+	 var fooRef = rootRef.child("security_test/foo");
+	 fooRef.set({
+	 	user:{
+	 		yuta:{type:"genious"},
+	 		makoto:{type:"senior"}
+	 	}
+	 }, function(error){
+	 	if(error){
+	 		console.log("erreor case");
+	 	}else{
+	 		console.log("update success");
+	 	}
+	 });
+}
+
+function validate_check(){
+	var rootRef = new Firebase("https://mixidea.firebaseio.com/");
+	var valid_check_Ref = rootRef.child("security_test/valid_check");
+	valid_check_Ref.set("aaa", function(error){
+	 	if(error){
+	 		console.log("erreor case");
+	 	}else{
+	 		console.log("update success");
+	 	}
+	});
+}
+
+
+function send_message(){
+
+	var num = $("#message_num").val();
+	var message_content = $("#message_text").val();
+
+	var rootRef = new Firebase("https://mixidea.firebaseio.com/");
+	var messages_Ref = rootRef.child("security_test/messages");
+
+	var message_key = "message" + num;
+	var current_time = new Date();
+	current_time = current_time.getTime();
+	var message_content = {content: message_content, timestamp: current_time, test:"sss"};
+	console.log(message_content);
+	var message_obj = new Object();
+	message_obj[message_key] = message_content;
+	//eval("var message_obj =  {" + message_key +":\'" + message_content + "\'};");
+	console.log(message_obj);
+
+	messages_Ref.update(message_obj, function(error){
+	 	if(error){
+	 		console.log("erreor case");
+	 	}else{
+	 		console.log("update success");
+	 	}
+	});
+}
+
+
+
+function create_child_bar(){
+
+	var rootRef = new Firebase("https://mixidea.firebaseio.com/");
+	var bar_Ref = rootRef.child("security_test/bar");
+
+	bar_Ref.set("aaa", function(error){
+	 	if(error){
+	 		console.log("erreor case");
+	 	}else{
+	 		console.log("update success");
+	 	}
+	});
+
+
+}
+
+function create_room(){
+
+	var rootRef = new Firebase("https://mixidea.firebaseio.com/");
+	var rooms_Ref = rootRef.child("security_test/rooms");
+
+	var pre_room = {
+		A_public_room: {
+			topic: "thw ban tobacco"
+		},
+		B_private_room: {
+			topic: "thw change the world rule"
+		},
+		C_public_room: {
+			topic: "thw legalize drug"
+		}
+	}
+
+	rooms_Ref.set(pre_room, function(error){
+	 	if(error){
+	 		console.log("erreor case");
+	 	}else{
+	 		console.log("update success");
+	 	}
+	});
+}
+
+function change_topic_public(room_id){
+
+	var topic =  $("#change_topic").val();
+
+	var rootRef = new Firebase("https://mixidea.firebaseio.com/");
+	var rooms_Ref = rootRef.child("security_test/rooms");
+	var room_name = room_id + "_public_room" ;
+	var room_ref = rooms_Ref.child(room_name);
+	var topic_ref = room_ref.child("topic");
+
+	topic_ref.set(topic, function(error){
+	 	if(error){
+	 		console.log("erreor case");
+	 	}else{
+	 		console.log("update success");
+	 	}
+	});
+}
+
+function change_topic_private(room_id){
+
+	var topic =  $("#change_topic").val();
+
+	var rootRef = new Firebase("https://mixidea.firebaseio.com/");
+	var rooms_Ref = rootRef.child("security_test/rooms");
+	var room_name = room_id + "_private_room" ;
+	var room_ref = rooms_Ref.child(room_name);
+	var topic_ref = room_ref.child("topic");
+
+	topic_ref.set(topic, function(error){
+	 	if(error){
+	 		console.log("erreor case");
+	 	}else{
+	 		console.log("update success");
+	 	}
+	});
+}
+
+
+
+function create_room2(){
+
+	var rootRef = new Firebase("https://mixidea.firebaseio.com/");
+	var rooms_Ref = rootRef.child("security_test/rooms2");
+
+	var pre_room = {
+		A_room: {
+			topic: "thw ban tobacco",
+			ACL_w:true
+		},
+		B_room: {
+			topic: "thw change the world rule",
+			ACL_w:false
+		},
+		C_room: {
+			topic: "thw legalize drug"
+		}
+	}
+
+	rooms_Ref.set(pre_room, function(error){
+	 	if(error){
+	 		console.log("erreor case");
+	 	}else{
+	 		console.log("update success");
+	 	}
+	});
+}
+
+
+function change_topic_room2(room_id){
+
+	var topic =  $("#change_topic_room2").val();
+
+	var rootRef = new Firebase("https://mixidea.firebaseio.com/");
+	var rooms_Ref = rootRef.child("security_test/rooms2");
+	var room_name = room_id + "_room" ;
+	var room_ref = rooms_Ref.child(room_name);
+	var topic_ref = room_ref.child("topic");
+
+	topic_ref.set(topic, function(error){
+	 	if(error){
+	 		console.log("erreor case");
+	 	}else{
+	 		console.log("update success");
+	 	}
+	});
+}
+
+
+</script>
+
+<input type="button" onclick="create_data()" value = "create_data">
+<input type="button" onclick="validate_check()" value = "validate_check">
+<br><br>
+
+message number <input type="number" id="message_num"> message <input type="text" id="message_text">
+<input type="button" onclick="send_message()" value = "send_message">
+
+<br><br>
+
+new_data <input type="button" onclick="create_child_bar()" value = "create_child_bar">
+
+
+<br><br>
+
+create_room <input type="button" onclick="create_room()" value = "create_room">
+
+<br><br>
+
+change topic <input type="text" id="change_topic"> message 
+<input type="button" onclick="change_topic_public('A')" value = "change topic roomaA">
+<input type="button" onclick="change_topic_private('B')" value = "change topic roomB">
+
+
+
+<br><br>
+
+create_room <input type="button" onclick="create_room2()" value = "create_room2">
+change topic <input type="text" id="change_topic_room2"> message 
+<input type="button" onclick="change_topic_room2('A')" value = "change topic room2_A">
+<input type="button" onclick="change_topic_room2('B')" value = "change topic room2_B">
+<input type="button" onclick="change_topic_room2('C')" value = "change topic room2_C">
+
+
+</html>

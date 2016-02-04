@@ -1,0 +1,142 @@
+<html>
+
+<head>
+
+
+<script src="https://cdn.firebase.com/js/client/2.4.0/firebase.js"></script>
+<script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+
+</head>
+<body>
+
+
+
+<script>
+
+
+var mixidea_root_ref = new Firebase("https://mixidea.firebaseio.com");
+
+function fb_login(){
+
+	mixidea_root_ref.authWithOAuthPopup("facebook", function(error, authData) {
+		if (error) {
+			console.log("Login Failed!", error);
+			console.log(error.message);
+			console.log(error.code);
+			console.log(error.detail);
+		} else {
+			console.log("Authenticated successfully with payload:", authData);
+			var uid = authData.uid;
+			var display_name = authData.facebook.displayName;
+			mixidea_root_ref.child("users").child(uid).set({
+				provider: authData.provider,
+				name: display_name
+			})
+		}
+	})
+
+}
+
+function check_auth_state(){
+
+	var authData = mixidea_root_ref.getAuth();
+	if (authData) {
+		console.log("User " + authData.uid + " is logged in with " + authData.provider);
+	} else {
+		console.log("User is logged out");
+	}
+
+}
+
+
+function update_own_name(){
+
+
+	var own_name = $("#own_name").val();
+
+	var userRef = new Firebase("https://mixidea.firebaseio.com/users");
+	
+	var authData = mixidea_root_ref.getAuth();
+	if (authData) {
+		var user_id = authData.uid
+		console.log("User " + user_id  + " is logged in with " + authData.provider);
+		var own_userRef = userRef.child(user_id);
+		var own_user_name_ref = own_userRef.child("name");
+
+/*
+		own_user_name_ref.on("value", function(snapshot){
+			var name = snapshot.val()
+			console.log(name);
+		},function(error_obj){
+			console.log(error_obj);
+		});
+*/
+
+
+		own_user_name_ref.set(own_name, function(error){
+			if(error){
+				alert("not saved" + error);
+			} else{
+				alert("succeed");
+			}
+		});
+
+	} else {
+		console.log("User is logged out");
+	}
+}
+
+
+function update_someone_name(){
+
+
+	var someone_name = $("#someone_name").val();
+	var someone_id = $("#someone_id").val();
+
+	var userRef = new Firebase("https://mixidea.firebaseio.com/users");
+	
+	var authData = mixidea_root_ref.getAuth();
+	if (authData) {
+		var user_id = authData.uid
+		console.log("User " + user_id  + " is logged in with " + authData.provider);
+		var someone_userRef = userRef.child(someone_id);
+		var someone_name_ref = someone_userRef.child("name");
+
+		var new_user_object = {
+			name: someone_name,
+			provider: "facebook"
+		}
+
+		someone_userRef.set(new_user_object, function(error){
+		//someone_name_ref.set(someone_name, function(error){
+			if(error){
+				alert("not saved" + error);
+			} else{
+				alert("succeed");
+			}
+		});
+
+	} else {
+		console.log("User is logged out");
+	}
+
+}
+
+
+</script>
+
+
+<input type="button" onclick="fb_login()" value = "fb_login">
+<input type="button" onclick="check_auth_state()" value = "check_auth_state">
+<br>
+<input type="text" id="own_name">
+<input type="button" onclick="update_own_name()" value = "update_own_name">
+<br>
+
+
+ id <input type="text" id="someone_id">
+ name <input type="text" id="someone_name">
+  <input type="button" onclick="update_someone_name()" value = "update_someone_name">
+
+</body>
+</html>

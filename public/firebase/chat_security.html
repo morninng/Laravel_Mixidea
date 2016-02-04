@@ -1,0 +1,272 @@
+<html>
+<head>
+	
+	<script src="https://cdn.firebase.com/js/client/2.4.0/firebase.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.3.0/knockout-min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+
+</head>
+<body>
+
+<script>
+
+function initial_setting(){
+
+	var rootRef = new Firebase("https://morninng-chat.firebaseio.com/");
+	var room_name_ref = rootRef.child("room_names");
+	var room_ref = room_name_ref.push({title:"initial room name"}, function(error){
+	 	if(error){
+	 		console.log("erreor case");
+	 	}else{
+	 		var room_id = room_ref.key();
+	 		var room_members_ref = rootRef.child("room_members/" + room_id);
+	 		var room_messages_ref = rootRef.child("room_messages/" + room_id);
+	 		room_members_ref.set({ aaa :true});
+	 		room_messages_ref.set({user:"aaa", timestamp:"1999/3/2 13:00", message: "ccc"});
+	 	}
+	});
+
+}
+
+</script>
+
+
+<input type="button" onclick="initial_setting()" value="initial_setting">
+
+
+<input type="button" onclick="login()" value="login">
+<input type="button" onclick="logout()" value="logout">
+
+<br><br>
+<p>room list</p>
+
+
+
+<input type="text" id="new_room_name" placeholder="new_room_name">
+<input type="button" onclick="create_room()" value="create_room">
+
+<div id="room_list_area">
+	<ul data-bind="foreach:room_list">
+		<li>
+			<div>
+				<span  data-bind="text:room_id"> </span>
+				<span  data-bind="text:room_title"></span> 
+			</div>
+		</li>
+	</ul>
+</div>
+
+
+<div>
+	<input type="text" id="room_id_for_chat" placeholder="input room id">
+	<input type="button" onclick="room_id_for_chat()" value="room_id_for_chat">
+</div>
+
+
+<p>message area</p>
+<br>
+
+<div> selected room is <span data-bind="text:selected_room_id"></span></div>
+
+<div>
+	<input type="text" id="chat_message" placeholder="chat message">
+	<input type="button" onclick="send_message()" value="send_message">
+</div>
+
+
+<div id="message_area">
+	<ul  data-bind="foreach:chat_list">
+		<li>
+			<div>
+				<span  data-bind="text:chat_id"></span>
+				<span  data-bind="text:chat_user"></span>
+				<span  data-bind="text:chat_message"></span>
+			</div>
+		</li>
+	</ul>
+</div>
+
+
+
+
+
+<script>
+
+	var selected_room_id = null;
+	var display_name = null;
+	var rootRef = new Firebase("https://morninng-chat.firebaseio.com/");
+	var authData = rootRef.getAuth();
+	if (authData) {
+		console.log("User " + authData.uid + " is logged in with " + authData.provider);
+
+		display_name = authData.facebook.displayName;
+	} else {
+		console.log("User is logged out");
+	}
+
+(function () {
+
+	// event list data retrieve
+	var room_name_ref = rootRef.child("room_names");
+	room_name_ref.on("child_added", function(snapshot){
+		var id = snapshot.key();
+		var title = snapshot.val().title;
+		var obj = {room_id: id, room_title: title};
+		viewModel_obj.push_room_list(obj);
+	})
+	//
+}());
+
+
+
+
+
+function knockout_VM(){
+
+	var self = this;
+	self.chat_list = ko.observableArray();
+	self.room_list = ko.observableArray();
+	self.selected_room_id = ko.observable();
+}
+
+knockout_VM.prototype.push_room_list = function(obj){
+
+	var self = this;
+	self.room_list.push(obj);
+
+}
+
+knockout_VM.prototype.push_message = function(obj){
+
+	var self = this;
+	self.chat_list.push(obj);
+
+}
+
+knockout_VM.prototype.clear_all_message = function(){
+
+	var self = this;
+	self.chat_list.removeAll();
+
+}
+
+knockout_VM.prototype.select_room = function(id){
+
+	var self = this;
+	self.selected_room_id(id);
+
+}
+
+
+
+
+
+  var viewModel_obj = new knockout_VM();
+  ko.applyBindings(viewModel_obj);
+
+
+
+function login(){
+
+	rootRef.authWithOAuthPopup("facebook", function(error, authData) {
+		if (error) {
+			console.log("Login Failed!", error);
+		} else {
+			console.log("Authenticated successfully with payload:", authData);
+			var uid = authData.uid;
+			var display_name = authData.facebook.displayName;
+			rootRef.child("users").child(uid).set({
+				provider: authData.provider,
+				name: display_name
+			})
+		}
+	})
+
+}
+
+function logout(){
+
+	rootRef.unauth();
+
+}
+
+
+function create_room(){
+
+	var current_time = new Date();
+	var new_room_name = $("#new_room_name").val();
+
+
+	var room_name_ref = rootRef.child("room_names");
+	var room_ref = room_name_ref.push({title: new_room_name}, function(error){
+	 	if(error){
+	 		console.log("erreor case");
+	 	}else{
+	 		var room_id = room_ref.key();
+	 		var room_members_ref = rootRef.child("room_members/" + room_id);
+	 		var room_messages_ref = rootRef.child("room_messages/" + room_id);
+	 		room_members_ref.set({ aaa :true});
+	 		room_messages_ref.set({user:"aaa", timestamp:"1999/3/2 13:00", message: "ccc"});
+
+	 		$("#new_room_name").val(null);
+	 	}
+	});
+}
+
+function room_id_for_chat(){
+
+	var selected_room_id = $("#room_id_for_chat").val();
+	viewModel_obj.clear_all_message();
+	viewModel_obj.select_room(selected_room_id);
+
+	// event list data retrieve
+	var room_message_ref = rootRef.child("room_messages");
+	room_message_ref.on("child_added", function(snapshot){
+		var id = snapshot.key();
+		var user = snapshot.val().user;
+		var message = snapshot.val().message;
+		var obj = {chat_id: id, chat_user: user, chat_message: message};
+		viewModel_obj.push_message(obj);
+	})
+
+}
+
+function send_message(){
+
+
+	var chat_message = $("#chat_message").val();
+	var current_date = new Date();
+	current_time = current_date.getTime()
+
+
+
+	var rootRef = new Firebase("https://morninng-chat.firebaseio.com/");
+	var room_message_ref = rootRef.child("room_messages");
+
+	var message_obj = {message:chat_message, user: display_name, timestamp: current_time };
+
+	var room_ref = room_message_ref.push(message_obj, function(error){
+	 	if(error){
+	 		console.log("erreor case");
+	 	}else{
+	 		console.log()
+	 	}
+	});
+
+
+}
+
+
+
+</script>
+
+
+
+
+</body>
+
+
+
+</body>
+</html>

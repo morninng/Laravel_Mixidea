@@ -1,0 +1,425 @@
+
+
+
+<html>
+<head></head>
+<body>
+
+<script src="https://cdn.firebase.com/js/client/2.4.0/firebase.js"></script>
+<script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+
+
+<script>
+
+function set_data(){
+ var rootRef = new Firebase("https://morninng-test.firebaseio.com/web/data");
+ var userRef = rootRef.child("users");
+ userRef.set({
+ 	basic_info:{
+ 		first_name:"yuta",
+ 		last_name:"moriyama"
+ 	},
+ 	ext_data:{
+ 		birthday:"August 23rd",
+ 		nationality: "Japan"
+ 	}
+ });
+}
+
+
+function update_data(){
+
+ var rootRef = new Firebase("https://morninng-test.firebaseio.com/web/data");
+ var userRef = rootRef.child("users");
+ var ext_data = userRef.child("ext_data");
+ ext_data.update({
+ 	birthday: "September first"
+ })
+
+ }
+
+function multiple_update_data(){
+ var rootRef = new Firebase("https://morninng-test.firebaseio.com/web/data");
+ rootRef.update({
+ 	"users/ext_data/birthday":"October first",
+ 	"users/basic_info/first_name":"masako" 
+ })
+}
+
+function set_callback(){
+
+ var rootRef = new Firebase("https://morninng-test.firebaseio.com/web/data");
+ rootRef.set("write data", function(error){
+ 	if(error){
+ 		console.log("erreor case");
+ 	}else{
+ 		console.log("update success");
+ 	}
+ })
+
+
+}
+
+
+function push_post(){
+
+ var rootRef = new Firebase("https://morninng-test.firebaseio.com/web/data");
+ var postRef = rootRef.child("posts");
+ var newPostRef = postRef.push();
+ newPostRef.set({
+ 	author: "alan",
+ 	title: "justice"
+ });
+
+ postRef.push().set({
+ 	author: "michel",
+ 	title: "freedom"
+ });
+
+ postRef.push({
+ 	author: "Sandel",
+ 	title: "principle"
+ });
+}
+
+function key_id(){
+
+ var rootRef = new Firebase("https://morninng-test.firebaseio.com/web/data");
+ var postRef = rootRef.child("posts");
+ var newPostRef = postRef.push();
+
+ var postID =  newPostRef.key();
+ console.log(postID);
+}
+
+function increment_decrement(){
+
+ var rootRef = new Firebase("https://morninng-test.firebaseio.com/web/data");
+ var counter = rootRef.child("counter");
+ counter.transaction(function(current_obj){
+
+ 	if(!current_obj){
+ 		var new_obj = new Object();
+ 		new_obj.value=0;
+ 		new_obj.status = true;
+ 		return new_obj;
+ 	}
+ 	if(current_obj.status){
+ 		current_obj.value++;
+ 	}else{
+ 		current_obj.value--;
+ 	}
+ 	if(current_obj.value > 10){
+ 		current_obj.status=false;
+ 	}else if(current_obj.value < 0){
+ 		current_obj.status=true;
+ 	}
+
+ 	return current_obj;
+ });
+
+}
+
+(function () {
+
+ var rootRef = new Firebase("https://morninng-test.firebaseio.com/web/data");
+ var posts_ref = rootRef.child("posts");
+ posts_ref.on("value",function(snapshot){
+ 	console.log(snapshot.val());
+ },function(error){
+ 	console.log(error);
+ });
+
+}());
+
+(function () {
+
+ var rootRef = new Firebase("https://morninng-test.firebaseio.com/web/data");
+ var posts_ref = rootRef.child("posts");
+ posts_ref.on("child_added",function(snapshot, prevChildkey){
+
+ 	console.log(snapshot.val());
+ 	var newPost = snapshot.val();
+ 	console.log(prevChildkey);
+ 	console.log(newPost.author);
+ 	console.log(newPost.title); ;
+
+ },function(error){
+ 	console.log(error);
+ });
+
+}());
+
+
+
+function push_post_one(){
+
+ var rootRef = new Firebase("https://morninng-test.firebaseio.com/web/data");
+ var postRef = rootRef.child("posts");
+
+ postRef.push({
+ 	author: "new",
+ 	title: "newbook"
+ });
+}
+
+
+
+
+
+
+
+
+
+
+function update_one_postdata(){
+
+	var rootRef = new Firebase("https://morninng-test.firebaseio.com/web/data");
+	var postRef = rootRef.child("posts");
+	var value = $("#update_postdata").val();
+
+	var post_id = "-K9HUUzMMyAtIgB1trrH";
+	var one_post = postRef.child(post_id);
+
+	one_post.set({
+	 	author: "asaa",
+	 	title: value
+	 });
+}
+
+
+
+ var rootRef_g = new Firebase("https://morninng-test.firebaseio.com/web/data");
+ var posts_ref_g = rootRef_g.child("posts");
+ posts_ref_g.on("child_changed",function(snapshot){
+
+ 	var changed_post_value = snapshot.val();
+ 	var changed_post_name = snapshot.name();
+ 	var changed_post_ref = snapshot.ref();
+ 	var changed_post_exportval = snapshot.exportVal();
+ 	console.log(changed_post_value);
+ 	console.log(changed_post_name);
+ 	console.log(changed_post_ref);
+ 	console.log(changed_post_exportval);
+
+ },function(error){
+ 	console.log(error);
+ });
+
+	function remove_callback(){
+		posts_ref_g.off("child_changed");
+	}
+
+
+(function () {
+
+ var rootRef = new Firebase("https://morninng-test.firebaseio.com/web/data");
+ var posts_ref = rootRef.child("posts");
+ posts_ref.on("child_removed",function(snapshot){
+
+ 	var removed_post_value = snapshot.val();
+ 	var removed_post_name = snapshot.name();
+ 	var removed_post_ref = snapshot.ref();
+ 	var removed_post_exportval = snapshot.exportVal();
+ 	console.log(removed_post_value);
+ 	console.log(removed_post_name);
+ 	console.log(removed_post_ref);
+ 	console.log(removed_post_exportval);
+
+ },function(error){
+ 	console.log(error);
+ });
+
+}());
+
+
+function remove_one_postdata(){
+
+	var rootRef = new Firebase("https://morninng-test.firebaseio.com/web/data");
+	var postRef = rootRef.child("posts");
+	var post_id = "-K9HUUzNaEzqCfLPAATQ";
+	var one_post = postRef.child(post_id);
+
+	one_post.remove(function(error){
+	 	if(error){
+	 		console.log("erreor case");
+	 	}else{
+	 		console.log("remove success");
+	 	}
+ 	});
+}
+
+function Query_orderchild(){
+
+	var ref = new Firebase("https://dinosaur-facts.firebaseio.com/dinosaurs");
+	ref.orderByChild("height").on("child_added", function(snapshot) {
+		var key = snapshot.key();
+		var height = snapshot.val().height;
+	  console.log(key + " was " + height + " meters tall");
+	});
+
+}
+
+function Query_orderbykey(){
+	var ref = new Firebase("https://dinosaur-facts.firebaseio.com/dinosaurs");
+	ref.orderByKey().on("child_added", function(snapshot) {
+	  var key = snapshot.key();
+	  console.log(key);
+	});	
+}
+
+function Query_orderbyvalue(){
+
+	var scoresRef = new Firebase("https://dinosaur-facts.firebaseio.com/scores");
+	scoresRef.orderByValue().on("value", function(snapshot) {
+		snapshot.forEach(function(data) {
+			var key = data.key();
+			var value = data.val();
+			console.log("The " + key + " dinosaur's score is " + value);
+		});
+	});
+
+}
+
+function Query_orderby_limittoLast(){
+
+	var ref = new Firebase("https://dinosaur-facts.firebaseio.com/dinosaurs");
+	ref.orderByChild("weight").limitToLast(5).on("child_added", function(snapshot) {
+		var key = snapshot.key();
+		var value = snapshot.val();
+		var weight = value.weight;
+		console.log("key is"  + key + "value is" + value + "weight is" + weight);
+	});
+
+}
+
+
+function Query_orderby_limittoFirst(){
+
+	var ref = new Firebase("https://dinosaur-facts.firebaseio.com/dinosaurs");
+	ref.orderByChild("weight").limitToFirst(5).on("child_added", function(snapshot) {
+		var key = snapshot.key();
+		var value = snapshot.val();
+		var weight = value.weight;
+		console.log("key is"  + key + "value is" + value + "weight is" + weight);
+	});
+
+}
+
+function QueryRange_StartAt(){
+
+	var ref = new Firebase("https://dinosaur-facts.firebaseio.com/dinosaurs");
+	ref.orderByChild("weight").startAt(2600).on("child_added", function(snapshot) {
+		var key = snapshot.key();
+		var value = snapshot.val();
+		var weight = value.weight;
+		console.log("key is"  + key + "value is" + value + "weight is" + weight);
+	});
+
+}
+
+
+function QueryRange_StartAt_EndAt(){
+
+	var ref = new Firebase("https://dinosaur-facts.firebaseio.com/dinosaurs");
+	ref.orderByChild("weight").startAt(3).endAt(6000).on("child_added", function(snapshot) {
+		var key = snapshot.key();
+		var value = snapshot.val();
+		var weight = value.weight;
+		console.log("key is"  + key + "value is" + value + "weight is" + weight);
+	});
+
+}
+
+function QueryEqualTo(){
+
+	var ref = new Firebase("https://dinosaur-facts.firebaseio.com/dinosaurs");
+	ref.orderByChild("weight").equalTo(3).on("child_added", function(snapshot) {
+		var key = snapshot.key();
+		var value = snapshot.val();
+		var weight = value.weight;
+		console.log("key is"  + key + "value is" + value + "weight is" + weight);
+	});
+
+}
+
+function QueryEqualToDiffCriteria(){
+
+	var ref = new Firebase("https://dinosaur-facts.firebaseio.com/dinosaurs");
+	ref.orderByChild("height").equalTo(3, "weight").on("child_added", function(snapshot) {
+		var key = snapshot.key();
+		var value = snapshot.val();
+		var weight = value.weight;
+		console.log("key is"  + key + "value is" + value + "weight is" + weight);
+	});
+
+}
+
+function fb_login(){
+
+	var ref = new Firebase("https://morninng-test.firebaseio.com");
+	ref.authWithOAuthPopup("facebook", function(error, authData) {
+		if (error) {
+			console.log("Login Failed!", error);
+		} else {
+			console.log("Authenticated successfully with payload:", authData);
+		}
+	})
+
+}
+
+function fb_login_redirect(){
+
+	var ref = new Firebase("https://morninng-test.firebaseio.com");
+	ref.authWithOAuthRedirect("facebook", function(error) {
+		if (error) {
+			console.log("Login Failed!", error);
+		} else {
+			// We'll never get here, as the page will redirect on success.
+		}
+	});
+
+}
+
+
+</script>
+
+<input type="button" onclick="set_data()" value="set data">
+<input type="button" onclick="update_data()" value = "update date">
+<input type="button" onclick="multiple_update_data()" value = "multiple update date">
+<input type="button" onclick="set_callback()" value = "set_callback">
+<input type="button" onclick="push_post()" value = "push_post">
+<input type="button" onclick="key_id()" value = "key_id">
+<input type="button" onclick="increment_decrement()" value = "increment_decrement">
+<br>
+<input type="button" onclick="push_post_one()" value = "push_post_one">
+<input type="button" onclick="update_one_postdata()" value = "update_one_postdata">
+<input type="text" id="update_postdata">
+
+
+<input type="button" onclick="remove_one_postdata()" value = "remove_one_postdata">
+<input type="button" onclick="remove_callback()" value = "remove_callback">
+<br>
+
+
+<input type="button" onclick="QueryRange_StartAt()" value = "remove_callback">
+
+<input type="button" onclick="Query_orderchild()" value = "Query_orderchild">
+<input type="button" onclick="Query_orderbykey()" value = "Query_orderbykey">
+<input type="button" onclick="Query_orderbyvalue()" value = "Query_orderbyvalue">
+<input type="button" onclick="Query_orderby_limittoLast()" value = "Query_orderby_limittoLast">
+<input type="button" onclick="Query_orderby_limittoFirst()" value = "Query_orderby_limittoFirst">
+
+<br>
+<input type="button" onclick="QueryRange_StartAt()" value = "QueryRange_StartAt">
+<input type="button" onclick="QueryRange_StartAt_EndAt()" value = "QueryRange_StartAt_EndAt">
+<input type="button" onclick="QueryEqualTo()" value = "QueryEqualTo">
+<input type="button" onclick="QueryEqualToDiffCriteria()" value = "QueryEqualToDiffCriteria">
+
+<br>
+<input type="button" onclick="fb_login()" value = "fb_login">
+<input type="button" onclick="fb_login_redirect()" value = "fb_login_redirect">
+
+
+</body>
+</html>
